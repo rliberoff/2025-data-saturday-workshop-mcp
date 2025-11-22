@@ -98,6 +98,8 @@ Copy-Item ../Exercise1Server/Models/Customer.cs Models/
 Copy-Item ../Exercise1Server/Models/Product.cs Models/
 ```
 
+‼️Recuerda cambiar el `namespace` en los archivos copiados a `Exercise2Server.Models`. De lo contrario, el código del Paso 2 no compilará.
+
 #### 1.4 Crear modelo Order
 
 Crea `Models/Order.cs`:
@@ -423,6 +425,15 @@ var app = builder.Build();
 var customers = LoadData<Customer>("../../../Data/customers.json");
 var products = LoadData<Product>("../../../Data/products.json");
 var orders = LoadData<Order>("../../../Data/orders.json");
+
+// Health check endpoint
+app.MapGet("/", (IOptions<McpWorkshop.Shared.Configuration.WorkshopSettings> settings) => Results.Ok(new
+{
+    status = "healthy",
+    server = settings.Value.Server.Name,
+    version = settings.Value.Server.Version,
+    timestamp = DateTime.UtcNow
+}));
 
 // Endpoint MCP
 app.MapPost("/mcp", async (

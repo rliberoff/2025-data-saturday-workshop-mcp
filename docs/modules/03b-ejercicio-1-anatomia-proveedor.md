@@ -145,11 +145,11 @@ List<Customer>? customers = null;
 List<Product>? products = null;
 
 // Health check endpoint
-app.MapGet("/", () => Results.Ok(new
+app.MapGet("/", (IOptions<McpWorkshop.Shared.Configuration.WorkshopSettings> settings) => Results.Ok(new
 {
     status = "healthy",
-    server = "Exercise1StaticResources",
-    version = "1.0.0",
+    server = settings.Value.Server.Name,
+    version = settings.Value.Server.Version,
     timestamp = DateTime.UtcNow
 }));
 
