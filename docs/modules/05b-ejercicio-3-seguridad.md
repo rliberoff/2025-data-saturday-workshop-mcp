@@ -324,8 +324,8 @@ public class ScopeAuthorizationService
 Crea `Security/RateLimitingService.cs`:
 
 ```csharp
-using Exercise3Server.Models;
 using System.Collections.Concurrent;
+using Exercise3Server.Models;
 
 namespace Exercise3Server.Security;
 
@@ -382,7 +382,6 @@ Crea `Middleware/AuthenticationMiddleware.cs`:
 
 ```csharp
 using Exercise3Server.Security;
-using Exercise3Server.Models;
 
 namespace Exercise3Server.Middleware;
 
@@ -485,13 +484,14 @@ public class RateLimitingMiddleware
 Reemplaza todo el contenido de `Program.cs`:
 
 ```csharp
+using System.Text.Json;
 using Exercise3Server.Models;
 using Exercise3Server.Middleware;
 using Exercise3Server.Security;
 using McpWorkshop.Shared.Logging;
 using McpWorkshop.Shared.Mcp;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -514,6 +514,15 @@ var app = builder.Build();
 // Middlewares de seguridad
 app.UseMiddleware<AuthenticationMiddleware>();
 app.UseMiddleware<RateLimitingMiddleware>();
+
+// Health check endpoint
+app.MapGet("/", (IOptions<McpWorkshop.Shared.Configuration.WorkshopSettings> settings) => Results.Ok(new
+{
+    status = "healthy",
+    server = settings.Value.Server.Name,
+    version = settings.Value.Server.Version,
+    timestamp = DateTime.UtcNow
+}));
 
 // Endpoint para generar tokens (solo para testing)
 app.MapPost("/auth/token", (
@@ -542,11 +551,11 @@ app.MapPost("/mcp", async (
     var requestId = request.Id?.ToString() ?? "unknown";
     var user = httpContext.Items["User"] as AuthenticatedUser;
 
-    logger.LogRequest(request.Method, requestId, new
+    logger.LogRequest(request.Method, requestId, new Dictionary<string, object>
     {
-        method = request.Method,
-        userId = user?.UserId ?? "anonymous",
-        scopes = user?.Scopes
+        ["method"] = request.Method,
+        ["userId"] = user?.UserId ?? "anonymous",
+        ["scopes"] = user?.Scopes ?? new List<string>()
     });
 
     try
