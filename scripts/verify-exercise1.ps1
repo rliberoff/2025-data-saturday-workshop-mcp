@@ -33,8 +33,29 @@ function Invoke-McpRequest {
     }
 }
 
+function Test-UninitializedAccess {
+    Write-Host "`n🧪 Test 1: Verificar error sin Initialize" -ForegroundColor Cyan
+    
+    $response = Invoke-McpRequest -Method "resources/read" -Params @{ uri = "mcp://customers" }
+
+    if ($response -and $response.error) {
+        Write-Host "✅ Uninitialized Access: PASS" -ForegroundColor Green
+        Write-Host "   Error detectado correctamente: $($response.error.message)" -ForegroundColor Gray
+        return $true
+    }
+    elseif ($response -and $response.result) {
+        Write-Host "❌ Uninitialized Access: FAIL (se permitió acceso sin initialize)" -ForegroundColor Red
+        Write-Host "   El servidor debería rechazar requests antes de initialize" -ForegroundColor Yellow
+        return $false
+    }
+    else {
+        Write-Host "❌ Uninitialized Access: FAIL (respuesta inesperada)" -ForegroundColor Red
+        return $false
+    }
+}
+
 function Test-Initialize {
-    Write-Host "`n🧪 Test 1: Initialize" -ForegroundColor Cyan
+    Write-Host "`n🧪 Test 2: Initialize" -ForegroundColor Cyan
     
     $response = Invoke-McpRequest -Method "initialize" -Params @{
         protocolVersion = "2024-11-05"
@@ -56,7 +77,7 @@ function Test-Initialize {
 }
 
 function Test-ResourcesList {
-    Write-Host "`n🧪 Test 2: Resources/List" -ForegroundColor Cyan
+    Write-Host "`n🧪 Test 3: Resources/List" -ForegroundColor Cyan
     
     $response = Invoke-McpRequest -Method "resources/list"
 
@@ -85,7 +106,7 @@ function Test-ResourcesList {
 }
 
 function Test-ResourceReadCustomers {
-    Write-Host "`n🧪 Test 3: Resources/Read - Customers" -ForegroundColor Cyan
+    Write-Host "`n🧪 Test 4: Resources/Read - Customers" -ForegroundColor Cyan
     
     $startTime = Get-Date
     $response = Invoke-McpRequest -Method "resources/read" -Params @{ uri = "mcp://customers" }
@@ -120,7 +141,7 @@ function Test-ResourceReadCustomers {
 }
 
 function Test-ResourceReadProducts {
-    Write-Host "`n🧪 Test 4: Resources/Read - Products" -ForegroundColor Cyan
+    Write-Host "`n🧪 Test 5: Resources/Read - Products" -ForegroundColor Cyan
     
     $response = Invoke-McpRequest -Method "resources/read" -Params @{ uri = "mcp://products" }
 
@@ -163,6 +184,7 @@ catch {
 }
 
 # Ejecutar tests
+if (Test-UninitializedAccess) { $testsPassed++ } else { $testsFailed++ }
 if (Test-Initialize) { $testsPassed++ } else { $testsFailed++ }
 if (Test-ResourcesList) { $testsPassed++ } else { $testsFailed++ }
 if (Test-ResourceReadCustomers) { $testsPassed++ } else { $testsFailed++ }
