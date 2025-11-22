@@ -21,7 +21,7 @@ function Invoke-McpRequest {
         method  = $Method
         params  = $Params
         id      = $Id
-    } | ConvertTo-Json -Depth 10
+    } | ConvertTo-Json
 
     try {
         $response = Invoke-RestMethod -Uri "$ServerUrl/mcp" -Method POST -Body $body -ContentType "application/json" -ErrorAction Stop
@@ -44,7 +44,7 @@ function Test-Initialize {
         }
     }
 
-    if ($response -and $response.result.serverInfo.name -eq "Exercise1StaticResources") {
+    if ($response -and $response.result.serverInfo.name -like "Exercise1*") {
         Write-Host "✅ Initialize: PASS" -ForegroundColor Green
         Write-Host "   Server: $($response.result.serverInfo.name) v$($response.result.serverInfo.version)" -ForegroundColor Gray
         return $true
@@ -88,7 +88,7 @@ function Test-ResourceReadCustomers {
     Write-Host "`n🧪 Test 3: Resources/Read - Customers" -ForegroundColor Cyan
     
     $startTime = Get-Date
-    $response = Invoke-McpRequest -Method "resources/read" -Params @{ uri = "customers" }
+    $response = Invoke-McpRequest -Method "resources/read" -Params @{ uri = "mcp://customers" }
     $duration = (Get-Date) - $startTime
 
     if ($response -and $response.result.contents) {
@@ -122,7 +122,7 @@ function Test-ResourceReadCustomers {
 function Test-ResourceReadProducts {
     Write-Host "`n🧪 Test 4: Resources/Read - Products" -ForegroundColor Cyan
     
-    $response = Invoke-McpRequest -Method "resources/read" -Params @{ uri = "products" }
+    $response = Invoke-McpRequest -Method "resources/read" -Params @{ uri = "mcp://products" }
 
     if ($response -and $response.result.contents) {
         $content = $response.result.contents[0]

@@ -140,9 +140,9 @@ builder.Services.Configure<McpWorkshop.Shared.Configuration.WorkshopSettings>(op
 
 var app = builder.Build();
 
-// Cargar datos de muestra
-var customers = LoadData<Customer>("../../../Data/customers.json");
-var products = LoadData<Product>("../../../Data/products.json");
+// Variables para almacenar los datos cargados durante initialize
+List<Customer>? customers = null;
+List<Product>? products = null;
 
 // Health check endpoint
 app.MapGet("/", () => Results.Ok(new
@@ -171,7 +171,7 @@ app.MapPost("/mcp", async (
     {
         var response = request.Method switch
         {
-            "initialize" => HandleInitialize(request.Id, settings),
+            "initialize" => HandleInitialize(request.Id, settings, ref customers, ref products),
             "resources/list" => HandleResourcesList(request.Id),
             "resources/read" => HandleResourcesRead(request.Id, paramsDict, customers, products),
             _ => CreateErrorResponse(-32601, "Method not found", null, request.Id)
@@ -187,11 +187,19 @@ app.MapPost("/mcp", async (
     }
 });
 
-app.Run("http://localhost:5001");
+await app.RunAsync("http://localhost:5001");
 
 // Métodos Helper
-static JsonRpcResponse HandleInitialize(object? requestId, IOptions<McpWorkshop.Shared.Configuration.WorkshopSettings> settings)
+static JsonRpcResponse HandleInitialize(
+    object? requestId,
+    IOptions<McpWorkshop.Shared.Configuration.WorkshopSettings> settings,
+    ref List<Customer>? customers,
+    ref List<Product>? products)
 {
+    // Cargar datos de muestra durante la inicialización
+    customers = LoadData<Customer>("../../../Data/customers.json");
+    products = LoadData<Product>("../../../Data/products.json");
+
     return new JsonRpcResponse
     {
         JsonRpc = "2.0",
@@ -245,9 +253,15 @@ static JsonRpcResponse HandleResourcesList(object? requestId)
 static JsonRpcResponse HandleResourcesRead(
     object? requestId,
     IDictionary<string, object>? parameters,
-    List<Customer> customers,
-    List<Product> products)
+    List<Customer>? customers,
+    List<Product>? products)
 {
+    // Validar que los datos estén inicializados
+    if (customers == null || products == null)
+    {
+        throw new InvalidOperationException("Los datos no han sido inicializados. Debe llamar a 'initialize' primero.");
+    }
+
     // Parsear el URI del recurso
     string? uri = null;
     if (parameters != null && parameters.TryGetValue("uri", out var uriValue))
