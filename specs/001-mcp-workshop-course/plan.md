@@ -144,12 +144,6 @@ scripts/                                # Workshop utilities
 ├── create-sample-data.ps1             # Generate test datasets
 └── run-all-tests.ps1                  # Execute full test suite
 
-templates/                              # Exercise starter templates
-├── exercise1-starter/                 # Empty project for Exercise 1
-├── exercise2-starter/                 # Scaffold for Exercise 2
-├── exercise3-starter/                 # Base for Exercise 3
-└── exercise4-starter/                 # Group challenge template
-
 .github/
 ├── copilot-instructions.md            # Repository instructions
 └── instructions/
@@ -162,7 +156,6 @@ templates/                              # Exercise starter templates
 -   **src/**: Complete C# solutions for all exercises (reference implementations)
 -   **tests/**: Comprehensive test suite for verification and protocol validation
 -   **infrastructure/**: Terraform IaC for Azure deployment scenarios
--   **templates/**: Exercise starter code for attendees to build upon
 -   **scripts/**: Automation for setup verification, data generation, and testing
 
 This structure supports self-paced learning, instructor-led delivery, local development, and cloud deployment scenarios.
@@ -173,7 +166,6 @@ This structure supports self-paced learning, instructor-led delivery, local deve
 -   **src/**: Complete C# solutions for all exercises (reference implementations)
 -   **tests/**: Comprehensive test suite for verification and protocol validation
 -   **infrastructure/**: Terraform IaC for Azure deployment scenarios
--   **templates/**: Exercise starter code for attendees to build upon
 -   **scripts/**: Automation for setup verification, data generation, and testing
 
 This structure supports self-paced learning, instructor-led delivery, local development, and cloud deployment scenarios.

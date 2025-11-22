@@ -208,11 +208,6 @@ mcp-workshop/
 │       ├── Exercise2ParametricQuery/
 │       ├── Exercise3SecureServer/
 │       └── Exercise4VirtualAnalyst/
-├── templates/
-│   ├── exercise1-starter/        # Código inicial para Ejercicio 1
-│   ├── exercise2-starter/        # Código inicial para Ejercicio 2
-│   ├── exercise3-starter/        # Código inicial para Ejercicio 3
-│   └── exercise4-starter/        # Código inicial para Ejercicio 4
 ├── tests/
 │   └── McpWorkshop.Tests/        # Tests automatizados de los ejercicios
 ├── scripts/

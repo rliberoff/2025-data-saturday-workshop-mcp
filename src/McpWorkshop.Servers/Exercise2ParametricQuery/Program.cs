@@ -41,7 +41,11 @@ T[] LoadData<T>(string fileName) where T : class
     }
 
     var json = File.ReadAllText(filePath);
-    var data = JsonSerializer.Deserialize<T[]>(json);
+    var options = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true
+    };
+    var data = JsonSerializer.Deserialize<T[]>(json, options);
     return data ?? Array.Empty<T>();
 }
 

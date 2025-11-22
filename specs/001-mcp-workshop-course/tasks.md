@@ -21,7 +21,7 @@
 
 **Purpose**: Project initialization and basic structure required before any feature work
 
--   [x] T001 Create root directory structure with docs/, src/, tests/, infrastructure/, scripts/, templates/ folders
+-   [x] T001 Create root directory structure with docs/, src/, tests/, infrastructure/, scripts/ folders
 -   [x] T002 Initialize .NET solution file McpWorkshop.sln in repository root
 -   [x] T003 [P] Create .gitignore file for .NET projects with bin/, obj/, .vs/, \*.user patterns
 -   [x] T004 [P] Create README.md in repository root with workshop overview and quick start links
@@ -145,7 +145,6 @@
 
 ### Exercise 1: Static Resource Server (15 min guided exercise)
 
--   [x] T047 [P] [US2] Create Exercise 1 starter template in templates/exercise1-starter/ with empty Program.cs and project structure
 -   [x] T048 [US2] Implement Exercise 1 reference server in src/McpWorkshop.Servers/Exercise1StaticResources/Program.cs exposing workshop://customers and workshop://products resources per contracts/exercise-1-static-resource.json
 -   [x] T049 [US2] Create customers sample data JSON in src/McpWorkshop.Servers/Exercise1StaticResources/Data/customers.json with 3 Spanish customers per contract
 -   [x] T050 [P] [US2] Create products sample data JSON in src/McpWorkshop.Servers/Exercise1StaticResources/Data/products.json with 3 Spanish products per contract
@@ -156,7 +155,6 @@
 
 ### Exercise 2: Parametric Query Tools (20 min independent exercise)
 
--   [x] T055 [P] [US2] Create Exercise 2 starter template in templates/exercise2-starter/ with tools registration scaffold
 -   [x] T056 [US2] Implement Exercise 2 reference server in src/McpWorkshop.Servers/Exercise2ParametricQuery/Program.cs with 3 tools per contracts/exercise-2-parametric-query.json
 -   [x] T057 [US2] Implement search_customers tool in src/McpWorkshop.Servers/Exercise2ParametricQuery/Tools/SearchCustomersTool.cs with country and emailDomain filtering per contract inputSchema
 -   [x] T058 [P] [US2] Implement filter_products tool in src/McpWorkshop.Servers/Exercise2ParametricQuery/Tools/FilterProductsTool.cs with category, price range, inStockOnly filtering per contract
@@ -167,7 +165,6 @@
 
 ### Exercise 3: Secure Server (20 min security implementation)
 
--   [x] T063 [P] [US2] Create Exercise 3 starter template in templates/exercise3-starter/ with authentication middleware scaffold
 -   [x] T064 [US2] Implement Exercise 3 reference server in src/McpWorkshop.Servers/Exercise3SecureServer/Program.cs with security features per contracts/exercise-3-secure-server.json
 -   [x] T065 [US2] Implement JWT authentication middleware in src/McpWorkshop.Servers/Exercise3SecureServer/Middleware/JwtAuthMiddleware.cs validating Bearer tokens per contract security.authentication
 -   [x] T066 [US2] Implement scope extraction in src/McpWorkshop.Servers/Exercise3SecureServer/Middleware/JwtAuthMiddleware.cs parsing required claims (sub, scope) per contract
@@ -185,7 +182,6 @@
 
 ### Exercise 4: Virtual Analyst Orchestration (30 min group challenge)
 
--   [x] T078 [P] [US2] Create Exercise 4 starter template in templates/exercise4-starter/ with orchestrator scaffold (addresses FR-013: data exploitation from diverse data sources)
 -   [x] T079 [US2] Create SqlMcpServer reference implementation in src/McpWorkshop.Servers/Exercise4SqlMcpServer/Program.cs exposing SQL resources and tools per contracts/exercise-4-virtual-analyst.json mcpServers[0]
 -   [x] T080 [US2] Implement sql://workshop/customers resource in src/McpWorkshop.Servers/Exercise4SqlMcpServer/Resources/CustomersResource.cs (implemented via Data/customers.json with resources/read handler in Program.cs)
 -   [x] T081 [P] [US2] Implement sql://workshop/orders resource in src/McpWorkshop.Servers/Exercise4SqlMcpServer/Resources/OrdersResource.cs (implemented via Data/orders.json with resources/read handler in Program.cs)
@@ -211,7 +207,7 @@
 -   [x] T101 [US2] Implement graceful fallback in src/McpWorkshop.Servers/Exercise4VirtualAnalyst/Services/OrchestratorService.cs when servers unavailable per contract successCriteria (try-catch with error messages)
 -   [x] T102 [P] [US2] Create Exercise 4 verification script in scripts/verify-exercise4.ps1 testing all 4 example questions from contract scenario.exampleQuestions
 
-**Checkpoint**: At this point, User Story 2 is complete - all 4 exercises have templates, reference implementations, verification scripts
+**Checkpoint**: At this point, User Story 2 is complete - all 4 exercises have reference implementations and verification scripts
 
 ---
 

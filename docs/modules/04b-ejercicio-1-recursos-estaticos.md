@@ -300,7 +300,11 @@ static JsonRpcResponse CreateErrorResponse(int code, string message, object? dat
 static List<T> LoadData<T>(string path)
 {
     var json = File.ReadAllText(path);
-    return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
+    var options = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true
+    };
+    return JsonSerializer.Deserialize<List<T>>(json, options) ?? new List<T>();
 }
 ```
 
@@ -338,7 +342,7 @@ $body = @{
         clientInfo = @{ name = "Exercise1Client"; version = "1.0.0" }
     }
     id = "init-001"
-} | ConvertTo-Json -Depth 10
+} | ConvertTo-Json
 
 Invoke-RestMethod -Uri "http://localhost:5001/mcp" `
     -Method POST `

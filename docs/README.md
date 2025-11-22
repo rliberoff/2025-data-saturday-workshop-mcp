@@ -141,7 +141,7 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 -   **Duración**: 15 minutos guiados
 -   **Skills**: `resources/list`, `resources/read`, JSON estructurado
 
-📚 [Instrucciones](./modules/04b-ejercicio-1-recursos-estaticos.md) | 🎯 [Template](../templates/exercise1-starter/) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise1StaticResources/)
+📚 [Instrucciones](./modules/04b-ejercicio-1-recursos-estaticos.md) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise1StaticResources/)
 
 ### Parte 2: Herramientas y Seguridad (1h 10min)
 
@@ -151,7 +151,7 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 -   **Duración**: 20 minutos independiente
 -   **Skills**: `tools/list`, `tools/call`, JSON Schema validation
 
-📚 [Instrucciones](./modules/05b-ejercicio-2-consultas-parametricas.md) | 🎯 [Template](../templates/exercise2-starter/) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise2ParametricQuery/)
+📚 [Instrucciones](./modules/05b-ejercicio-2-consultas-parametricas.md) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise2ParametricQuery/)
 
 #### Bloque 6: Ejercicio 3 - Seguridad (20 min)
 
@@ -159,7 +159,7 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 -   **Duración**: 20 minutos
 -   **Skills**: Bearer tokens, scopes, logging estructurado
 
-📚 [Instrucciones](./modules/06b-ejercicio-3-seguridad.md) | 🎯 [Template](../templates/exercise3-starter/) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise3SecureServer/)
+📚 [Instrucciones](./modules/06b-ejercicio-3-seguridad.md) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise3SecureServer/)
 
 #### Bloque 7: Seguridad & Gobernanza (15 min)
 
@@ -177,7 +177,7 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 -   **Duración**: 25 minutos en grupos de 3-5 personas
 -   **Skills**: Multi-source orchestration, caching, natural language queries
 
-📚 [Instrucciones](./modules/08-ejercicio-4-analista-virtual.md) | 🎯 [Template](../templates/exercise4-starter/) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise4VirtualAnalyst/)
+📚 [Instrucciones](./modules/08-ejercicio-4-analista-virtual.md) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise4VirtualAnalyst/)
 
 ### Parte 3: Arquitectura y Casos de Negocio (40 min)
 
@@ -242,7 +242,6 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 -   🚀 [Quick Start Guide](./quickstart.md) - Instalación y configuración
 -   📚 [Quick Reference](./QUICK_REFERENCE.md) - MCP protocol cheat sheet, code snippets
 -   🔧 [Troubleshooting Guide](./TROUBLESHOOTING.md) - Solución de problemas comunes
--   💡 [Templates](../templates/) - Código inicial para cada ejercicio
 
 ### Recursos Técnicos
 

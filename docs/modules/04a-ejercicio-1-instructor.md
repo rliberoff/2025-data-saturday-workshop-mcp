@@ -378,7 +378,11 @@ static JsonRpcResponse CreateErrorResponse(int code, string message, object? dat
 static List<T> LoadData<T>(string path)
 {
     var json = File.ReadAllText(path);
-    return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
+    var options = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true
+    };
+    return JsonSerializer.Deserialize<List<T>>(json, options) ?? new List<T>();
 }
 ```
 
