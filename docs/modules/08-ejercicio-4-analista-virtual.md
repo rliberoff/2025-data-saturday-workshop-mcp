@@ -24,7 +24,7 @@ Al completar este ejercicio, habrás:
 ```mermaid
 flowchart TB
     User[Usuario: Pregunta en español]
-    Orchestrator[Orquestador MCP<br/>VirtualAnalystServer]
+    Orchestrator[Orquestador MCP<br/>Exercise4Server]
 
     SQL[SQL MCP Server<br/>Datos transaccionales]
     Cosmos[Cosmos MCP Server<br/>Comportamiento usuarios]
@@ -88,9 +88,10 @@ flowchart TB
 ### Paso 1: Estructura del Proyecto (2 minutos)
 
 ```powershell
+
 cd src/McpWorkshop.Servers
-dotnet new web -n Exercise4VirtualAnalyst -f net10.0
-cd Exercise4VirtualAnalyst
+dotnet new web -n Exercise4Server -f net10.0
+cd Exercise4Server
 
 # Referencias
 dotnet add reference ../../McpWorkshop.Shared/McpWorkshop.Shared.csproj
@@ -102,7 +103,7 @@ mkdir Parsers
 
 # Agregar a solución
 cd ../../..
-dotnet sln add src/McpWorkshop.Servers/Exercise4VirtualAnalyst/Exercise4VirtualAnalyst.csproj
+dotnet sln add src/McpWorkshop.Servers/Exercise4Server/Exercise4Server.csproj
 ```
 
 **✅ Checkpoint**: Proyecto creado.
@@ -118,7 +119,7 @@ Crea `Models/McpServerClient.cs`:
 ```csharp
 using System.Text.Json;
 
-namespace Exercise4VirtualAnalyst.Models;
+namespace Exercise4Server.Models;
 
 public class McpServerClient
 {
@@ -165,7 +166,7 @@ public class McpServerClient
 Crea `Parsers/SpanishQueryParser.cs`:
 
 ```csharp
-namespace Exercise4VirtualAnalyst.Parsers;
+namespace Exercise4Server.Parsers;
 
 public record ParsedQuery(
     string Intent,
@@ -287,11 +288,11 @@ public class SpanishQueryParser
 Crea `Orchestration/OrchestratorService.cs`:
 
 ```csharp
-using Exercise4VirtualAnalyst.Models;
-using Exercise4VirtualAnalyst.Parsers;
+using Exercise4Server.Models;
+using Exercise4Server.Parsers;
 using System.Collections.Concurrent;
 
-namespace Exercise4VirtualAnalyst.Orchestration;
+namespace Exercise4Server.Orchestration;
 
 public class OrchestratorService
 {
@@ -448,7 +449,7 @@ public class OrchestratorService
 ### Paso 5: Program.cs (3 minutos)
 
 ```csharp
-using Exercise4VirtualAnalyst.Orchestration;
+using Exercise4Server.Orchestration;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<OrchestratorService>();
