@@ -147,9 +147,9 @@ app.MapPost("/mcp", async (
     {
         var response = request.Method switch
         {
-            "initialize" => HandleInitialize(settings),
-            "resources/list" => HandleResourcesList(),
-            "resources/read" => HandleResourcesRead(paramsDict, customers),
+            "initialize" => HandleInitialize(requestId, settings),
+            "resources/list" => HandleResourcesList(requestId),
+            "resources/read" => HandleResourcesRead(requestId, paramsDict, customers),
             _ => CreateErrorResponse(-32601, "Method not found", null, request.Id)
         };
 
@@ -166,7 +166,7 @@ app.MapPost("/mcp", async (
 await app.RunAsync("http://localhost:5000");
 
 // Métodos helper
-static JsonRpcResponse HandleInitialize(IOptions<McpWorkshop.Shared.Configuration.WorkshopSettings> settings)
+static JsonRpcResponse HandleInitialize(string requestId, IOptions<McpWorkshop.Shared.Configuration.WorkshopSettings> settings)
 {
     return new JsonRpcResponse
     {
@@ -185,11 +185,11 @@ static JsonRpcResponse HandleInitialize(IOptions<McpWorkshop.Shared.Configuratio
                 version = settings.Value.Server.Version
             }
         },
-        Id = "init"
+        Id = requestId
     };
 }
 
-static JsonRpcResponse HandleResourcesList()
+static JsonRpcResponse HandleResourcesList(string requestId)
 {
     return new JsonRpcResponse
     {
@@ -207,14 +207,25 @@ static JsonRpcResponse HandleResourcesList()
                 }
             }
         },
-        Id = "list"
+        Id = requestId
     };
 }
 
-static JsonRpcResponse HandleResourcesRead(IDictionary<string, object>? parameters, List<Customer> customers)
+static JsonRpcResponse HandleResourcesRead(string requestId, IDictionary<string, object>? parameters, List<Customer> customers)
 {
     // Parsear el URI del recurso
-    var uri = parameters?["uri"] as string;
+    string? uri = null;
+    if (parameters != null && parameters.TryGetValue("uri", out var uriValue))
+    {
+        if (uriValue is JsonElement jsonElement)
+        {
+            uri = jsonElement.GetString();
+        }
+        else if (uriValue is string strValue)
+        {
+            uri = strValue;
+        }
+    }
 
     if (uri == "mcp://customers")
     {
@@ -233,12 +244,13 @@ static JsonRpcResponse HandleResourcesRead(IDictionary<string, object>? paramete
                     }
                 }
             },
-            Id = "read"
+            Id = requestId
         };
     }
 
     throw new ArgumentException($"Unknown resource URI: {uri}");
 }
+
 static JsonRpcResponse CreateErrorResponse(int code, string message, object? data, object? id)
 {
     return new JsonRpcResponse
@@ -257,9 +269,14 @@ static JsonRpcResponse CreateErrorResponse(int code, string message, object? dat
 static List<Customer> LoadCustomers()
 {
     var json = File.ReadAllText("../../../Data/customers.json");
-    return JsonSerializer.Deserialize<List<Customer>>(json)
+    var options = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true
+    };
+    return JsonSerializer.Deserialize<List<Customer>>(json, options)
            ?? new List<Customer>();
 }
+
 ```
 
 **Explicación progresiva durante el live coding**:
