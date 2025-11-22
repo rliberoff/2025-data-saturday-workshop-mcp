@@ -345,7 +345,7 @@ $body = @{
         }
     }
     id = "init-001"
-} | ConvertTo-Json -Depth 10
+} | ConvertTo-Json
 
 Invoke-RestMethod -Uri "http://localhost:5000/mcp" `
     -Method POST `
