@@ -1,4 +1,4 @@
-# Bloque 7: Seguridad y Gobernanza - Guía del Instructor (15 minutos)
+# Bloque 6: Seguridad y Gobernanza - Guía del Instructor (15 minutos)
 
 **Propósito**: Corto inciso para hablar sobre patrones empresariales y mejores prácticas de seguridad para despliegues MCP en producción.  
 **Formato**: Presentación con ejemplos prácticos y casos reales.  

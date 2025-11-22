@@ -1,4 +1,4 @@
-# Bloque 7: Seguridad y Gobernanza (15 minutos)
+# Bloque 6: Seguridad y Gobernanza (15 minutos)
 
 **Tipo**: Sesión teórica con ejemplos prácticos  
 **Duración**: 15 minutos  

@@ -129,15 +129,14 @@ dotnet run  # Puerto 5012
 
 -   [01 - Apertura](docs/modules/01b-apertura.md)
 -   [02 - Fundamentos](docs/modules/02b-fundamentos.md)
--   [03 - Anatomía de un Proveedor](docs/modules/03b-anatomia-proveedor.md)
--   [04 - Ejercicio 1: Recursos Estáticos](docs/modules/04b-ejercicio-1-recursos-estaticos.md)
--   [05 - Ejercicio 2: Consultas Paramétricas](docs/modules/05b-ejercicio-2-consultas-parametricas.md)
--   [06 - Ejercicio 3: Seguridad](docs/modules/06b-ejercicio-3-seguridad.md)
--   [07 - Security & Gobernanza](docs/modules/07b-seguridad-gobernanza.md)
--   [08 - Ejercicio 4: Analista Virtual](docs/modules/08-ejercicio-4-analista-virtual.md)
--   [09 - Orquestación Multi-Fuente](docs/modules/09-orquestacion-multifuente.md)
--   [10 - Roadmap & Casos B2B](docs/modules/10-roadmap-casos-b2b.md)
--   [11 - Cierre](docs/modules/11-cierre.md)
+-   [03 - Anatomía de un Proveedor MCP + Ejercicio 1](docs/modules/03b-anatomia-proveedor.md)
+-   [04 - Ejercicio 2: Consultas Paramétricas](docs/modules/04b-ejercicio-2-consultas-parametricas.md)
+-   [05 - Ejercicio 3: Seguridad](docs/modules/05b-ejercicio-3-seguridad.md)
+-   [06 - Seguridad & Gobernanza](docs/modules/06b-seguridad-gobernanza.md)
+-   [07 - Ejercicio 4: Analista Virtual](docs/modules/07-ejercicio-4-analista-virtual.md)
+-   [08 - Orquestación Multi-Fuente](docs/modules/08-orquestacion-multifuente.md)
+-   [09 - Roadmap & Casos B2B](docs/modules/09-roadmap-casos-b2b.md)
+-   [10 - Cierre](docs/modules/10-cierre.md)
 
 ## 🏗️ Estructura del Proyecto
 
@@ -148,7 +147,7 @@ mcp-workshop/
 │   │   ├── 01b-apertura.md
 │   │   ├── 02b-fundamentos.md
 │   │   ├── 03b-anatomia-proveedor.md
-│   │   ├── 04b-ejercicio-1-recursos-estaticos.md
+│   │   ├── 04b-ejercicio-1-recursos-estaticos.md (eliminado, fusionado en 03b)
 │   │   ├── 05b-ejercicio-2-consultas-parametricas.md
 │   │   ├── 06b-ejercicio-3-seguridad.md
 │   │   ├── 07b-seguridad-gobernanza.md
@@ -261,7 +260,7 @@ mcp-workshop/
 .\scripts\verify-exercise1.ps1
 ```
 
-**[📄 Guía completa →](docs/modules/04b-ejercicio-1-recursos-estaticos.md)**
+**[📄 Guía completa →](docs/modules/03b-anatomia-proveedor.md)** _(Fusionado con demostración en vivo)_
 
 ---
 

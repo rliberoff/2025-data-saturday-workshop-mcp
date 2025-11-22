@@ -1,4 +1,4 @@
-# Security Anti-Patterns for MCP Servers
+# Bloque 6: Seguridad y Gobernanza - Anti-Patterns (Material de Referencia)
 
 **Purpose**: Common security mistakes to avoid when building production MCP servers  
 **Audience**: Developers, DevOps, Security Engineers  

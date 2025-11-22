@@ -1,4 +1,4 @@
-# Ejercicio 2: Consultas Paramétricas con Herramientas (20 minutos)
+# Bloque 4: Ejercicio 2 - Consultas Paramétricas con Herramientas (20 minutos)
 
 **Tipo**: Ejercicio semi-independiente  
 **Duración**: 20 minutos  

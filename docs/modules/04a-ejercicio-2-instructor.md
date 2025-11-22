@@ -1,4 +1,4 @@
-# Ejercicio 2: Guía del Instructor (20 minutos)
+# Bloque 4: Ejercicio 2 - Guía del Instructor (20 minutos)
 
 **Propósito**: Segundo ejercicio práctico donde los asistentes implementan herramientas con parámetros dinámicos.  
 **Formato**: Semi-independiente (instructor explica conceptos, asistentes implementan con apoyo).  

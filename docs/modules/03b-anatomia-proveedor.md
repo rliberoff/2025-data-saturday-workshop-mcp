@@ -1,18 +1,18 @@
-# Bloque 3: Anatomía de un Proveedor MCP - Live Coding (20 minutos)
+# Bloque 3: Anatomía de un Proveedor MCP - Ejercicio Guiado (30 minutos)
 
-**Duración**: 20 minutos  
-**Tipo**: Demostración en vivo (live coding)  
+**Duración**: 30 minutos (15 min demostración + 15 min práctica)  
+**Tipo**: Demostración en vivo seguida de ejercicio práctico hands-on  
 **Objetivo**: Crear un servidor MCP funcional desde cero y ejecutarlo
 
 ---
 
 ## 🎯 Objetivos del Bloque
 
-1. Crear un proyecto de servidor MCP básico en C# / .NET 10.0
-2. Implementar el método `initialize` para handshake
-3. Exponer recursos estáticos (`resources/list` y `resources/read`)
-4. Probar el servidor con solicitudes HTTP directas
-5. Mostrar el flujo JSON-RPC 2.0 en acción
+1. **[Demostración]** Crear un proyecto de servidor MCP básico en C# / .NET 10.0
+2. **[Demostración]** Implementar el método `initialize` para handshake
+3. **[Demostración]** Exponer recursos estáticos (`resources/list` y `resources/read`)
+4. **[Todos]** Probar el servidor con solicitudes HTTP directas
+5. **[Práctica]** Extender el servidor con un segundo recurso (productos)
 
 ---
 
@@ -52,38 +52,38 @@ src/McpWorkshop.Servers/
 
 ## 📝 Código Paso a Paso
 
-### Paso 1: Crear el Proyecto (2 minutos)
+### Paso 1: Crear el Proyecto (3 minutos) - **[DEMOSTRACIÓN]**
+
+> **💬 Instructor**: "Usamos `dotnet new web` porque es la plantilla más ligera de ASP.NET Core. No necesitamos MVC, solo un endpoint HTTP simple."
 
 ```powershell
 # Crear proyecto web API
 cd src/McpWorkshop.Servers
-dotnet new web -n DemoServer -f net10.0
+dotnet new web -n Exercise1Server -f net10.0
 
 # Agregar referencia a la librería compartida
-cd DemoServer
+cd Exercise1Server
 dotnet add reference ../../McpWorkshop.Shared/McpWorkshop.Shared.csproj
 
-# Agregar a la solución
+# Agregar a solución y verificar compilación
 cd ../../..
-dotnet sln add src/McpWorkshop.Servers/DemoServer/DemoServer.csproj
+dotnet sln add src/McpWorkshop.Servers/Exercise1Server/Exercise1Server.csproj
+dotnet build
 ```
 
-**Explicación al salón**:
-
-> "Usamos `dotnet new web` porque es la plantilla más ligera de ASP.NET Core. No necesitamos MVC, solo un endpoint HTTP simple."
+**✅ Checkpoint**: Debe compilar sin errores.
 
 ---
 
-### Paso 2: Modelo de Datos (3 minutos)
+### Paso 2: Modelos de Datos (3 minutos) - **[DEMOSTRACIÓN]**
 
-**Archivo**: `src/McpWorkshop.Servers/DemoServer/Models/Customer.cs`
+> **💬 Instructor**: "Este es un modelo simple de cliente. En un sistema real vendría de SQL Server o Cosmos DB. Hoy usamos JSON estático para simplificar."
+
+**Archivo**: `src/McpWorkshop.Servers/Exercise1Server/Models/Customer.cs`
 
 ```csharp
-namespace DemoServer.Models;
+namespace Exercise1Server.Models;
 
-/// <summary>
-/// Representa un cliente en el sistema de demostración
-/// </summary>
 public class Customer
 {
     public int Id { get; set; }
@@ -94,19 +94,34 @@ public class Customer
 }
 ```
 
-**Explicación**:
+**Archivo**: `src/McpWorkshop.Servers/Exercise1Server/Models/Product.cs`
 
-> "Este es un modelo simple de cliente. En un sistema real vendría de SQL Server o Cosmos DB. Hoy usamos JSON estático para simplificar."
+```csharp
+namespace Exercise1Server.Models;
+
+public class Product
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+    public string Category { get; set; } = string.Empty;
+    public bool InStock { get; set; }
+}
+```
+
+**✅ Checkpoint**: Dos modelos creados.
 
 ---
 
-### Paso 3: Implementación del Servidor (10 minutos)
+### Paso 3: Implementación del Servidor (10 minutos) - **[DEMOSTRACIÓN]**
 
-**Archivo**: `src/McpWorkshop.Servers/DemoServer/Program.cs`
+**Archivo**: `src/McpWorkshop.Servers/Exercise1Server/Program.cs`
+
+> **💬 Instructor - Parte 1**: "Configuramos los servicios con DI. Inyectamos el logger estructurado y la configuración del servidor desde nuestra librería compartida."
 
 ```csharp
 using System.Text.Json;
-using DemoServer.Models;
+using Exercise1Server.Models;
 using McpWorkshop.Shared.Logging;
 using McpWorkshop.Shared.Mcp;
 using Microsoft.Extensions.Options;
@@ -117,15 +132,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<IStructuredLogger, StructuredLogger>();
 builder.Services.Configure<McpWorkshop.Shared.Configuration.WorkshopSettings>(options =>
 {
-    options.Server.Name = "DemoServer";
+    options.Server.Name = "Exercise1Server";
     options.Server.Version = "1.0.0";
     options.Server.ProtocolVersion = "2024-11-05";
+    options.Server.Port = 5001;
 });
 
 var app = builder.Build();
 
 // Cargar datos de muestra
-var customers = LoadCustomers();
+var customers = LoadData<Customer>("../../../Data/customers.json");
+var products = LoadData<Product>("../../../Data/products.json");
 
 // Endpoint principal MCP
 app.MapPost("/mcp", async (
@@ -141,15 +158,13 @@ app.MapPost("/mcp", async (
         paramsDict = JsonSerializer.Deserialize<IDictionary<string, object>>(JsonSerializer.Serialize(request.Params));
     }
 
-    logger.LogRequest(request.Method, requestId, paramsDict);
-
     try
     {
         var response = request.Method switch
         {
-            "initialize" => HandleInitialize(requestId, settings),
-            "resources/list" => HandleResourcesList(requestId),
-            "resources/read" => HandleResourcesRead(requestId, paramsDict, customers),
+            "initialize" => HandleInitialize(request.Id, settings),
+            "resources/list" => HandleResourcesList(request.Id),
+            "resources/read" => HandleResourcesRead(request.Id, paramsDict, customers, products),
             _ => CreateErrorResponse(-32601, "Method not found", null, request.Id)
         };
 
@@ -163,17 +178,17 @@ app.MapPost("/mcp", async (
     }
 });
 
-await app.RunAsync("http://localhost:5000");
+app.Run("http://localhost:5001");
 
-// Métodos helper
-static JsonRpcResponse HandleInitialize(string requestId, IOptions<McpWorkshop.Shared.Configuration.WorkshopSettings> settings)
+// Métodos Helper
+static JsonRpcResponse HandleInitialize(object? requestId, IOptions<McpWorkshop.Shared.Configuration.WorkshopSettings> settings)
 {
     return new JsonRpcResponse
     {
         JsonRpc = "2.0",
         Result = new
         {
-            protocolVersion = settings.Value.Server.ProtocolVersion,
+            protocolVersion = "2024-11-05",
             capabilities = new
             {
                 resources = new { },
@@ -189,7 +204,7 @@ static JsonRpcResponse HandleInitialize(string requestId, IOptions<McpWorkshop.S
     };
 }
 
-static JsonRpcResponse HandleResourcesList(string requestId)
+static JsonRpcResponse HandleResourcesList(object? requestId)
 {
     return new JsonRpcResponse
     {
@@ -202,7 +217,14 @@ static JsonRpcResponse HandleResourcesList(string requestId)
                 {
                     uri = "mcp://customers",
                     name = "Customers Database",
-                    description = "Lista de clientes del sistema",
+                    description = "Lista completa de clientes registrados",
+                    mimeType = "application/json"
+                },
+                new
+                {
+                    uri = "mcp://products",
+                    name = "Products Catalog",
+                    description = "Catálogo de productos disponibles",
                     mimeType = "application/json"
                 }
             }
@@ -211,7 +233,11 @@ static JsonRpcResponse HandleResourcesList(string requestId)
     };
 }
 
-static JsonRpcResponse HandleResourcesRead(string requestId, IDictionary<string, object>? parameters, List<Customer> customers)
+static JsonRpcResponse HandleResourcesRead(
+    object? requestId,
+    IDictionary<string, object>? parameters,
+    List<Customer> customers,
+    List<Product> products)
 {
     // Parsear el URI del recurso
     string? uri = null;
@@ -227,28 +253,30 @@ static JsonRpcResponse HandleResourcesRead(string requestId, IDictionary<string,
         }
     }
 
-    if (uri == "mcp://customers")
+    var content = uri switch
     {
-        return new JsonRpcResponse
-        {
-            JsonRpc = "2.0",
-            Result = new
-            {
-                contents = new[]
-                {
-                    new
-                    {
-                        uri = "mcp://customers",
-                        mimeType = "application/json",
-                        text = JsonSerializer.Serialize(customers, new JsonSerializerOptions { WriteIndented = true })
-                    }
-                }
-            },
-            Id = requestId
-        };
-    }
+        "mcp://customers" => JsonSerializer.Serialize(customers, new JsonSerializerOptions { WriteIndented = true }),
+        "mcp://products" => JsonSerializer.Serialize(products, new JsonSerializerOptions { WriteIndented = true }),
+        _ => throw new ArgumentException($"Unknown resource URI: {uri}")
+    };
 
-    throw new ArgumentException($"Unknown resource URI: {uri}");
+    return new JsonRpcResponse
+    {
+        JsonRpc = "2.0",
+        Result = new
+        {
+            contents = new[]
+            {
+                new
+                {
+                    uri,
+                    mimeType = "application/json",
+                    text = content
+                }
+            }
+        },
+        Id = requestId
+    };
 }
 
 static JsonRpcResponse CreateErrorResponse(int code, string message, object? data, object? id)
@@ -266,120 +294,75 @@ static JsonRpcResponse CreateErrorResponse(int code, string message, object? dat
     };
 }
 
-static List<Customer> LoadCustomers()
+static List<T> LoadData<T>(string path)
 {
-    var json = File.ReadAllText("../../../Data/customers.json");
+    var json = File.ReadAllText(path);
     var options = new JsonSerializerOptions
     {
         PropertyNameCaseInsensitive = true
     };
-    return JsonSerializer.Deserialize<List<Customer>>(json, options)
-           ?? new List<Customer>();
+    return JsonSerializer.Deserialize<List<T>>(json, options) ?? new List<T>();
 }
-
 ```
 
-**Explicación progresiva durante el live coding**:
+> **💬 Instructor - Resumen**:
+>
+> -   "Un endpoint `/mcp` recibe todas las solicitudes JSON-RPC"
+> -   "Usamos pattern matching para rutear a los handlers"
+> -   "Initialize negocia capabilities, list muestra recursos, read devuelve contenido"
+> -   "Los datos vienen de JSON estático - en producción serían consultas a BD"
 
-#### Parte 1: Configuración (líneas 1-15)
-
-> "Primero configuramos los servicios. Inyectamos el logger estructurado y la configuración del servidor. Esto viene de nuestra librería compartida que creamos antes."
-
-#### Parte 2: Carga de Datos (línea 19)
-
-> "Cargamos los clientes desde el JSON que generamos con el script `create-sample-data.ps1`. En producción, esto sería una consulta a base de datos."
-
-#### Parte 3: Endpoint MCP (líneas 22-44)
-
-> "Este es el corazón. Un solo endpoint `/mcp` que recibe todas las solicitudes JSON-RPC. Usamos pattern matching con `switch` para rutear a los handlers correctos."
-
-#### Parte 4: Handler de Initialize (líneas 47-66)
-
-> "El cliente siempre empieza llamando `initialize`. Respondemos con nuestra versión de protocolo, nuestras capabilities (recursos y herramientas), y la info del servidor."
-
-#### Parte 5: Handler de Resources/List (líneas 68-86)
-
-> "Aquí listamos los recursos disponibles. Solo tenemos uno: `mcp://customers`. El cliente usa esto para descubrir qué puede pedir."
-
-#### Parte 6: Handler de Resources/Read (líneas 88-117)
-
-> "Cuando el cliente pide leer un recurso específico, verificamos el URI y devolvemos el JSON. Simple pero poderoso."
+**✅ Checkpoint**: El código compila sin errores.
 
 ---
 
-### Paso 4: Ejecutar el Servidor (2 minutos)
+### Paso 4: Ejecutar y Probar el Servidor (10 minutos) - **[DEMOSTRACIÓN + PRÁCTICA]**
+
+#### 4.1 Iniciar el servidor
+
+> **💬 Instructor**: "El servidor correrá en puerto 5001. Ahora todos van a probarlo con solicitudes HTTP."
 
 ```powershell
-# Ejecutar el servidor
-cd src/McpWorkshop.Servers/DemoServer
+cd src/McpWorkshop.Servers/Exercise1Server
 dotnet run
-
-# Deberías ver:
-# info: Microsoft.Hosting.Lifetime[14]
-#       Now listening on: http://localhost:5000
-# info: Microsoft.Hosting.Lifetime[0]
-#       Application started. Press Ctrl+C to shut down.
 ```
 
-**Explicación**:
+**Salida esperada**:
 
-> "El servidor está corriendo en puerto 5000. Ahora vamos a probarlo con solicitudes HTTP directas."
+```
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5001
+```
 
 ---
 
-## 🧪 Pruebas en Vivo
+#### 4.2 Test 1: Initialize (Todos lo ejecutan)
 
-### Test 1: Initialize
+> **💬 Instructor**: "Abran una segunda terminal y ejecuten esto todos juntos"
 
 ```powershell
-# En otra terminal
 $body = @{
     jsonrpc = "2.0"
     method = "initialize"
     params = @{
         protocolVersion = "2024-11-05"
         capabilities = @{}
-        clientInfo = @{
-            name = "TestClient"
-            version = "1.0.0"
-        }
+        clientInfo = @{ name = "WorkshopClient"; version = "1.0.0" }
     }
     id = "init-001"
 } | ConvertTo-Json
 
-Invoke-RestMethod -Uri "http://localhost:5000/mcp" `
+Invoke-RestMethod -Uri "http://localhost:5001/mcp" `
     -Method POST `
     -Body $body `
     -ContentType "application/json"
 ```
 
-**Resultado esperado**:
+**✅ Debe devolver**: `serverInfo` con nombre "Exercise1Server" y capabilities.
 
-```json
-{
-    "jsonrpc": "2.0",
-    "result": {
-        "protocolVersion": "2024-11-05",
-        "capabilities": {
-            "resources": {},
-            "tools": {}
-        },
-        "serverInfo": {
-            "name": "DemoServer",
-            "version": "1.0.0"
-        }
-    },
-    "id": "init-001"
-}
-```
+> **💬 Instructor**: "¡Perfecto! El servidor respondió con su información. Ahora sabemos que habla MCP 2024-11-05."
 
-**Explicación**:
-
-> "¡Funciona! El servidor nos respondió con su información. Ahora sabemos que habla MCP 2024-11-05 y tiene capacidad de recursos."
-
----
-
-### Test 2: Resources/List
+#### 4.3 Test 2: Resources/List
 
 ```powershell
 $body = @{
@@ -389,100 +372,85 @@ $body = @{
     id = "list-001"
 } | ConvertTo-Json
 
-Invoke-RestMethod -Uri "http://localhost:5000/mcp" `
+Invoke-RestMethod -Uri "http://localhost:5001/mcp" `
     -Method POST `
     -Body $body `
     -ContentType "application/json"
 ```
 
-**Resultado esperado**:
+**✅ Debe devolver**: Array con **2 recursos** (`mcp://customers` y `mcp://products`).
 
-```json
-{
-    "jsonrpc": "2.0",
-    "result": {
-        "resources": [
-            {
-                "uri": "mcp://customers",
-                "name": "Customers Database",
-                "description": "Lista de clientes del sistema",
-                "mimeType": "application/json"
-            }
-        ]
-    },
-    "id": "list-001"
-}
-```
+> **💬 Instructor**: "Perfecto. El servidor lista ambos recursos. Ahora vamos a leer cada uno."
 
-**Explicación**:
-
-> "Perfecto. El servidor nos dice que tiene un recurso: `mcp://customers`. Ahora vamos a leerlo."
-
----
-
-### Test 3: Resources/Read
+#### 4.4 Test 3: Resources/Read (Customers)
 
 ```powershell
 $body = @{
     jsonrpc = "2.0"
     method = "resources/read"
-    params = @{
-        uri = "mcp://customers"
-    }
+    params = @{ uri = "mcp://customers" }
     id = "read-001"
 } | ConvertTo-Json
 
-Invoke-RestMethod -Uri "http://localhost:5000/mcp" `
+Invoke-RestMethod -Uri "http://localhost:5001/mcp" `
     -Method POST `
     -Body $body `
     -ContentType "application/json"
 ```
 
-**Resultado esperado**:
+**✅ Debe devolver**: JSON con array de clientes.
 
-```json
-{
-    "jsonrpc": "2.0",
-    "result": {
-        "contents": [
-            {
-                "uri": "mcp://customers",
-                "mimeType": "application/json",
-                "text": "[\n  {\n    \"id\": 1,\n    \"name\": \"Ana García\",\n    \"email\": \"ana.garcia@example.com\",\n    \"country\": \"España\",\n    \"created\": \"2024-01-15T10:30:00Z\"\n  },\n  ...\n]"
-            }
-        ]
-    },
-    "id": "read-001"
-}
+#### 4.5 Test 4: Resources/Read (Products)
+
+```powershell
+$body = @{
+    jsonrpc = "2.0"
+    method = "resources/read"
+    params = @{ uri = "mcp://products" }
+    id = "read-002"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "http://localhost:5001/mcp" `
+    -Method POST `
+    -Body $body `
+    -ContentType "application/json"
 ```
 
-**Explicación**:
+**✅ Debe devolver**: JSON con array de productos.
 
-> "¡Excelente! Recibimos los datos de clientes. Este es el flujo completo: initialize → list → read. Así funciona MCP."
+> **💬 Instructor**: "¡Excelente! Este es el flujo completo MCP: **initialize → list → read**. Así funciona el protocolo."
 
 ---
 
-## 📊 Diagrama de Secuencia de lo que Acabamos de Hacer
+---
+
+## 📊 Diagrama de Secuencia Completo
 
 ```mermaid
 sequenceDiagram
-    participant T as Terminal/Cliente
-    participant S as DemoServer
-    participant D as Data/customers.json
+    participant C as Cliente (Terminal)
+    participant S as Exercise1Server
+    participant D as Data Files
 
-    Note over T,S: Test 1: Initialize
-    T->>S: POST /mcp<br/>{method: "initialize"}
-    S-->>T: {serverInfo, capabilities}
+    Note over C,S: 1. Initialize
+    C->>S: POST /mcp<br/>{method: "initialize"}
+    S-->>C: {serverInfo, capabilities}
 
-    Note over T,S: Test 2: Resources/List
-    T->>S: POST /mcp<br/>{method: "resources/list"}
-    S-->>T: {resources: ["mcp://customers"]}
+    Note over C,S: 2. Resources/List
+    C->>S: POST /mcp<br/>{method: "resources/list"}
+    S-->>C: {resources: [customers, products]}
 
-    Note over T,S: Test 3: Resources/Read
-    T->>S: POST /mcp<br/>{method: "resources/read", uri}
-    S->>D: Leer archivo JSON
-    D-->>S: Datos de clientes
-    S-->>T: {contents: [...]}
+    Note over C,S: 3. Resources/Read (Customers)
+    C->>S: POST /mcp<br/>{method: "resources/read", uri: "mcp://customers"}
+    S->>D: Leer customers.json
+    D-->>S: Array de clientes
+    S-->>C: {contents: [...]}
+
+    Note over C,S: 4. Resources/Read (Products)
+    C->>S: POST /mcp<br/>{method: "resources/read", uri: "mcp://products"}
+    S->>D: Leer products.json
+    D-->>S: Array de productos
+    S-->>C: {contents: [...]}
 ```
 
 ---
@@ -500,7 +468,7 @@ Cada mensaje tiene:
 
 ### 2. **Patrón Request/Response**
 
-```
+```text
 Cliente envía:          Servidor responde:
 {                       {
   "method": "...",        "result": {...},
@@ -518,7 +486,7 @@ El cliente y servidor acuerdan qué funcionalidades soportan:
 
 ### 4. **Recursos como URIs**
 
-```
+```text
 mcp://customers
 mcp://products
 mcp://orders
@@ -528,84 +496,136 @@ Esquema de URI personalizado para identificar recursos de forma única.
 
 ---
 
-## 🔧 Mejoras Posibles (Extensiones)
+---
 
-### Agregar Herramientas (Tools)
+## ✅ Criterios de Éxito
 
-```csharp
-case "tools/list":
-    return new JsonRpcResponse
-    {
-        JsonRpc = "2.0",
-        Result = new
-        {
-            tools = new[]
-            {
-                new
-                {
-                    name = "search_customers",
-                    description = "Busca clientes por país",
-                    inputSchema = new
-                    {
-                        type = "object",
-                        properties = new
-                        {
-                            country = new { type = "string" }
-                        }
-                    }
-                }
-            }
-        }
-    };
+Has completado el ejercicio exitosamente si:
 
-case "tools/call":
-    // Ejecutar búsqueda...
-    break;
-```
+-   [x] El servidor compila sin errores
+-   [x] El servidor se ejecuta en `http://localhost:5001`
+-   [x] `initialize` devuelve serverInfo correcto
+-   [x] `resources/list` muestra 2 recursos (customers y products)
+-   [x] `resources/read` devuelve datos de customers
+-   [x] `resources/read` devuelve datos de products
 
-### Agregar Logging Estructurado
-
-Ya está integrado con `IStructuredLogger` - se puede ver en logs del servidor.
-
-### Agregar Validación de Entrada
-
-```csharp
-if (string.IsNullOrEmpty(uri) || !uri.StartsWith("mcp://"))
-{
-    return CreateErrorResponse(-32602, "Invalid params", "URI must start with mcp://", id);
-}
-```
+**¡Si todos los checkboxes están marcados, lo lograste!** 🎉
 
 ---
 
-## ⚠️ Errores Comunes y Soluciones
+---
 
-### Error: "Port 5000 already in use"
+## 🐛 Solución de Problemas
 
-**Solución**:
+### Error: "Port 5001 already in use"
 
 ```powershell
 # Ver qué proceso usa el puerto
-netstat -ano | findstr :5000
+netstat -ano | findstr :5001
 
-# Cambiar puerto en Program.cs
-app.Run("http://localhost:5001");
+# Cambiar puerto en Program.cs a 5002
+app.Run("http://localhost:5002");
+# Y actualizar URLs de prueba
 ```
 
 ### Error: "Cannot find customers.json"
 
-**Solución**:
-
 ```powershell
-# Verificar ruta del archivo
-Get-Item ../../../Data/customers.json
+# Verificar que ejecutaste el script de datos
+.\scripts\create-sample-data.ps1
+Get-Item Data/customers.json  # Debe existir
 
-# Ajustar ruta relativa según estructura
+# Ajustar ruta en LoadData si es necesario
+var customers = LoadData<Customer>("../../../../Data/customers.json");
 ```
 
 ### Error: "JsonException: The JSON value could not be converted"
 
-**Solución**: Verificar que el JSON del body esté bien formado con `ConvertTo-Json -Depth 10`
+```powershell
+# Usar -Depth 10 en ConvertTo-Json
+$body | ConvertTo-Json -Depth 10
+```
+
+### Error: Compilación falla con "Type or namespace 'McpWorkshop' could not be found"
+
+```powershell
+# Verificar referencia
+dotnet list reference  # Debe mostrar McpWorkshop.Shared
+
+# Si no está, agrégala
+dotnet add reference ../../McpWorkshop.Shared/McpWorkshop.Shared.csproj
+```
+
+---
+
+---
+
+## 📚 Conceptos Aprendidos
+
+### 1. Inicialización del Servidor MCP
+
+-   Configuración de servicios con DI (Dependency Injection)
+-   Registro de logger y settings
+-   ASP.NET Core Minimal API
+
+### 2. Manejo de Solicitudes JSON-RPC
+
+-   Pattern matching con `switch` expressions
+-   Deserialización de parámetros dinámicos
+-   Generación de respuestas estructuradas
+
+### 3. Recursos Estáticos
+
+-   URIs como identificadores (`mcp://resource-name`)
+-   Listado dinámico de recursos disponibles
+-   Lectura de contenido desde fuentes locales (JSON)
+
+### 4. Manejo de Errores
+
+-   Códigos de error estándar JSON-RPC (-32601, -32603)
+-   Try-catch para excepciones
+-   Logging estructurado
+
+---
+
+## 🚀 Extensiones Opcionales (Tiempo Extra)
+
+Si terminaste antes de los 30 minutos, prueba estas extensiones:
+
+### Extensión 1: Agregar Recurso de Pedidos
+
+1. Crea `Models/Order.cs`
+2. Carga los datos: `var orders = LoadData<Order>("../../../Data/orders.json");`
+3. Agrega el recurso en `HandleResourcesList`
+4. Agrega el caso en `HandleResourcesRead`
+
+### Extensión 2: Filtrar por País
+
+Modifica `HandleResourcesRead` para aceptar parámetros opcionales:
+
+```csharp
+var country = paramsDict?["country"]?.ToString();
+
+if (uri == "mcp://customers" && !string.IsNullOrEmpty(country))
+{
+    var filtered = customers.Where(c => c.Country == country).ToList();
+    content = JsonSerializer.Serialize(filtered, new JsonSerializerOptions { WriteIndented = true });
+}
+```
+
+### Extensión 3: Agregar Metadata
+
+```csharp
+Result = new
+{
+    contents = new[] { ... },
+    metadata = new
+    {
+        timestamp = DateTime.UtcNow,
+        count = customers.Count
+    }
+}
+```
 
 ---
 
@@ -613,25 +633,32 @@ Get-Item ../../../Data/customers.json
 
 ### Lo que Construimos
 
-1. ✅ Servidor MCP funcional en ~120 líneas de C#
+1. ✅ Servidor MCP funcional en ~150 líneas de C#
 2. ✅ Tres métodos MCP: `initialize`, `resources/list`, `resources/read`
-3. ✅ Endpoint HTTP único (`/mcp`) para todas las operaciones
-4. ✅ Integración con logging estructurado
-5. ✅ Carga de datos desde JSON
-
-### Lo que Aprendimos
-
--   Cómo se estructura un servidor MCP
--   El flujo JSON-RPC 2.0 request/response
--   Pattern matching para ruteo de métodos
--   Uso de la librería compartida (`McpServerBase`)
+3. ✅ Dos recursos estáticos: clientes y productos
+4. ✅ Endpoint HTTP único (`/mcp`) para todas las operaciones
+5. ✅ Integración con logging estructurado
 
 ### Próximo Paso
 
-**Bloque 4**: Los asistentes crearán su propio servidor MCP con recursos estáticos en el **Ejercicio 1** (15 minutos guiados).
+**Bloque 4 (Ejercicio 2)**: Consultas Paramétricas con Herramientas (20 min)
+
+Aprenderás a:
+
+-   Implementar herramientas invocables (`tools/call`)
+-   Validar parámetros de entrada con JSON Schema
+-   Ejecutar búsquedas y filtros dinámicos
+-   Combinar múltiples fuentes de datos
+
+---
+
+## 📖 Recursos Adicionales
+
+-   **Contrato de referencia**: `specs/001-mcp-workshop-course/contracts/exercise-1-static-resource.json`
+-   **Documentación MCP**: <https://modelcontextprotocol.io/specification/2025-06-18>
 
 ---
 
 **Preparado por**: Instructor del taller MCP  
-**Versión**: 1.0.0  
+**Versión**: 2.0.0 (Fusión de bloques 3 y 4)  
 **Última actualización**: Noviembre 2025

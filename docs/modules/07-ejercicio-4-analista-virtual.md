@@ -1,4 +1,4 @@
-# Ejercicio 4: Analista Virtual - Orquestación Multi-Fuente (25 minutos)
+# Bloque 7: Ejercicio 4 - Analista Virtual Multi-Fuente (25 minutos)
 
 **Tipo**: Ejercicio en grupo (3-5 personas)  
 **Duración**: 25 minutos  

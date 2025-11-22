@@ -1,4 +1,4 @@
-# Bloque 9: Orquestación Multi-Fuente (15 minutos)
+# Bloque 8: Orquestación Multi-Fuente (15 minutos)
 
 **Tipo**: Sesión con demo  
 **Duración**: 15 minutos  

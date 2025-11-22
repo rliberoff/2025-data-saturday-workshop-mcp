@@ -141,7 +141,7 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 -   **Duración**: 15 minutos guiados
 -   **Skills**: `resources/list`, `resources/read`, JSON estructurado
 
-📚 [Instrucciones](./modules/04b-ejercicio-1-recursos-estaticos.md) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise1StaticResources/)
+📚 [Instrucciones](./modules/03b-anatomia-proveedor.md) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise1StaticResources/)
 
 ### Parte 2: Herramientas y Seguridad (1h 10min)
 
@@ -151,7 +151,7 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 -   **Duración**: 20 minutos independiente
 -   **Skills**: `tools/list`, `tools/call`, JSON Schema validation
 
-📚 [Instrucciones](./modules/05b-ejercicio-2-consultas-parametricas.md) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise2ParametricQuery/)
+📚 [Instrucciones](./modules/04b-ejercicio-2-consultas-parametricas.md) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise2ParametricQuery/)
 
 #### Bloque 6: Ejercicio 3 - Seguridad (20 min)
 
@@ -159,7 +159,7 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 -   **Duración**: 20 minutos
 -   **Skills**: Bearer tokens, scopes, logging estructurado
 
-📚 [Instrucciones](./modules/06b-ejercicio-3-seguridad.md) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise3SecureServer/)
+📚 [Instrucciones](./modules/05b-ejercicio-3-seguridad.md) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise3SecureServer/)
 
 #### Bloque 7: Seguridad & Gobernanza (15 min)
 
@@ -169,7 +169,7 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 -   Logging y auditoría
 -   Anti-patterns de seguridad
 
-📚 [Presentación](./modules/07b-seguridad-gobernanza.md) | ⚠️ [Anti-patterns](./modules/07-seguridad-gobernanza-antipatterns.md)
+📚 [Presentación](./modules/06b-seguridad-gobernanza.md) | ⚠️ [Anti-patterns](./modules/06-seguridad-gobernanza-antipatterns.md)
 
 #### Bloque 8: Ejercicio 4 - Analista Virtual (25 min)
 
@@ -177,7 +177,7 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 -   **Duración**: 25 minutos en grupos de 3-5 personas
 -   **Skills**: Multi-source orchestration, caching, natural language queries
 
-📚 [Instrucciones](./modules/08-ejercicio-4-analista-virtual.md) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise4VirtualAnalyst/)
+📚 [Instrucciones](./modules/07-ejercicio-4-analista-virtual.md) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise4VirtualAnalyst/)
 
 ### Parte 3: Arquitectura y Casos de Negocio (40 min)
 
@@ -188,7 +188,7 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 -   Distributed tracing
 -   Caching strategies
 
-📚 [Patrones Avanzados](./modules/09-orquestacion-multifuente.md)
+📚 [Patrones Avanzados](./modules/08-orquestacion-multifuente.md)
 
 #### Bloque 10: Roadmap & Casos B2B (10 min)
 
@@ -197,7 +197,7 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 -   Decision matrix: ¿Cuándo usar MCP?
 -   Comparativa de costos (MCP vs APIs vs Database directo)
 
-📚 [Casos de Negocio](./modules/10-roadmap-casos-b2b.md)
+📚 [Casos de Negocio](./modules/09-roadmap-casos-b2b.md)
 
 #### Bloque 11: Cierre (10 min)
 
@@ -206,7 +206,7 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 -   Próximos pasos
 -   Feedback
 
-📚 [Guía de Cierre](./modules/11-cierre.md)
+📚 [Guía de Cierre](./modules/10-cierre.md)
 
 ---
 
@@ -384,7 +384,7 @@ Agregación de datos de CRM, transacciones, redes sociales, y soporte para anál
 **Impacto**: 18% incremento en customer retention  
 **Valor anual**: 450K€
 
-Más casos en [Roadmap & Casos B2B](./modules/10-roadmap-casos-b2b.md)
+Más casos en [Roadmap & Casos B2B](./modules/09-roadmap-casos-b2b.md)
 
 ---
 

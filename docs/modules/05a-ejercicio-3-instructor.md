@@ -1,4 +1,4 @@
-# Ejercicio 3: Guía del Instructor (20 minutos)
+# Bloque 5: Ejercicio 3 - Seguridad - Guía del Instructor (20 minutos)
 
 **Propósito**: Ejercicio de seguridad donde los asistentes implementan autenticación, autorización y rate limiting.  
 **Formato**: Implementación enfocada con validación continua.  

@@ -1,4 +1,4 @@
-# Ejercicio 3: Seguridad y Autenticación (20 minutos)
+# Bloque 5: Ejercicio 3 - Servidor MCP con Seguridad (20 minutos)
 
 **Tipo**: Ejercicio de implementación enfocada  
 **Duración**: 20 minutos  

@@ -27,18 +27,17 @@ Este taller intensivo de 3 horas te enseñará a crear servidores MCP (Model Con
 | -------------------------------------------------------------------------- | ----------- | -------- | --------------- | ----------------------------------------------- |
 | **[1. Apertura](#bloque-1-apertura-10-min)**                               | 0-10 min    | 10 min   | Presentación    | Bienvenida, objetivos, logística                |
 | **[2. Fundamentos MCP](#bloque-2-fundamentos-25-min)**                     | 10-35 min   | 25 min   | Teoría          | ¿Qué es MCP? Arquitectura, flujos, casos de uso |
-| **[3. Anatomía de un Proveedor](#bloque-3-anatomía-20-min)**               | 35-55 min   | 20 min   | Live Coding     | Crear primer servidor MCP desde cero            |
-| **🔄 Descanso**                                                            | 55-60 min   | 5 min    | -               | Café, networking                                |
-| **[4. Ejercicio 1: Recursos Estáticos](#bloque-4-ejercicio-1-15-min)**     | 60-75 min   | 15 min   | Ejercicio       | Implementar servidor con recursos JSON          |
-| **[5. Ejercicio 2: Consultas Paramétricas](#bloque-5-ejercicio-2-20-min)** | 75-95 min   | 20 min   | Ejercicio       | Añadir herramientas con parámetros              |
-| **🔄 Descanso**                                                            | 95-98 min   | 3 min    | -               | Breve pausa                                     |
-| **[6. Ejercicio 3: Seguridad](#bloque-6-ejercicio-3-20-min)**              | 98-118 min  | 20 min   | Ejercicio       | JWT, scopes, rate limiting                      |
-| **[7. Seguridad y Gobernanza](#bloque-7-seguridad-15-min)**                | 118-133 min | 15 min   | Sesión          | Azure AD, Key Vault, GDPR, arquitectura         |
-| **🔄 Descanso**                                                            | 133-136 min | 3 min    | -               | Formar equipos                                  |
-| **[8. Ejercicio 4: Analista Virtual](#bloque-8-ejercicio-4-25-min)**       | 136-161 min | 25 min   | Ejercicio Grupo | Orquestación multi-fuente                       |
-| **[9. Orquestación Multi-Fuente](#bloque-9-orquestación-15-min)**          | 161-176 min | 15 min   | Sesión          | Patrones: paralelo, secuencial, caching         |
-| **[10. Roadmap y Casos B2B](#bloque-10-roadmap-10-min)**                   | 176-186 min | 10 min   | Business        | ROI, casos reales, monetización                 |
-| **[11. Cierre y Retrospectiva](#bloque-11-cierre-10-min)**                 | 186-196 min | 10 min   | Cierre          | Retrospectiva 3-2-1, Q&A, próximos pasos        |
+| **[3. Anatomía + Ejercicio 1](#bloque-3-anatomia-30-min)**                 | 35-65 min   | 30 min   | Demo + Práctica | Crear servidor MCP con recursos estáticos       |
+| **🔄 Descanso**                                                            | 65-68 min   | 3 min    | -               | Breve pausa                                     |
+| **[4. Ejercicio 2: Consultas Paramétricas](#bloque-4-ejercicio-2-20-min)** | 68-88 min   | 20 min   | Ejercicio       | Añadir herramientas con parámetros              |
+| **[5. Ejercicio 3: Seguridad](#bloque-5-ejercicio-3-20-min)**              | 88-108 min  | 20 min   | Ejercicio       | JWT, scopes, rate limiting                      |
+| **🔄 Descanso**                                                            | 108-113 min | 5 min    | -               | Café, networking                                |
+| **[6. Seguridad y Gobernanza](#bloque-6-seguridad-15-min)**                | 113-128 min | 15 min   | Sesión          | Azure AD, Key Vault, GDPR, arquitectura         |
+| **[7. Ejercicio 4: Analista Virtual](#bloque-7-ejercicio-4-25-min)**       | 128-153 min | 25 min   | Ejercicio Grupo | Orquestación multi-fuente                       |
+| **🔄 Descanso**                                                            | 153-156 min | 3 min    | -               | Formar equipos                                  |
+| **[8. Orquestación Multi-Fuente](#bloque-8-orquestacion-15-min)**          | 156-171 min | 15 min   | Sesión          | Patrones: paralelo, secuencial, caching         |
+| **[9. Roadmap y Casos B2B](#bloque-9-roadmap-10-min)**                     | 171-181 min | 10 min   | Business        | ROI, casos reales, monetización                 |
+| **[10. Cierre y Retrospectiva](#bloque-10-cierre-10-min)**                 | 181-191 min | 10 min   | Cierre          | Retrospectiva 3-2-1, Q&A, próximos pasos        |
 | **Buffer**                                                                 | 196-200 min | 4 min    | -               | Tiempo reserva para atrasos                     |
 
 **Tiempo total**: 196 minutos efectivos + 4 min buffer = **200 min (3h 20m asignados)**
@@ -115,7 +114,7 @@ Café, networking, verificar que todos siguen el ritmo.
 
 ---
 
-### Bloque 4: Ejercicio 1 - Recursos Estáticos (15 min)
+### Bloque 3 (continuación): Ejercicio Práctico Guiado
 
 **Objetivo**: Implementar tu primer servidor MCP con recursos JSON.
 
@@ -133,11 +132,11 @@ Café, networking, verificar que todos siguen el ritmo.
 
 **Tiempo**: 15 minutos guiados con checkpoints cada 3 minutos.
 
-**[📄 Documentación completa →](./modules/04b-ejercicio-1-recursos-estaticos.md)**
+**[📄 Documentación completa →](./modules/03b-anatomia-proveedor.md)** _(Fusionado: Demostración + Ejercicio guiado)_
 
 ---
 
-### Bloque 5: Ejercicio 2 - Consultas Paramétricas (20 min)
+### Bloque 4: Ejercicio 2 - Consultas Paramétricas (20 min)
 
 **Objetivo**: Añadir herramientas (tools) con parámetros.
 
@@ -165,7 +164,7 @@ Pausa breve, estirar piernas.
 
 ---
 
-### Bloque 6: Ejercicio 3 - Seguridad (20 min)
+### Bloque 5: Ejercicio 3 - Seguridad (20 min)
 
 **Objetivo**: Implementar autenticación JWT, scopes, y rate limiting.
 
@@ -195,7 +194,7 @@ Pausa breve, estirar piernas.
 
 ---
 
-### Bloque 7: Seguridad y Gobernanza (15 min)
+### Bloque 6: Seguridad y Gobernanza (15 min)
 
 **Objetivo**: Mejores prácticas empresariales para producción.
 
@@ -233,7 +232,7 @@ Formar equipos de 3-5 personas para Ejercicio 4.
 
 ---
 
-### Bloque 8: Ejercicio 4 - Analista Virtual (25 min)
+### Bloque 7: Ejercicio 4 - Analista Virtual (25 min)
 
 **Objetivo**: Orquestar 3 servidores MCP para responder preguntas de negocio en español.
 
@@ -264,7 +263,7 @@ Crear `Exercise4VirtualAnalyst` que:
 
 ---
 
-### Bloque 9: Orquestación Multi-Fuente (15 min)
+### Bloque 8: Orquestación Multi-Fuente (15 min)
 
 **Objetivo**: Teoría sobre patrones de integración multi-fuente.
 
@@ -287,7 +286,7 @@ Crear `Exercise4VirtualAnalyst` que:
 
 ---
 
-### Bloque 10: Roadmap y Casos B2B (10 min)
+### Bloque 9: Roadmap y Casos B2B (10 min)
 
 **Objetivo**: Conectar MCP con valor de negocio y oportunidades comerciales.
 
@@ -325,7 +324,7 @@ ROI = ((Beneficio Anual - Costo Inversión) / Costo Inversión) × 100%
 
 ---
 
-### Bloque 11: Cierre y Retrospectiva (10 min)
+### Bloque 10: Cierre y Retrospectiva (10 min)
 
 **Objetivo**: Consolidar aprendizaje y recoger feedback.
 
