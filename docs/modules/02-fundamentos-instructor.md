@@ -214,7 +214,7 @@ Proyecta el diagrama "Tradicional vs MCP" y enfatiza:
 
 ## 📖 Especificación MCP (1 minuto)
 
-> "Todo lo que hemos visto está documentado en la especificación oficial: https://spec.modelcontextprotocol.io/
+> "Todo lo que hemos visto está documentado en la especificación oficial: https://modelcontextprotocol.io/specification/2025-06-18
 >
 > Versión actual: 2024-11-05. Es un documento abierto, pueden leerlo. Define cada método, cada código de error, cada formato. No hay magia, solo estándar claro."
 

@@ -206,7 +206,7 @@ Checklist de validación completa para instructores. Ejecutar 24 horas antes del
 
     -   [ ] Pestañas precargadas:
         -   [ ] GitHub repo
-        -   [ ] MCP Spec (https://spec.modelcontextprotocol.io/)
+        -   [ ] MCP Spec (https://modelcontextprotocol.io/specification/2025-06-18)
         -   [ ] JWT.io (para debugging)
         -   [ ] Timer online (visible para asistentes)
     -   [ ] Bookmarks organizados en carpeta "MCP Workshop"

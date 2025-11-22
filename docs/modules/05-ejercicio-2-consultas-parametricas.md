@@ -784,7 +784,7 @@ En el siguiente ejercicio aprenderás a:
 ## 📖 Recursos Adicionales
 
 -   **Contrato de referencia**: `specs/001-mcp-workshop-course/contracts/exercise-2-parametric-query.json`
--   **Documentación MCP - Tools**: https://spec.modelcontextprotocol.io/specification/2024-11-05/basic/tools/
+-   **Documentación MCP - Tools**: https://modelcontextprotocol.io/specification/2025-06-18
 -   **JSON Schema**: https://json-schema.org/understanding-json-schema/
 
 ---

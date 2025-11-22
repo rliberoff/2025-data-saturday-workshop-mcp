@@ -146,7 +146,7 @@ flowchart TB
 
 ### Documentación Oficial
 
--   **Especificación MCP**: https://spec.modelcontextprotocol.io/
+-   **Especificación MCP**: https://modelcontextprotocol.io/specification/2025-06-18
 -   **SDK .NET**: https://github.com/modelcontextprotocol/dotnet-sdk
 -   **Ejemplos oficiales**: https://github.com/modelcontextprotocol/servers
 
@@ -255,11 +255,6 @@ Aquí tienes todo lo prometido:
 
 📊 Resultados de la encuesta:
 [Compartiremos resumen agregado en 1 semana]
-
-📚 Recursos adicionales:
-- Especificación MCP: https://spec.modelcontextprotocol.io/
-- Discord MCP: https://discord.gg/modelcontextprotocol
-- Azure Container Apps: https://learn.microsoft.com/azure/container-apps/
 
 💬 ¿Preguntas?
 Responde a este email o únete al Discord.

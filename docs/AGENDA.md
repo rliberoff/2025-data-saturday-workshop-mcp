@@ -349,8 +349,7 @@ ROI = ((Beneficio Anual - Costo Inversión) / Costo Inversión) × 100%
 
 **Recursos**:
 
--   Especificación MCP: https://spec.modelcontextprotocol.io/
--   Discord oficial: https://discord.gg/modelcontextprotocol
+-   Especificación MCP: https://modelcontextprotocol.io/specification/2025-06-18
 -   Repo del taller: [GitHub URL]
 
 **[📄 Documentación completa →](./modules/11-cierre.md)**

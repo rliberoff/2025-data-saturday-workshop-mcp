@@ -734,12 +734,12 @@ Si después de 5 minutos no resuelves el problema:
 
 ## 📚 Recursos de Soporte
 
-| Recurso                                           | Cuándo Usar                   |
-| ------------------------------------------------- | ----------------------------- |
-| [QUICK_REFERENCE.md](./QUICK_REFERENCE.md)        | Referencia rápida de comandos |
-| [MCP Spec](https://spec.modelcontextprotocol.io/) | Dudas del protocolo           |
-| [.NET Docs](https://learn.microsoft.com/dotnet/)  | Errores de C# / ASP.NET       |
-| Instructor                                        | Problemas bloqueantes         |
+| Recurso                                                              | Cuándo Usar                   |
+| -------------------------------------------------------------------- | ----------------------------- |
+| [QUICK_REFERENCE.md](./QUICK_REFERENCE.md)                           | Referencia rápida de comandos |
+| [MCP Spec](https://modelcontextprotocol.io/specification/2025-06-18) | Dudas del protocolo           |
+| [.NET Docs](https://learn.microsoft.com/dotnet/)                     | Errores de C# / ASP.NET       |
+| Instructor                                                           | Problemas bloqueantes         |
 
 ---
 

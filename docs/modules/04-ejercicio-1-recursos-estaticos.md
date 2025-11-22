@@ -613,7 +613,7 @@ En el siguiente ejercicio aprenderás a:
 
 -   **Contrato de referencia**: `specs/001-mcp-workshop-course/contracts/exercise-1-static-resource.json`
 -   **Código de ejemplo**: `src/McpWorkshop.Servers/DemoServer/`
--   **Documentación MCP**: https://spec.modelcontextprotocol.io/specification/2024-11-05/basic/resources/
+-   **Documentación MCP**: https://modelcontextprotocol.io/specification/2025-06-18
 
 ---
 

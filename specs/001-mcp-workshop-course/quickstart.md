@@ -9,12 +9,12 @@
 
 This guide will help you set up your development environment for the MCP workshop. By the end, you'll have:
 
-- ✅ .NET SDK installed and configured
-- ✅ Required development tools (IDE, Git, PowerShell)
-- ✅ Workshop repository cloned
-- ✅ ModelContextProtocol library installed
-- ✅ Sample data and local MCP server running
-- ✅ Azure CLI configured (optional, for cloud exercises)
+-   ✅ .NET SDK installed and configured
+-   ✅ Required development tools (IDE, Git, PowerShell)
+-   ✅ Workshop repository cloned
+-   ✅ ModelContextProtocol library installed
+-   ✅ Sample data and local MCP server running
+-   ✅ Azure CLI configured (optional, for cloud exercises)
 
 ---
 
@@ -22,15 +22,15 @@ This guide will help you set up your development environment for the MCP worksho
 
 ### Required
 
-- **Operating System**: Windows 11
-- **RAM**: Minimum 8 GB (16 GB recommended)
-- **Disk Space**: 5 GB free space
-- **Internet**: Required for initial setup and package downloads
+-   **Operating System**: Windows 11
+-   **RAM**: Minimum 8 GB (16 GB recommended)
+-   **Disk Space**: 5 GB free space
+-   **Internet**: Required for initial setup and package downloads
 
 ### Accounts (Optional for Azure Exercises)
 
-- **Azure Account**: Free tier sufficient ([azure.microsoft.com/free](https://azure.microsoft.com/free))
-- **GitHub Account**: For repository access (if using private fork)
+-   **Azure Account**: Free tier sufficient ([azure.microsoft.com/free](https://azure.microsoft.com/free))
+-   **GitHub Account**: For repository access (if using private fork)
 
 ---
 
@@ -79,7 +79,7 @@ dotnet --version
 
 ### IDE Options
 
-#### Option A: Visual Studio Code (Recommended)**
+#### Option A: Visual Studio Code (Recommended)\*\*
 
 1. Download from [code.visualstudio.com](https://code.visualstudio.com)
 2. Install required extensions:
@@ -213,7 +213,7 @@ dotnet run
 
 ### Test the Server
 
-#### Option A: Using PowerShell**
+#### Option A: Using PowerShell\*\*
 
 ```powershell
 # In a new terminal
@@ -228,7 +228,7 @@ $response | ConvertTo-Json -Depth 10
 # Expected output: List of resources (customers, products)
 ```
 
-#### Option B: Using REST Client (VS Code)**
+#### Option B: Using REST Client (VS Code)\*\*
 
 Create a file `test-mcp-server.http`:
 
@@ -443,23 +443,23 @@ az login --service-principal -u <app-id> -p <password> --tenant <tenant-id>
 
 ### Workshop Day Checklist
 
-- [ ] Laptop charged
-- [ ] All tools installed (run `verify-setup.ps1`)
-- [ ] Sample data loaded
-- [ ] Test server working
-- [ ] Internet connection stable
-- [ ] Azure account ready (if doing cloud exercises)
-- [ ] Questions prepared for instructor
+-   [ ] Laptop charged
+-   [ ] All tools installed (run `verify-setup.ps1`)
+-   [ ] Sample data loaded
+-   [ ] Test server working
+-   [ ] Internet connection stable
+-   [ ] Azure account ready (if doing cloud exercises)
+-   [ ] Questions prepared for instructor
 
 ---
 
 ## Resources
 
-- **MCP Specification**: [spec.modelcontextprotocol.io](https://spec.modelcontextprotocol.io)
-- **Workshop Documentation**: `docs/` directory
-- **Contract Specifications**: `specs/001-mcp-workshop-course/contracts/`
-- **Sample Code**: `src/McpWorkshop.Servers/`
-- **Support**: Open an issue in the repository or ask during workshop
+-   **MCP Specification**: [modelcontextprotocol.io/specification/2025-06-18](https://modelcontextprotocol.io/specification/2025-06-18)
+-   **Workshop Documentation**: `docs/` directory
+-   **Contract Specifications**: `specs/001-mcp-workshop-course/contracts/`
+-   **Sample Code**: `src/McpWorkshop.Servers/`
+-   **Support**: Open an issue in the repository or ask during workshop
 
 ---
 

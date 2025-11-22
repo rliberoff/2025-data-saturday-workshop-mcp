@@ -265,7 +265,7 @@ En el próximo bloque exploraremos:
 
 ## 📚 Recursos Adicionales
 
--   **Especificación MCP oficial**: https://spec.modelcontextprotocol.io/
+-   **Especificación MCP oficial**: https://modelcontextprotocol.io/specification/2025-06-18
 -   **GitHub ModelContextProtocol**: https://github.com/modelcontextprotocol
 -   **Documentación .NET 10.0**: https://learn.microsoft.com/dotnet
 -   **Azure Documentation**: https://learn.microsoft.com/azure

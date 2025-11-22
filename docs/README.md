@@ -332,7 +332,7 @@ start coverage/report/index.html
 
 ### Documentación Oficial
 
--   [MCP Specification](https://spec.modelcontextprotocol.io/) - Especificación oficial del protocolo
+-   [MCP Specification](https://modelcontextprotocol.io/specification/2025-06-18) - Especificación oficial del protocolo
 -   [JSON-RPC 2.0](https://www.jsonrpc.org/specification) - Especificación del protocolo de transporte
 -   [.NET 10 Documentation](https://learn.microsoft.com/dotnet/) - Documentación de .NET
 
