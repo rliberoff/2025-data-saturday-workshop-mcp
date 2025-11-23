@@ -63,14 +63,14 @@ flowchart TB
 1. **"¿Cuántos clientes nuevos registrados en Madrid este mes?"**
 
     - Servidor: SQL MCP
-    - Método: `tools/call` → `query_customers`
-    - Parámetros: `{ city: "Madrid", since: "2025-11-01" }`
+    - Método: `tools/call` → `query_customers_by_country`
+    - Parámetros: `{ country: "España", city: "Madrid" }`
 
 2. **"¿Qué usuarios abandonaron carritos en las últimas 24 horas?"**
 
     - Servidor: Cosmos MCP
-    - Método: `tools/call` → `analyze_user_behavior`
-    - Parámetros: `{ behaviorType: "cart_abandonment", timeRange: "24h" }`
+    - Método: `tools/call` → `get_abandoned_carts`
+    - Parámetros: `{ hours: 24 }`
 
 3. **"¿Cuál es el estado del pedido #1234 y su inventario asociado?"**
 
@@ -145,14 +145,40 @@ public class McpServerClient
         var json = JsonSerializer.Serialize(request);
         var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync($"{_serverUrl}/mcp", content);
-        response.EnsureSuccessStatusCode();
+        try
+        {
+            var response = await _httpClient.PostAsync($"{_serverUrl}/mcp", content);
+            response.EnsureSuccessStatusCode();
 
-        var responseJson = await response.Content.ReadAsStringAsync();
-        var result = JsonSerializer.Deserialize<JsonElement>(responseJson);
+            var responseJson = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<JsonElement>(responseJson);
 
-        var resultProperty = result.GetProperty("result");
-        return JsonSerializer.Deserialize<T>(resultProperty.GetRawText());
+            // Verificar si la respuesta tiene la propiedad "result"
+            if (result.TryGetProperty("result", out var resultProperty))
+            {
+                return JsonSerializer.Deserialize<T>(resultProperty.GetRawText());
+            }
+
+            // Si tiene "error", lanzar excepción con el mensaje de error
+            if (result.TryGetProperty("error", out var errorProperty))
+            {
+                var errorMessage = errorProperty.TryGetProperty("message", out var msgProp)
+                    ? msgProp.GetString()
+                    : "Unknown error";
+                throw new InvalidOperationException($"MCP Server error: {errorMessage}");
+            }
+
+            // Si no tiene ni result ni error, devolver la respuesta completa
+            return JsonSerializer.Deserialize<T>(responseJson);
+        }
+        catch (HttpRequestException ex)
+        {
+            throw new InvalidOperationException($"Failed to connect to MCP server at {_serverUrl}: {ex.Message}", ex);
+        }
+        catch (TaskCanceledException ex)
+        {
+            throw new InvalidOperationException($"Request to MCP server at {_serverUrl} timed out", ex);
+        }
     }
 }
 ```
@@ -344,42 +370,53 @@ public class OrchestratorService
         }
 
         // 3. Execute based on intent
-        object result = parsedQuery.Intent switch
+        try
         {
-            "new_customers" => await ExecuteNewCustomersAsync(parsedQuery.Parameters),
-            "abandoned_carts" => await ExecuteAbandonedCartsAsync(parsedQuery.Parameters),
-            "order_status" => await ExecuteOrderStatusAsync(parsedQuery.Parameters),
-            "sales_summary" => await ExecuteSalesSummaryAsync(),
-            _ => "Intent no implementado"
-        };
+            object result = parsedQuery.Intent switch
+            {
+                "new_customers" => await ExecuteNewCustomersAsync(parsedQuery.Parameters),
+                "abandoned_carts" => await ExecuteAbandonedCartsAsync(parsedQuery.Parameters),
+                "order_status" => await ExecuteOrderStatusAsync(parsedQuery.Parameters),
+                "sales_summary" => await ExecuteSalesSummaryAsync(),
+                _ => "Intent no implementado"
+            };
 
-        // 4. Cache result
-        _cache[cacheKey] = (result, DateTime.UtcNow);
+            // 4. Cache result
+            _cache[cacheKey] = (result, DateTime.UtcNow);
 
-        // 5. Format and return
-        return FormatResult(parsedQuery.Intent, result);
+            // 5. Format and return
+            return FormatResult(parsedQuery.Intent, result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return $"❌ Error al ejecutar la consulta: {ex.Message}. Verifica que los servidores MCP estén corriendo.";
+        }
+        catch (Exception ex)
+        {
+            return $"❌ Error inesperado: {ex.Message}";
+        }
     }
 
     private async Task<object> ExecuteNewCustomersAsync(Dictionary<string, string> parameters)
     {
-        // Single server: SQL
+        // Single server: SQL - usa query_customers_by_country
         var sqlClient = _servers["sql"];
-        var result = await sqlClient.CallToolAsync<dynamic>("query_customers", new
+        var result = await sqlClient.CallToolAsync<dynamic>("query_customers_by_country", new
         {
-            city = parameters["city"],
-            since = parameters["since"]
+            country = "España",
+            city = parameters["city"]
         });
         return result ?? "No data";
     }
 
     private async Task<object> ExecuteAbandonedCartsAsync(Dictionary<string, string> parameters)
     {
-        // Single server: Cosmos
+        // Single server: Cosmos - usa get_abandoned_carts
         var cosmosClient = _servers["cosmos"];
-        var result = await cosmosClient.CallToolAsync<dynamic>("analyze_user_behavior", new
+        var hours = parameters["timeRange"] == "24h" ? 24 : 168; // 24h o 7 días
+        var result = await cosmosClient.CallToolAsync<dynamic>("get_abandoned_carts", new
         {
-            behaviorType = parameters["behaviorType"],
-            timeRange = parameters["timeRange"]
+            hours = hours
         });
         return result ?? "No data";
     }
@@ -420,9 +457,9 @@ public class OrchestratorService
         var sqlClient = _servers["sql"];
         var restClient = _servers["rest"];
 
-        var salesTask = sqlClient.CallToolAsync<dynamic>("calculate_metrics", new
+        var salesTask = sqlClient.CallToolAsync<dynamic>("get_sales_summary", new
         {
-            metricType = "sales"
+            // Opcional: startDate, endDate, status
         });
 
         var topProductsTask = restClient.CallToolAsync<dynamic>("get_top_products", new
@@ -482,8 +519,7 @@ Console.WriteLine("  - top_products: 'Top 10 productos más vendidos'");
 Console.WriteLine("\n🔧 Servidores MCP requeridos:");
 Console.WriteLine("  - SqlMcpServer (http://localhost:5010)");
 Console.WriteLine("  - CosmosMcpServer (http://localhost:5011)");
-Console.WriteLine("  - RestApiMcpServer (http://localhost:5012)");
-app.Run("http://localhost:5004");
+Console.WriteLine("  - RestApiMcpServer (http://localhost:5012) \n");
 
 await app.RunAsync("http://localhost:5004");
 
