@@ -51,13 +51,13 @@ public class AnalyzeUserBehaviorTool
         var userCartEvents = cartEvents.Where(e => e.UserId == userId).ToList();
 
         var totalSessions = userSessions.Count;
-        var totalPageViews = userSessions.Sum(s => s.PageViews);
-        var totalActions = userSessions.Sum(s => s.Actions);
+        var totalPageViews = userSessions.Sum(s => s.PagesViewed);
+        var totalActions = userSessions.Sum(s => s.Actions.Length);
         var hasCheckout = userCartEvents.Any(e => e.Action == "checkout");
         var addToCartCount = userCartEvents.Count(e => e.Action == "addToCart");
 
         var avgSessionDuration = userSessions.Any()
-            ? userSessions.Average(s => (s.SessionEnd - s.SessionStart).TotalMinutes)
+            ? userSessions.Average(s => (s.EndTime - s.StartTime).TotalMinutes)
             : 0;
 
         object textContent = new Dictionary<string, object>

@@ -493,6 +493,37 @@ await app.RunAsync("http://localhost:5004");
 
 ## 🧪 Pruebas (En Grupo)
 
+### Prerequisito: Levantar Servidores MCP
+
+**⚠️ IMPORTANTE**: Antes de ejecutar las pruebas, debes tener corriendo los 3 servidores MCP que el orquestador necesita consultar:
+
+```powershell
+# Terminal 1: SQL Server
+cd src/McpWorkshop.Servers/Exercise4SqlMcpServer
+dotnet run
+
+# Terminal 2: Cosmos DB Server
+cd src/McpWorkshop.Servers/Exercise4CosmosMcpServer
+dotnet run
+
+# Terminal 3: REST API Server
+cd src/McpWorkshop.Servers/Exercise4RestApiMcpServer
+dotnet run
+
+# Terminal 4: Orchestrator (este proyecto)
+cd src/McpWorkshop.Servers/Exercise4Server
+dotnet run
+```
+
+**Verifica que los 4 servidores estén escuchando**:
+
+-   SqlMcpServer: `http://localhost:5010`
+-   CosmosMcpServer: `http://localhost:5011`
+-   RestApiMcpServer: `http://localhost:5012`
+-   Orchestrator (este ejercicio): `http://localhost:5004`
+
+---
+
 ### Prueba 1: Clientes nuevos en Madrid
 
 ```powershell

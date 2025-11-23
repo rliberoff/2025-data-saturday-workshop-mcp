@@ -4,12 +4,12 @@ namespace Exercise4CosmosMcpServer.Models;
 
 public class UserSession
 {
+    public string Id { get; set; } = string.Empty;
     public string UserId { get; set; } = string.Empty;
-    public DateTime SessionStart { get; set; }
-    public DateTime SessionEnd { get; set; }
-    public int PageViews { get; set; }
-    public int Actions { get; set; }
-    public string LastPage { get; set; } = string.Empty;
+    public DateTime StartTime { get; set; }
+    public DateTime EndTime { get; set; }
+    public int PagesViewed { get; set; }
+    public string[] Actions { get; set; } = Array.Empty<string>();
 }
 
 public class CartEvent

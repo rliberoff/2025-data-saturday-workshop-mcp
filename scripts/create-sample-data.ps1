@@ -206,6 +206,66 @@ $abandonedCarts = @(
     }
 )
 
+# Datos de eventos del carrito
+$cartEvents = @(
+    @{
+        userId      = "user_1"
+        productId   = 101
+        action      = "addToCart"
+        timestamp   = "2024-06-10T08:30:00Z"
+        quantity    = 1
+    },
+    @{
+        userId      = "user_1"
+        productId   = 101
+        action      = "checkout"
+        timestamp   = "2024-06-10T08:40:00Z"
+        quantity    = 1
+    },
+    @{
+        userId      = "user_2"
+        productId   = 102
+        action      = "addToCart"
+        timestamp   = "2024-06-10T09:45:00Z"
+        quantity    = 2
+    },
+    @{
+        userId      = "user_2"
+        productId   = 103
+        action      = "addToCart"
+        timestamp   = "2024-06-10T09:55:00Z"
+        quantity    = 1
+    },
+    @{
+        userId      = "user_2"
+        productId   = 103
+        action      = "removeFromCart"
+        timestamp   = "2024-06-10T09:58:00Z"
+        quantity    = 1
+    },
+    @{
+        userId      = "user_1"
+        productId   = 104
+        action      = "addToCart"
+        timestamp   = "2024-06-11T14:30:00Z"
+        quantity    = 1
+    },
+    @{
+        userId      = "user_3"
+        productId   = 101
+        action      = "addToCart"
+        timestamp   = "2024-06-11T16:00:00Z"
+        quantity    = 1
+    },
+    @{
+        userId      = "user_3"
+        productId   = 104
+        action      = "addToCart"
+        timestamp   = "2024-06-11T16:20:00Z"
+        quantity    = 1
+    }
+)
+
 # Guardar archivos JSON
 try {
     $customersPath = Join-Path $OutputPath "customers.json"
@@ -227,6 +287,10 @@ try {
     $abandonedCartsPath = Join-Path $OutputPath "abandoned-carts.json"
     $abandonedCarts | ConvertTo-Json -Depth 10 | Out-File -FilePath $abandonedCartsPath -Encoding UTF8
     Write-Host "✓ Generado: $abandonedCartsPath ($($abandonedCarts.Count) carritos abandonados)" -ForegroundColor Green
+
+    $cartEventsPath = Join-Path $OutputPath "cart-events.json"
+    $cartEvents | ConvertTo-Json -Depth 10 | Out-File -FilePath $cartEventsPath -Encoding UTF8
+    Write-Host "✓ Generado: $cartEventsPath ($($cartEvents.Count) eventos de carrito)" -ForegroundColor Green
 
     Write-Host "`n✅ Todos los datos de muestra generados exitosamente" -ForegroundColor Green
     Write-Host "Ubicación: $(Resolve-Path $OutputPath)" -ForegroundColor Cyan
