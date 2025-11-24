@@ -29,10 +29,31 @@ app.MapPost("/mcp", async (HttpContext context) =>
 {
     using var reader = new StreamReader(context.Request.Body);
     var requestBody = await reader.ReadToEndAsync();
+
+    // Log para debug
+    Console.WriteLine($"📨 Request recibido: {requestBody}");
+
     var request = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
-    var method = request.GetProperty("method").GetString();
-    var id = request.GetProperty("id");
+    // Verificar que tenga las propiedades requeridas
+    if (!request.TryGetProperty("method", out var methodElement))
+    {
+        context.Response.StatusCode = 400;
+        await context.Response.WriteAsJsonAsync(new
+        {
+            jsonrpc = "2.0",
+            error = new
+            {
+                code = -32600,
+                message = "Invalid Request: missing 'method' field"
+            },
+            id = request.TryGetProperty("id", out var idProp) ? idProp : (object?)null
+        });
+        return;
+    }
+
+    var method = methodElement.GetString();
+    var id = request.TryGetProperty("id", out var idElement) ? idElement : JsonDocument.Parse("null").RootElement;
 
     object? result = null;
 
@@ -168,19 +189,36 @@ object HandleToolCall(JsonElement request)
 {
     var paramsObj = request.GetProperty("params");
     var toolName = paramsObj.GetProperty("name").GetString();
-    var argsElement = paramsObj.GetProperty("arguments");
 
     var arguments = new Dictionary<string, JsonElement>();
-    foreach (var prop in argsElement.EnumerateObject())
+
+    // Manejar caso cuando arguments puede no existir o estar vacío
+    if (paramsObj.TryGetProperty("arguments", out var argsElement))
     {
-        arguments[prop.Name] = prop.Value;
+        foreach (var prop in argsElement.EnumerateObject())
+        {
+            arguments[prop.Name] = prop.Value;
+        }
     }
 
-    return toolName switch
+    var toolResult = toolName switch
     {
         "query_customers_by_country" => QueryCustomersByCountryTool.Execute(arguments, customers),
         "get_sales_summary" => GetSalesSummaryTool.Execute(arguments, orders),
         "get_order_details" => GetOrderDetailsTool.Execute(arguments, orders, customers, products),
         _ => throw new InvalidOperationException($"Unknown tool: {toolName}")
+    };
+
+    // Envolver el resultado en el formato MCP correcto
+    return new
+    {
+        content = new[]
+        {
+            new
+            {
+                type = "text",
+                text = JsonSerializer.Serialize(toolResult)
+            }
+        }
     };
 }

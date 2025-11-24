@@ -12,7 +12,7 @@ public class CheckInventoryTool
         return new
         {
             name = "check_inventory",
-            description = "Verificar inventario disponible de un producto (simula llamada a API externa)",
+            description = "Verifica el inventario disponible de un producto específico. IMPORTANTE: Esta herramienta requiere el parámetro 'productId' (number, requerido) que es el ID numérico del producto (ejemplo: 101, 102, 105). NO uses nombres de productos, solo IDs numéricos. Usa esta herramienta cuando te pregunten sobre disponibilidad, stock, o inventario de un producto específico.",
             inputSchema = new Dictionary<string, object>
             {
                 ["type"] = "object",
@@ -45,7 +45,7 @@ public class CheckInventoryTool
         var quantity = inStock ? random.Next(5, 50) : 0;
         var warehouse = new[] { "Madrid", "Barcelona", "Valencia" }[random.Next(0, 3)];
 
-        return new
+        var result = new
         {
             content = new[]
             {
@@ -60,5 +60,11 @@ public class CheckInventoryTool
                 }
             }
         };
+
+        // Trace: log result
+        Console.WriteLine($"🔍 [check_inventory] Input: productId={productId}");
+        Console.WriteLine($"📤 [check_inventory] Output: inStock={inStock}, quantity={quantity}, warehouse={warehouse}");
+
+        return result;
     }
 }

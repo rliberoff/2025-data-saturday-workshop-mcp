@@ -13,7 +13,7 @@ public class QueryCustomersByCountryTool
         return new
         {
             name = "query_customers_by_country",
-            description = "Consultar clientes filtrados por país y opcionalmente por ciudad",
+            description = "Busca y lista clientes registrados en un país específico, con opción de filtrar por ciudad. Usa esta herramienta cuando te pregunten cuántos clientes hay en un país o ciudad (ejemplo: '¿Cuántos clientes hay en España?', '¿Clientes en Madrid?').",
             inputSchema = new Dictionary<string, object>
             {
                 ["type"] = "object",
@@ -22,12 +22,12 @@ public class QueryCustomersByCountryTool
                     ["country"] = new Dictionary<string, object>
                     {
                         ["type"] = "string",
-                        ["description"] = "País del cliente (ej: España, México)"
+                        ["description"] = "Nombre del país para filtrar clientes (ejemplos: 'España', 'México', 'Argentina')"
                     },
                     ["city"] = new Dictionary<string, object>
                     {
                         ["type"] = "string",
-                        ["description"] = "Ciudad del cliente (opcional)"
+                        ["description"] = "Nombre de la ciudad para filtrar clientes dentro del país (opcional, ejemplos: 'Madrid', 'Barcelona')"
                     }
                 },
                 ["required"] = new[] { "country" }
@@ -75,9 +75,15 @@ public class QueryCustomersByCountryTool
             }
         };
 
-        return new Dictionary<string, object>
+        var result = new Dictionary<string, object>
         {
             ["content"] = new[] { textContent, resourceContent }
         };
+
+        // Trace: log result
+        Console.WriteLine($"🔍 [query_customers_by_country] Input: country={country}, city={city ?? "null"}");
+        Console.WriteLine($"📤 [query_customers_by_country] Output: {filtered.Count} customers found");
+
+        return result;
     }
 }

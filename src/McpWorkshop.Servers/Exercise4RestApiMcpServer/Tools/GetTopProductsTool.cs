@@ -12,7 +12,7 @@ public class GetTopProductsTool
         return new
         {
             name = "get_top_products",
-            description = "Obtener productos más vendidos (simula API de analítica)",
+            description = "Obtiene el ranking de productos más vendidos con estadísticas de ventas e ingresos. IMPORTANTE: Parámetros opcionales 'limit' (number, por defecto 10) para número de productos a mostrar y 'period' (string: 'day'/'week'/'month', por defecto 'week') para el período de análisis. Usa esta herramienta cuando te pregunten sobre productos más vendidos, top productos, mejores productos, ranking de ventas, o productos populares.",
             inputSchema = new Dictionary<string, object>
             {
                 ["type"] = "object",
@@ -38,16 +38,25 @@ public class GetTopProductsTool
 
     public static object Execute(Dictionary<string, JsonElement> arguments)
     {
+        // Manejar caso cuando arguments puede ser null o vacío
+        arguments ??= new Dictionary<string, JsonElement>();
+
         var limit = 10;
-        if (arguments.ContainsKey("limit") && arguments["limit"].ValueKind == JsonValueKind.Number)
+        if (arguments.ContainsKey("limit"))
         {
-            limit = arguments["limit"].GetInt32();
+            if (arguments["limit"].ValueKind == JsonValueKind.Number)
+            {
+                limit = arguments["limit"].GetInt32();
+            }
         }
 
         var period = "week";
-        if (arguments.ContainsKey("period") && arguments["period"].ValueKind == JsonValueKind.String)
+        if (arguments.ContainsKey("period"))
         {
-            period = arguments["period"].GetString() ?? "week";
+            if (arguments["period"].ValueKind == JsonValueKind.String)
+            {
+                period = arguments["period"].GetString() ?? "week";
+            }
         }
 
         // Simulate API call delay
@@ -80,7 +89,7 @@ public class GetTopProductsTool
             _ => period.ToUpper()
         };
 
-        return new
+        var result = new
         {
             content = new[]
             {
@@ -96,5 +105,11 @@ public class GetTopProductsTool
                 }
             }
         };
+
+        // Trace: log result
+        Console.WriteLine($"🔍 [get_top_products] Input: limit={limit}, period={period}");
+        Console.WriteLine($"📤 [get_top_products] Output: {topProducts.Count} products, totalSales={totalSales}, totalRevenue=€{totalRevenue:N2}");
+
+        return result;
     }
 }

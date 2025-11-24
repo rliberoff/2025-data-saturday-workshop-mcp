@@ -34,7 +34,7 @@ $warnings = @()
 
 Write-Host "[Test 1] Verificando que el proyecto existe..." -NoNewline
 
-$projectPath = "src/McpWorkshop.Servers/Exercise5AgentServer/Exercise5AgentServer.csproj"
+$projectPath = "src/McpWorkshop.Servers/Exercise5Agent/Exercise5Agent.csproj"
 
 if (Test-Path $projectPath) {
     Write-Host " ✅ PASS" -ForegroundColor Green
@@ -86,9 +86,10 @@ if ($allPackagesPresent) {
 Write-Host "[Test 3] Verificando archivos clave..." -NoNewline
 
 $requiredFiles = @(
-    "src/McpWorkshop.Servers/Exercise5AgentServer/Program.cs",
-    "src/McpWorkshop.Servers/Exercise5AgentServer/McpClientHelper.cs",
-    "src/McpWorkshop.Servers/Exercise5AgentServer/appsettings.json"
+    "src/McpWorkshop.Servers/Exercise5Agent/Program.cs",
+    "src/McpWorkshop.Servers/Exercise5Agent/McpClientHelper.cs",
+    "src/McpWorkshop.Servers/Exercise5Agent/McpToolAdapter.cs",
+    "src/McpWorkshop.Servers/Exercise5Agent/appsettings.json"
 )
 
 $allFilesPresent = $true
@@ -115,7 +116,7 @@ if ($allFilesPresent) {
 
 Write-Host "[Test 4] Verificando configuración..." -NoNewline
 
-$appsettingsPath = "src/McpWorkshop.Servers/Exercise5AgentServer/appsettings.json"
+$appsettingsPath = "src/McpWorkshop.Servers/Exercise5Agent/appsettings.json"
 
 if (Test-Path $appsettingsPath) {
     $config = Get-Content $appsettingsPath -Raw | ConvertFrom-Json
@@ -163,7 +164,7 @@ if (Test-Path $appsettingsPath) {
 
 Write-Host "[Test 5] Verificando que el proyecto compila..." -NoNewline
 
-Push-Location "src/McpWorkshop.Servers/Exercise5AgentServer"
+Push-Location "src/McpWorkshop.Servers/Exercise5Agent"
 
 try {
     $buildOutput = dotnet build --configuration Release --nologo 2>&1
@@ -225,24 +226,41 @@ if ($allServersRunning) {
 
 Write-Host "[Test 7] Verificando estructura del código..." -NoNewline
 
-$programContent = Get-Content "src/McpWorkshop.Servers/Exercise5AgentServer/Program.cs" -Raw
+$programContent = Get-Content "src/McpWorkshop.Servers/Exercise5Agent/Program.cs" -Raw
+$adapterContent = Get-Content "src/McpWorkshop.Servers/Exercise5Agent/McpToolAdapter.cs" -Raw -ErrorAction SilentlyContinue
 
 $codeChecks = @(
     "McpClientHelper.CreateHttpClientAsync",
     "ListToolsAsync",
     "AzureOpenAI",
-    "Microsoft.Agents.AI"
+    "Microsoft.Agents.AI",
+    "McpToolAdapter.ConvertToAITools"
 )
 
 $allChecksPass = $true
 
 foreach ($check in $codeChecks) {
-    if ($programContent -notmatch [regex]::Escape($check)) {
+    $found = $false
+    if ($programContent -match [regex]::Escape($check)) {
+        $found = $true
+    }
+    if ($adapterContent -and $adapterContent -match [regex]::Escape($check)) {
+        $found = $true
+    }
+    
+    if (-not $found) {
         Write-Host " ❌ FAIL" -ForegroundColor Red
         Write-Host "  Falta código esperado: $check" -ForegroundColor Red
         $allChecksPass = $false
         break
     }
+}
+
+# Verificar que NO usen Cast<AITool>() directamente
+if ($programContent -match "Cast<AITool>") {
+    Write-Host " ❌ FAIL" -ForegroundColor Red
+    Write-Host "  El código usa Cast<AITool>() en lugar de McpToolAdapter" -ForegroundColor Red
+    $allChecksPass = $false
 }
 
 if ($allChecksPass) {
@@ -277,17 +295,17 @@ if ($testsFailed -eq 0) {
     Write-Host "`nPróximos pasos:" -ForegroundColor Cyan
     Write-Host "  1. Configura tu Azure OpenAI endpoint en appsettings.json" -ForegroundColor White
     Write-Host "  2. Asegúrate de que los 3 servidores MCP estén corriendo:" -ForegroundColor White
-    Write-Host "     - dotnet run --project src/McpWorkshop.Servers/Exercise1SqlMcpServer" -ForegroundColor Gray
-    Write-Host "     - dotnet run --project src/McpWorkshop.Servers/Exercise2CosmosMcpServer" -ForegroundColor Gray
-    Write-Host "     - dotnet run --project src/McpWorkshop.Servers/Exercise3RestApiMcpServer" -ForegroundColor Gray
+    Write-Host "     - dotnet run --project src/McpWorkshop.Servers/Exercise4SqlMcpServer" -ForegroundColor Gray
+    Write-Host "     - dotnet run --project src/McpWorkshop.Servers/Exercise4CosmosMcpServer" -ForegroundColor Gray
+    Write-Host "     - dotnet run --project src/McpWorkshop.Servers/Exercise4RestApiMcpServer" -ForegroundColor Gray
     Write-Host "  3. Ejecuta el agente:" -ForegroundColor White
-    Write-Host "     dotnet run --project src/McpWorkshop.Servers/Exercise5AgentServer" -ForegroundColor Gray
+    Write-Host "     dotnet run --project src/McpWorkshop.Servers/Exercise5Agent" -ForegroundColor Gray
     Write-Host ""
     exit 0
 } else {
     Write-Host "❌ Algunos tests fallaron. Revisa los errores arriba." -ForegroundColor Red
     Write-Host "`nConsulta la documentación:" -ForegroundColor Cyan
-    Write-Host "  docs/modules/11-ejercicio-5-agente-maf.md" -ForegroundColor White
+    Write-Host "  docs/modules/9b-ejercicio-5-agente-maf.md" -ForegroundColor White
     Write-Host ""
     exit 1
 }

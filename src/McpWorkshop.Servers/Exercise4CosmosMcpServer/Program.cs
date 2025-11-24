@@ -13,7 +13,8 @@ var app = builder.Build();
 // Load data
 var sessions = LoadData<UserSession>("../../../data/sessions.json");
 var cartEvents = LoadData<CartEvent>("../../../data/cart-events.json");
-Console.WriteLine($"✅ Loaded {sessions.Length} sessions, {cartEvents.Length} cart events");
+var abandonedCarts = LoadData<AbandonedCart>("../../../data/abandoned-carts.json");
+Console.WriteLine($"✅ Loaded {sessions.Length} sessions, {cartEvents.Length} cart events, {abandonedCarts.Length} abandoned carts");
 
 // Health check endpoint
 app.MapGet("/", () => Results.Ok(new
@@ -28,10 +29,31 @@ app.MapPost("/mcp", async (HttpContext context) =>
 {
     using var reader = new StreamReader(context.Request.Body);
     var requestBody = await reader.ReadToEndAsync();
+
+    // Log para debug
+    Console.WriteLine($"📨 Request recibido: {requestBody}");
+
     var request = JsonSerializer.Deserialize<JsonElement>(requestBody);
 
-    var method = request.GetProperty("method").GetString();
-    var id = request.GetProperty("id");
+    // Verificar que tenga las propiedades requeridas
+    if (!request.TryGetProperty("method", out var methodElement))
+    {
+        context.Response.StatusCode = 400;
+        await context.Response.WriteAsJsonAsync(new
+        {
+            jsonrpc = "2.0",
+            error = new
+            {
+                code = -32600,
+                message = "Invalid Request: missing 'method' field"
+            },
+            id = request.TryGetProperty("id", out var idProp) ? idProp : (object?)null
+        });
+        return;
+    }
+
+    var method = methodElement.GetString();
+    var id = request.TryGetProperty("id", out var idElement) ? idElement : JsonDocument.Parse("null").RootElement;
 
     object? result = null;
 
@@ -74,6 +96,13 @@ app.MapPost("/mcp", async (HttpContext context) =>
                             uri = "cosmos://analytics/cart-events",
                             name = "Cart Events",
                             description = "Eventos del carrito de compras",
+                            mimeType = "application/json"
+                        },
+                        new
+                        {
+                            uri = "cosmos://analytics/abandoned-carts",
+                            name = "Abandoned Carts",
+                            description = "Carritos abandonados con detalles de productos y valores",
                             mimeType = "application/json"
                         }
                     }
@@ -148,6 +177,7 @@ object HandleResourceRead(JsonElement request)
     {
         "cosmos://analytics/user-sessions" => JsonSerializer.Serialize(sessions),
         "cosmos://analytics/cart-events" => JsonSerializer.Serialize(cartEvents),
+        "cosmos://analytics/abandoned-carts" => JsonSerializer.Serialize(abandonedCarts),
         _ => throw new ArgumentException($"Unknown resource URI: {uri}")
     };
 
@@ -169,18 +199,35 @@ object HandleToolCall(JsonElement request)
 {
     var paramsObj = request.GetProperty("params");
     var toolName = paramsObj.GetProperty("name").GetString();
-    var argsElement = paramsObj.GetProperty("arguments");
 
     var arguments = new Dictionary<string, JsonElement>();
-    foreach (var prop in argsElement.EnumerateObject())
+
+    // Manejar caso cuando arguments puede no existir o estar vacío
+    if (paramsObj.TryGetProperty("arguments", out var argsElement))
     {
-        arguments[prop.Name] = prop.Value;
+        foreach (var prop in argsElement.EnumerateObject())
+        {
+            arguments[prop.Name] = prop.Value;
+        }
     }
 
-    return toolName switch
+    var toolResult = toolName switch
     {
-        "get_abandoned_carts" => GetAbandonedCartsTool.Execute(arguments, cartEvents),
+        "get_abandoned_carts" => GetAbandonedCartsTool.Execute(arguments, abandonedCarts),
         "analyze_user_behavior" => AnalyzeUserBehaviorTool.Execute(arguments, sessions, cartEvents),
         _ => throw new InvalidOperationException($"Unknown tool: {toolName}")
+    };
+
+    // Envolver el resultado en el formato MCP correcto
+    return new
+    {
+        content = new[]
+        {
+            new
+            {
+                type = "text",
+                text = JsonSerializer.Serialize(toolResult)
+            }
+        }
     };
 }

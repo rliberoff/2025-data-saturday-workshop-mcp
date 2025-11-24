@@ -12,7 +12,7 @@ public class GetShippingStatusTool
         return new
         {
             name = "get_shipping_status",
-            description = "Obtener estado de envío de un pedido (simula API de tracking)",
+            description = "Obtiene el estado de envío y tracking de un pedido específico. IMPORTANTE: Esta herramienta requiere el parámetro 'orderId' (number, requerido) que es el ID numérico del pedido (ejemplo: 1001, 1002). Usa esta herramienta cuando te pregunten sobre el estado de envío, tracking, entrega o dónde está un pedido.",
             inputSchema = new Dictionary<string, object>
             {
                 ["type"] = "object",
@@ -56,7 +56,7 @@ public class GetShippingStatusTool
             _ => "📦"
         };
 
-        return new
+        var result = new
         {
             content = new[]
             {
@@ -72,5 +72,11 @@ public class GetShippingStatusTool
                 }
             }
         };
+
+        // Trace: log result
+        Console.WriteLine($"🔍 [get_shipping_status] Input: orderId={orderId}");
+        Console.WriteLine($"📤 [get_shipping_status] Output: status={status}, carrier={carrier}, tracking={trackingNumber}");
+
+        return result;
     }
 }

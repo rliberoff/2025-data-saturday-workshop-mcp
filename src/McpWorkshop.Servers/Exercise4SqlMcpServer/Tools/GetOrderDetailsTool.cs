@@ -13,7 +13,7 @@ public static class GetOrderDetailsTool
         return new
         {
             name = "get_order_details",
-            description = "Obtener detalles de un pedido específico por su ID",
+            description = "Obtiene información detallada de un pedido específico, incluyendo cliente, producto, cantidad y monto total. IMPORTANTE: Esta herramienta requiere el parámetro 'orderId' (integer). Usa esta herramienta cuando te pregunten sobre un pedido específico por su número o ID (ejemplo: 'pedido 1001', 'pedido número 1001', 'order 1001').",
             inputSchema = new Dictionary<string, object>
             {
                 ["type"] = "object",
@@ -22,7 +22,7 @@ public static class GetOrderDetailsTool
                     ["orderId"] = new Dictionary<string, object>
                     {
                         ["type"] = "integer",
-                        ["description"] = "ID del pedido a consultar"
+                        ["description"] = "El número o ID del pedido a consultar (ejemplo: 1001, 1002, etc.)"
                     }
                 },
                 ["required"] = new[] { "orderId" }
@@ -43,17 +43,23 @@ public static class GetOrderDetailsTool
 
         if (order == null)
         {
-            return new
+            var notFoundResult = new
             {
                 found = false,
                 message = $"No se encontró el pedido con ID {orderId}"
             };
+
+            // Trace: log result
+            Console.WriteLine($"🔍 [get_order_details] Input: orderId={orderId}");
+            Console.WriteLine($"📤 [get_order_details] Output: Order not found");
+
+            return notFoundResult;
         }
 
         var customer = customers.FirstOrDefault(c => c.Id == order.CustomerId);
         var product = products.FirstOrDefault(p => p.Id == order.ProductId);
 
-        return new
+        var result = new
         {
             found = true,
             order = new
@@ -70,5 +76,11 @@ public static class GetOrderDetailsTool
                 status = order.Status
             }
         };
+
+        // Trace: log result
+        Console.WriteLine($"🔍 [get_order_details] Input: orderId={orderId}");
+        Console.WriteLine($"📤 [get_order_details] Output: Order found - customer={customer?.Name}, product={product?.Name}, amount=€{order.TotalAmount}, status={order.Status}");
+
+        return result;
     }
 }

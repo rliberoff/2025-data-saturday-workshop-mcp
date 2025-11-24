@@ -223,9 +223,20 @@ public static class McpClientHelper
     {
         Console.WriteLine($"🔌 Conectando a {serverName} en {serverUrl}...");
 
-        // Usamos SimpleHttpClientTransport que internamente usa la implementación oficial
-        var transport = new SimpleHttpClientTransport(serverUrl, serverName, loggerFactory);
+        // Crear un cliente HTTP simple para el servidor MCP
+        var httpClient = new HttpClient
+        {
+            BaseAddress = new Uri(serverUrl.TrimEnd('/')),
+            Timeout = TimeSpan.FromSeconds(30)
+        };
 
+        // Usamos HttpClientTransport del SDK oficial
+        var options = new HttpClientTransportOptions
+        {
+            Endpoint = new Uri(serverUrl.TrimEnd('/') + "/mcp")
+        };
+
+        var transport = new HttpClientTransport(options, httpClient, loggerFactory);
         var client = await McpClient.CreateAsync(transport, loggerFactory: loggerFactory);
 
         Console.WriteLine($"✅ Conectado a {serverName}");
@@ -262,49 +273,174 @@ public static class McpClientHelper
     }
 }
 
-/// <summary>
-/// Transport personalizado para servidores MCP sobre HTTP
-/// NOTA: Este es un ejemplo simplificado para el workshop.
-/// En producción, usa la clase HttpClientTransport del SDK oficial que
-/// soporta SSE (Server-Sent Events) y Streamable HTTP correctamente.
-/// </summary>
-public class SimpleHttpClientTransport : IClientTransport
-{
-    private readonly HttpClientTransportOptions _options;
-    private readonly HttpClient _httpClient;
-    private readonly ILoggerFactory? _loggerFactory;
 
-    public SimpleHttpClientTransport(string serverUrl, string serverName, ILoggerFactory? loggerFactory = null)
-    {
-        Name = serverName;
-        _options = new HttpClientTransportOptions
-        {
-            Endpoint = new Uri(serverUrl.TrimEnd('/'))
-        };
-        _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
-        _loggerFactory = loggerFactory;
-    }
-
-    public string Name { get; }
-
-    public Task<ITransport> ConnectAsync(CancellationToken cancellationToken = default)
-    {
-        // Usa la implementación oficial del SDK que soporta SSE y Streamable HTTP
-        var transport = new ModelContextProtocol.Client.HttpClientTransport(_options, _httpClient, _loggerFactory);
-        return transport.ConnectAsync(cancellationToken);
-    }
-}
 ```
 
 **💡 Conceptos Clave**:
 
 -   **Transport**: Mecanismo de comunicación con el servidor MCP (HTTP, stdio, WebSocket)
--   **IMcpClient**: Interfaz del cliente que se conecta al servidor MCP
+-   **McpClient**: Cliente oficial del SDK que se conecta al servidor MCP
 -   **Stdio vs HTTP**: Stdio para procesos locales, HTTP para servidores remotos
+-   **HttpClientTransport**: Usa el endpoint `/mcp` para comunicarse con el servidor
 
 ---
 
-### Paso 4: Implementar el Agente (10 minutos)
+### Paso 4: Crear el Adaptador MCP (10 minutos)
+
+⚠️ **PASO CRÍTICO**: Las herramientas MCP (`McpClientTool`) son solo metadatos. NO se pueden ejecutar directamente. Necesitamos crear un adaptador que las convierta en funciones ejecutables.
+
+Crea `McpToolAdapter.cs`:
+
+```csharp
+using System.ComponentModel;
+using System.Text.Json;
+using Microsoft.Extensions.AI;
+using ModelContextProtocol.Client;
+
+namespace Exercise5Agent;
+
+/// <summary>
+/// Adaptador que envuelve herramientas MCP en AIFunctions ejecutables
+/// </summary>
+public static class McpToolAdapter
+{
+    /// <summary>
+    /// Convierte una lista de McpClientTool a AITool ejecutables
+    /// </summary>
+    public static List<AITool> ConvertToAITools(
+        IList<McpClientTool> mcpTools,
+        McpClient mcpClient,
+        string serverName)
+    {
+        var aiTools = new List<AITool>();
+
+        foreach (var mcpTool in mcpTools)
+        {
+            // Crear un wrapper ejecutable para cada herramienta MCP
+            var wrappedTool = CreateExecutableToolWrapper(mcpTool, mcpClient, serverName);
+            aiTools.Add(wrappedTool);
+
+            Console.WriteLine($"   ✓ Registrando tool '{mcpTool.Name}' de {serverName}");
+        }
+
+        return aiTools;
+    }
+
+    /// <summary>
+    /// Crea un AIFunction wrapper que ejecuta la herramienta MCP
+    /// </summary>
+    private static AIFunction CreateExecutableToolWrapper(
+        McpClientTool mcpTool,
+        McpClient mcpClient,
+        string serverName)
+    {
+        var toolName = mcpTool.Name;
+        var toolDescription = mcpTool.Description ?? "Herramienta MCP";
+
+        // Crear el método que ejecutará la tool
+        var method = new Func<string, Task<string>>(async (argsJson) =>
+        {
+            try
+            {
+                Console.WriteLine($"\n🔧 [{serverName}] Ejecutando '{toolName}'");
+                Console.WriteLine($"   Argumentos JSON: {argsJson}\n\n");
+
+                // Parsear argumentos JSON a diccionario
+                IReadOnlyDictionary<string, object?>? arguments = null;
+
+                if (!string.IsNullOrWhiteSpace(argsJson) && argsJson != "{}")
+                {
+                    var argsDict = JsonSerializer.Deserialize<Dictionary<string, object?>>(argsJson);
+                    arguments = argsDict;
+                }
+
+                // Llamar al servidor MCP
+                var result = await mcpClient.CallToolAsync(toolName, arguments);
+
+                // Extraer contenido
+                var content = ExtractContent(result);
+
+                Console.WriteLine($"✅ [{serverName}] '{toolName}' completada");
+                Console.WriteLine($"   Respuesta: {content}\n\n");
+
+                return content;
+            }
+            catch (Exception ex)
+            {
+                var error = $"Error en {toolName}: {ex.Message}";
+                Console.WriteLine($"❌ [{serverName}] {error}\n\n");
+                return error;
+            }
+        });
+
+        // Crear AIFunction con el método, nombre y descripción
+        return AIFunctionFactory.Create(
+            method,
+            toolName,
+            toolDescription);
+    }
+
+    /// <summary>
+    /// Extrae el contenido de texto de la respuesta MCP
+    /// </summary>
+    private static string ExtractContent(ModelContextProtocol.Protocol.CallToolResult result)
+    {
+        if (result.Content == null || result.Content.Count == 0)
+        {
+            return "No se recibió respuesta del servidor MCP";
+        }
+
+        var contents = new List<string>();
+
+        foreach (var contentBlock in result.Content)
+        {
+            // Serializar el contentBlock para acceder a sus propiedades dinámicas
+            var json = JsonSerializer.Serialize(contentBlock);
+            var doc = JsonDocument.Parse(json);
+
+            if (doc.RootElement.TryGetProperty("type", out var typeElement))
+            {
+                var type = typeElement.GetString();
+
+                if (type == "text" && doc.RootElement.TryGetProperty("text", out var textElement))
+                {
+                    var text = textElement.GetString();
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        contents.Add(text);
+                    }
+                }
+                else if (type == "image")
+                {
+                    contents.Add("[Imagen recibida]");
+                }
+                else if (type == "resource" && doc.RootElement.TryGetProperty("uri", out var uriElement))
+                {
+                    contents.Add($"[Recurso: {uriElement.GetString()}]");
+                }
+            }
+        }
+
+        return contents.Count > 0
+            ? string.Join("\n", contents)
+            : "Respuesta vacía del servidor MCP";
+    }
+}
+```
+
+**💡 Conceptos Clave del Adaptador**:
+
+1. **McpClientTool**: Solo contiene metadatos (nombre, descripción). NO es ejecutable.
+2. **AIFunction**: Función ejecutable que el agente puede invocar.
+3. **Wrapper Pattern**: Creamos un wrapper que captura el `McpClient` y llama `CallToolAsync()`.
+4. **Extracción de Contenido**: Las respuestas MCP tienen formato `{content: [{type:"text", text:"..."}]}`.
+5. **Manejo de Errores**: Capturamos excepciones y las devolvemos como texto para que el agente las procese.
+
+**⚠️ Sin este adaptador, el agente NO podrá ejecutar las herramientas MCP.**
+
+---
+
+### Paso 5: Implementar el Agente (10 minutos)
 
 Crea `Program.cs`:
 
@@ -379,13 +515,15 @@ foreach (var tool in restApiTools)
 
 Console.WriteLine();
 
-// Combinar todas las herramientas
-var allMcpTools = new List<McpClientTool>();
-allMcpTools.AddRange(sqlTools);
-allMcpTools.AddRange(cosmosTools);
-allMcpTools.AddRange(restApiTools);
+// Convertir las herramientas MCP a AITools usando el adaptador
+Console.WriteLine("🔄 Registrando herramientas MCP con el agente...\n");
 
-Console.WriteLine($"✅ Total de herramientas MCP disponibles: {allMcpTools.Count}\n");
+var allAITools = new List<AITool>();
+allAITools.AddRange(McpToolAdapter.ConvertToAITools(sqlTools, sqlMcpClient, "SQL Server"));
+allAITools.AddRange(McpToolAdapter.ConvertToAITools(cosmosTools, cosmosMcpClient, "Cosmos DB"));
+allAITools.AddRange(McpToolAdapter.ConvertToAITools(restApiTools, restApiMcpClient, "REST API"));
+
+Console.WriteLine($"\n✅ Total de herramientas disponibles: {allAITools.Count}\n");
 
 // ====================================================================
 // PASO 3: Crear el agente con Azure OpenAI y las herramientas MCP
@@ -399,9 +537,9 @@ AIAgent agent = new AzureOpenAIClient(
     .CreateAIAgent(
         instructions: instructions,
         name: agentName,
-        tools: allMcpTools.Cast<AITool>().ToList());
+        tools: allAITools);
 
-Console.WriteLine($"✅ Agente '{agentName}' creado exitosamente con {allMcpTools.Count} herramientas\n");
+Console.WriteLine($"✅ Agente '{agentName}' creado exitosamente con {allAITools.Count} herramientas\n");
 
 // ====================================================================
 // PASO 4: Loop de conversación interactivo
@@ -459,9 +597,11 @@ Console.WriteLine("🛑 Cerrando conexiones...");
 1. **DefaultAzureCredential**: Usa la identidad de Azure (Managed Identity, Azure CLI, etc.)
 2. **CreateAIAgent**: Crea el agente con instrucciones y herramientas
 3. **ListToolsAsync**: Obtiene todas las herramientas disponibles del servidor MCP
-4. **Cast<AITool>()**: Convierte herramientas MCP a herramientas de AI Agent
+4. **McpToolAdapter.ConvertToAITools()**: Convierte herramientas MCP en AIFunctions ejecutables
 5. **GetNewThread**: Crea un hilo de conversación para mantener contexto
 6. **RunAsync**: Ejecuta el agente con un mensaje y contexto
+
+**⚠️ NOTA IMPORTANTE**: NO uses `Cast<AITool>()` directamente. Las herramientas MCP son solo metadatos y no son ejecutables. Siempre usa `McpToolAdapter.ConvertToAITools()` para crear wrappers ejecutables.
 
 ---
 

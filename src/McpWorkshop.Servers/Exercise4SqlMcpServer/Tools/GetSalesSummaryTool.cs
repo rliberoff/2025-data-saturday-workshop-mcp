@@ -13,7 +13,7 @@ public class GetSalesSummaryTool
         return new
         {
             name = "get_sales_summary",
-            description = "Obtener resumen de ventas con estadísticas agregadas",
+            description = "Calcula estadísticas agregadas de ventas: total de pedidos, ventas totales, ticket promedio, productos más vendidos. Usa esta herramienta para preguntas sobre métricas generales de ventas (ejemplo: 'estadísticas de ventas', 'total de ventas', 'productos más vendidos').",
             inputSchema = new Dictionary<string, object>
             {
                 ["type"] = "object",
@@ -22,17 +22,17 @@ public class GetSalesSummaryTool
                     ["startDate"] = new Dictionary<string, object>
                     {
                         ["type"] = "string",
-                        ["description"] = "Fecha de inicio (opcional, formato: YYYY-MM-DD)"
+                        ["description"] = "Fecha inicial del período a analizar (opcional, formato: YYYY-MM-DD, ejemplo: '2024-01-01')"
                     },
                     ["endDate"] = new Dictionary<string, object>
                     {
                         ["type"] = "string",
-                        ["description"] = "Fecha de fin (opcional, formato: YYYY-MM-DD)"
+                        ["description"] = "Fecha final del período a analizar (opcional, formato: YYYY-MM-DD, ejemplo: '2024-12-31')"
                     },
                     ["status"] = new Dictionary<string, object>
                     {
                         ["type"] = "string",
-                        ["description"] = "Filtrar por estado del pedido (opcional)"
+                        ["description"] = "Filtrar por estado del pedido (opcional, valores: 'completed', 'pending', 'cancelled')"
                     }
                 }
             }
@@ -123,9 +123,15 @@ public class GetSalesSummaryTool
             }
         };
 
-        return new Dictionary<string, object>
+        var result = new Dictionary<string, object>
         {
             ["content"] = new[] { textContent, resourceContent }
         };
+
+        // Trace: log result
+        Console.WriteLine($"🔍 [get_sales_summary] Input: startDate={startDate?.ToString("yyyy-MM-dd") ?? "null"}, endDate={endDate?.ToString("yyyy-MM-dd") ?? "null"}, status={status ?? "null"}");
+        Console.WriteLine($"📤 [get_sales_summary] Output: {totalOrders} orders, totalSales=€{totalSales:F2}, avgOrderValue=€{averageOrderValue:F2}");
+
+        return result;
     }
 }

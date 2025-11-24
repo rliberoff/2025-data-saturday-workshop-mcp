@@ -20,3 +20,20 @@ public class CartEvent
     public DateTime Timestamp { get; set; }
     public int Quantity { get; set; }
 }
+
+public class AbandonedCart
+{
+    public string Id { get; set; } = string.Empty;
+    public string UserId { get; set; } = string.Empty;
+    public CartItem[] Items { get; set; } = Array.Empty<CartItem>();
+    public decimal TotalValue { get; set; }
+    public int HoursAgo { get; set; }
+    public DateTime AbandonedAt { get; set; }
+}
+
+public class CartItem
+{
+    public int ProductId { get; set; }
+    public decimal Price { get; set; }
+    public int Quantity { get; set; }
+}

@@ -145,11 +145,26 @@ Explica las diferencias:
 | **HTTP**      | Servidor remoto o en otro puerto   | `http://localhost:5010`         |
 | **WebSocket** | Conexión persistente bidireccional | `ws://api.example.com`          |
 
+**⚠️ Nota importante sobre HTTP Transport**:
+
+Los servidores MCP del workshop usan endpoints POST en `/mcp`. Es crítico:
+
+1. **Incluir el path `/mcp` en el endpoint**:
+
+```csharp
+var options = new HttpClientTransportOptions
+{
+    Endpoint = new Uri(serverUrl.TrimEnd('/') + "/mcp")  // ← Importante: agregar /mcp
+};
+```
+
+2. **Dar tiempo suficiente** para la conexión inicial (el `HttpClientTransport` puede intentar auto-detectar SSE, lo cual puede tomar unos segundos antes de caer back a POST simple)
+
 **Demo en vivo**:
 
 1. Muestra cómo `ListToolsAsync()` descubre herramientas
 2. Imprime las herramientas disponibles
-3. Explica cómo se convierten a `AITool`
+3. Explica cómo se convierten a `AITool` usando **McpToolAdapter**
 
 ```csharp
 // Mostrar en consola
@@ -157,9 +172,46 @@ foreach (var tool in sqlTools)
 {
     Console.WriteLine($"Tool: {tool.Name}");
     Console.WriteLine($"  Description: {tool.Description}");
-    Console.WriteLine($"  Parameters: {JsonSerializer.Serialize(tool.InputSchema)}");
 }
+
+// IMPORTANTE: Usar McpToolAdapter para convertir a AITools ejecutables
+var allAITools = new List<AITool>();
+allAITools.AddRange(McpToolAdapter.ConvertToAITools(sqlTools, sqlMcpClient, "SQL Server"));
+allAITools.AddRange(McpToolAdapter.ConvertToAITools(cosmosTools, cosmosMcpClient, "Cosmos DB"));
+allAITools.AddRange(McpToolAdapter.ConvertToAITools(restApiTools, restApiMcpClient, "REST API"));
 ```
+
+**💡 Concepto crítico: Por qué necesitamos McpToolAdapter**
+
+> "Las herramientas MCP (`McpClientTool`) son METADATA pura - solo describen las herramientas.
+> NO tienen capacidad de ejecución. Si las usas directamente con `Cast<AITool>()`, el agente
+> verá las herramientas pero NO podrá ejecutarlas.
+>
+> El `McpToolAdapter` crea wrappers ejecutables (`AIFunction`) que:
+>
+> 1. Capturan el `McpClient` para cada servidor
+> 2. Parsean argumentos JSON
+> 3. Llaman a `CallToolAsync()` en el servidor correcto
+> 4. Extraen el contenido de la respuesta MCP
+> 5. Devuelven el resultado al agente
+>
+> Sin este adaptador, el agente fallará silenciosamente al intentar ejecutar las herramientas."
+
+**💡 Punto de énfasis crítico: Calidad de las descripciones**
+
+> "Las **descripciones de herramientas son CRUCIALES** para que el agente las seleccione correctamente. El modelo de IA usa estas descripciones para decidir qué herramienta llamar mediante function calling.
+>
+> Por ejemplo, para `get_order_details`:
+>
+> -   ❌ Descripción vaga: "Obtener detalles de un pedido"
+> -   ✅ Descripción clara: "Obtiene información detallada de un pedido específico, incluyendo cliente, producto, cantidad y monto total. Usa esta herramienta cuando te pregunten sobre un pedido específico por su número o ID (ejemplo: 'pedido 1001', 'pedido número 1001', 'order 1001')."
+>
+> Incluye:
+>
+> 1. **Qué hace** la herramienta
+> 2. **Cuándo usarla** (ejemplos de frases del usuario)
+> 3. **Qué retorna**
+> 4. **Ejemplos de valores** para parámetros"
 
 ### Fase 4: Crear el Agente (8 minutos)
 
@@ -176,12 +228,14 @@ Explica cómo funciona:
 **Código crítico**:
 
 ```csharp
-AIAgent agent = new AzureOpenAIClient(...)
+AIAgent agent = new AzureOpenAIClient(
+    new Uri(endpoint),
+    new DefaultAzureCredential())
     .GetChatClient(deploymentName)
     .CreateAIAgent(
-        instructions: "...",  // ← MUY IMPORTANTE: Define personalidad y comportamiento
-        name: "...",
-        tools: allMcpTools.Cast<AITool>().ToList()  // ← Todas las herramientas MCP
+        instructions: instructions,  // ← MUY IMPORTANTE: Define personalidad y comportamiento
+        name: agentName,
+        tools: allAITools  // ← Herramientas convertidas con McpToolAdapter
     );
 ```
 
@@ -231,22 +285,25 @@ Sin thread, el agente no sabría el contexto de "¿Y en Madrid?".
 
 #### Errores de Compilación
 
-| Problema                                    | Causa                                         | Solución                                                                  |
-| ------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------- |
-| "AITool could not be found"                 | Falta `using Microsoft.Extensions.AI;`        | Agregar el using statement al inicio de Program.cs                        |
-| "CreateAIAgent not found"                   | Falta `using OpenAI;`                         | Agregar el using para las extensiones de OpenAI                           |
-| "IClientTransport.ConnectAsync not found"   | Implementación incorrecta de IClientTransport | Usar `Task<ITransport> ConnectAsync()` en lugar de `ReadAsync/WriteAsync` |
-| "ModelContextProtocol.Client.Transports..." | Namespace incorrecto                          | Usar `ModelContextProtocol.Client` y `ModelContextProtocol.Protocol`      |
+| Problema                                    | Causa                                                | Solución                                                                  |
+| ------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------- |
+| "AITool could not be found"                 | Falta `using Microsoft.Extensions.AI;`               | Agregar el using statement al inicio de Program.cs                        |
+| "CreateAIAgent not found"                   | Falta `using OpenAI;`                                | Agregar el using para las extensiones de OpenAI                           |
+| "McpToolAdapter could not be found"         | Falta crear la clase McpToolAdapter.cs               | Crear el archivo McpToolAdapter.cs con el código del adaptador            |
+| "Cast<AITool>() not working"                | Las herramientas MCP no son directamente ejecutables | Usar `McpToolAdapter.ConvertToAITools()` en lugar de `Cast<AITool>()`     |
+| "IClientTransport.ConnectAsync not found"   | Implementación incorrecta de IClientTransport        | Usar `Task<ITransport> ConnectAsync()` en lugar de `ReadAsync/WriteAsync` |
+| "ModelContextProtocol.Client.Transports..." | Namespace incorrecto                                 | Usar `ModelContextProtocol.Client` y `ModelContextProtocol.Protocol`      |
 
 #### Errores de Ejecución
 
-| Problema                       | Causa                              | Solución                                                |
-| ------------------------------ | ---------------------------------- | ------------------------------------------------------- |
-| "El agente no responde"        | Servidores MCP no están corriendo  | Verificar con `Test-NetConnection localhost -Port 5010` |
-| "Authentication failed"        | Azure credentials no configuradas  | Ejecutar `az login`                                     |
-| "El agente responde en inglés" | Instructions no especifican idioma | Añadir explícitamente "Siempre responde en español"     |
-| "Tools not found"              | Conexión MCP falló silenciosamente | Verificar logs de conexión                              |
-| "Rate limit exceeded"          | Demasiadas peticiones              | Implementar retry o usar caching                        |
+| Problema                                 | Causa                                            | Solución                                                                                                                                                          |
+| ---------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "TimeoutException" o "Failed to connect" | HttpClientTransport intenta usar SSE por defecto | Asegurarse de incluir `/mcp` en el endpoint: `new HttpClientTransportOptions { Endpoint = new Uri(serverUrl + "/mcp") }` y dar tiempo suficiente para la conexión |
+| "El agente no responde"                  | Servidores MCP no están corriendo                | Verificar con `Test-NetConnection localhost -Port 5010`                                                                                                           |
+| "Authentication failed"                  | Azure credentials no configuradas                | Ejecutar `az login`                                                                                                                                               |
+| "El agente responde en inglés"           | Instructions no especifican idioma               | Añadir explícitamente "Siempre responde en español"                                                                                                               |
+| "Tools not found"                        | Conexión MCP falló silenciosamente               | Verificar logs de conexión y configuración del transporte                                                                                                         |
+| "Rate limit exceeded"                    | Demasiadas peticiones                            | Implementar retry o usar caching                                                                                                                                  |
 
 ### 2. Preguntas Frecuentes de los Alumnos
 

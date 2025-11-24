@@ -98,9 +98,15 @@ public class AnalyzeUserBehaviorTool
             }
         };
 
-        return new Dictionary<string, object>
+        var result = new Dictionary<string, object>
         {
             ["content"] = new[] { textContent, resourceContent }
         };
+
+        // Trace: log result
+        Console.WriteLine($"🔍 [analyze_user_behavior] Input: userId={userId}, metricType={metricType}");
+        Console.WriteLine($"📤 [analyze_user_behavior] Output: {totalSessions} sessions, {totalPageViews} pageViews, {avgSessionDuration:F1}min avg");
+
+        return result;
     }
 }
