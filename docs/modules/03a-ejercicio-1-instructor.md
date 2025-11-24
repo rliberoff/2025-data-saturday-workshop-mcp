@@ -54,7 +54,7 @@
 cd src/McpWorkshop.Servers
 
 # Crear proyecto web minimal
-dotnet new web -n DemoServer -f net10.0
+dotnet new web -n Exercise1Server -f net10.0
 ```
 
 **Narración**:
@@ -63,7 +63,7 @@ dotnet new web -n DemoServer -f net10.0
 
 ```powershell
 # Entrar al proyecto
-cd DemoServer
+cd Exercise1Server
 
 # Agregar referencia a librería compartida
 dotnet add reference ../../McpWorkshop.Shared/McpWorkshop.Shared.csproj
@@ -76,7 +76,7 @@ dotnet add reference ../../McpWorkshop.Shared/McpWorkshop.Shared.csproj
 ```powershell
 # Agregar a solución
 cd ../../..
-dotnet sln add src/McpWorkshop.Servers/DemoServer/DemoServer.csproj
+dotnet sln add src/McpWorkshop.Servers/Exercise1Server/Exercise1Server.csproj
 
 # Verificar compilación
 dotnet build
@@ -98,7 +98,7 @@ dotnet build
 
 ```powershell
 # Crear carpeta Models
-cd src/McpWorkshop.Servers/DemoServer
+cd src/McpWorkshop.Servers/Exercise1Server
 mkdir Models
 ```
 
@@ -107,7 +107,7 @@ mkdir Models
 ### Código a Escribir
 
 ```csharp
-namespace DemoServer.Models;
+namespace Exercise1Server.Models;
 
 public class Customer
 {
@@ -139,7 +139,7 @@ Abre `Program.cs` y reemplaza con:
 
 ```csharp
 using System.Text.Json;
-using DemoServer.Models;
+using Exercise1Server.Models;
 using McpWorkshop.Shared.Logging;
 using McpWorkshop.Shared.Mcp;
 using Microsoft.Extensions.Options;
@@ -150,7 +150,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<IStructuredLogger, StructuredLogger>();
 builder.Services.Configure<McpWorkshop.Shared.Configuration.WorkshopSettings>(options =>
 {
-    options.Server.Name = "DemoServer";
+    options.Server.Name = "Exercise1Server";
     options.Server.Version = "1.0.0";
     options.Server.ProtocolVersion = "2024-11-05";
 });
@@ -207,7 +207,7 @@ app.MapPost("/mcp", async (
     }
 });
 
-app.Run("http://localhost:5000");
+app.Run("http://localhost:5001");
 ```
 
 **Narración**:
