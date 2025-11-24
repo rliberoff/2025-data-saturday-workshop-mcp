@@ -96,6 +96,9 @@ pwsh --version    # Debe ser 7.x
 git clone https://github.com/yourusername/mcp-workshop.git
 cd mcp-workshop
 
+# Generar datos de ejemplo
+.\scripts\create-sample-data.ps1
+
 # Restaurar dependencias
 dotnet restore
 

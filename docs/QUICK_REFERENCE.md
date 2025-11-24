@@ -196,6 +196,9 @@ public class VirtualAnalyst
 # Verificar todos los requisitos previos
 .\scripts\check-prerequisites.ps1 -Verbose
 
+# Generar datos de ejemplo
+.\scripts\create-sample-data.ps1
+
 # Verificar ejercicio específico
 .\scripts\verify-exercise1.ps1
 .\scripts\verify-exercise2.ps1
@@ -340,12 +343,11 @@ app.UseCors("AllowAll");
 
 | Recurso                     | URL                                      |
 | --------------------------- | ---------------------------------------- |
-| Especificación MCP          | https://modelcontextprotocol.io/    |
+| Especificación MCP          | https://modelcontextprotocol.io/         |
 | Documentación .NET 10       | https://learn.microsoft.com/dotnet/core/ |
 | Especificación JSON-RPC 2.0 | https://www.jsonrpc.org/specification    |
 | Depurador JWT               | https://jwt.io                           |
 | Validador JSON Schema       | https://www.jsonschemavalidator.net/     |
-
 
 ---
 

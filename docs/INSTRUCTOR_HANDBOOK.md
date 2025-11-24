@@ -52,6 +52,9 @@ Guía completa para facilitar el taller de Model Context Protocol de 3 horas con
 # Ejecutar validación completa
 .\scripts\verify-setup.ps1 -Verbose
 
+# Generar datos de ejemplo
+.\scripts\create-sample-data.ps1
+
 # Probar todos los ejercicios en secuencia
 .\scripts\run-all-exercises.ps1
 
@@ -66,7 +69,7 @@ Copy-Item -Recurse src\McpWorkshop.Servers backup\solutions
 
 -   [ ] Repositorio accesible (GitHub/GitLab)
 -   [ ] Slides actualizadas con branding del evento
--   [ ] Datos de ejemplo incluidos en `data/` del repositorio (customers.json, products.json, etc.)
+-   [ ] Script `create-sample-data.ps1` ejecutado para generar datos de ejemplo en `data/`
 -   [ ] Tokens JWT pre-generados para Exercise 3
 -   [ ] Backup de código en USB (contingencia sin internet)
 
@@ -92,6 +95,9 @@ Copy-Item -Recurse src\McpWorkshop.Servers backup\solutions
 dotnet clean
 dotnet restore
 dotnet build -c Release
+
+# Generar datos de ejemplo frescos
+.\scripts\create-sample-data.ps1
 
 # Levantar todos los servidores de Exercise 4
 .\scripts\start-exercise4-servers.ps1

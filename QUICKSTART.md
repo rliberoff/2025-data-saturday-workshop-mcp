@@ -19,11 +19,14 @@ cd mcp-workshop
 # 2. Verificar el entorno
 .\scripts\verify-setup.ps1
 
-# 3. Construir la solución
+# 3. Generar datos de ejemplo
+.\scripts\create-sample-data.ps1
+
+# 4. Construir la solución
 dotnet build McpWorkshop.sln
 ```
 
-> **Nota**: Los datos de ejemplo están incluidos en `data/` (customers.json, products.json, orders.json, etc.).
+> **Nota**: Los datos de ejemplo se generan mediante el script `create-sample-data.ps1`, que crea archivos JSON en `data/` (customers.json, products.json, orders.json, sessions.json, abandoned-carts.json, cart-events.json).
 
 **Salida esperada del script de verificación**:
 

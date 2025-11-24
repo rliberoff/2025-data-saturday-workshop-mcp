@@ -160,7 +160,19 @@ Get-ChildItem -Recurse *.json
 
 **Soluciones**:
 
-**Opción A - Build Action Incorrecta**:
+**Opción A - Generar Datos de Ejemplo**:
+
+```powershell
+# Ejecutar el script de generación de datos
+.\scripts\create-sample-data.ps1
+
+# Verificar que se crearon los archivos
+Get-ChildItem data/*.json
+# Debe mostrar: customers.json, products.json, orders.json,
+# sessions.json, abandoned-carts.json, cart-events.json
+```
+
+**Opción B - Build Action Incorrecta**:
 
 ```xml
 <!-- En .csproj, asegurar: -->
@@ -182,14 +194,18 @@ var basePath = AppContext.BaseDirectory;
 var json = await File.ReadAllTextAsync(Path.Combine(basePath, "data", "customers.json"));
 ```
 
-**Opción C - Verificar Clonado del Repositorio**:
+**Opción C - Verificar Script de Generación**:
 
 ```powershell
-# Verificar que los archivos de datos están presentes
-Get-ChildItem data/*.json
-# Deben existir: customers.json, products.json, orders.json, etc.
+# Verificar que el script existe
+Test-Path .\scripts\create-sample-data.ps1
 
-# Si no existen, re-clonar el repositorio
+# Ejecutar el script nuevamente con logging detallado
+.\scripts\create-sample-data.ps1 -Verbose
+
+# Verificar permisos de escritura en carpeta data/
+Test-Path data -PathType Container
+New-Item -ItemType Directory -Force -Path data
 ```
 
 ---

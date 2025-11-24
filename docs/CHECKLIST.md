@@ -65,16 +65,22 @@ Checklist de validación completa para instructores. Ejecutar 24 horas antes del
 
 ### 3. Datos de Muestra
 
--   [ ] **Datos de muestra presentes en el repositorio**
+-   [ ] **Script de generación de datos ejecutable**
 
     ```powershell
-    # Verificar que los archivos de datos están presentes
-    Get-ChildItem data\*.json
-    # Debe mostrar: customers.json, products.json, orders.json, sessions.json, etc.
+    # Ejecutar script de generación de datos
+    .\scripts\create-sample-data.ps1
+    # Debe crear 6 archivos JSON en ./data/
     ```
 
--   [ ] **Archivos JSON accesibles**
+-   [ ] **Archivos JSON generados correctamente**
+
     ```powershell
+    # Verificar que los archivos fueron creados
+    Get-ChildItem data\*.json | Select-Object Name, Length
+    # Debe mostrar: customers.json, products.json, orders.json,
+    # sessions.json, abandoned-carts.json, cart-events.json
+
     # Verificar contenido de un archivo de ejemplo
     Get-Content data\customers.json | ConvertFrom-Json | Measure-Object
     # Debe mostrar varios registros
