@@ -369,7 +369,7 @@ ROI = ((Beneficio Anual - Costo Inversión) / Costo Inversión) × 100%
 
 ---
 
-### Bloque 10: Cierre y Retrospectiva (10 min)
+### Bloque 11: Cierre y Retrospectiva (10 min)
 
 **Objetivo**: Consolidar aprendizaje y recoger feedback.
 
