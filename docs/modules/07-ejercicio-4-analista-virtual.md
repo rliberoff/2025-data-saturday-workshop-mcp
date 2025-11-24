@@ -369,6 +369,7 @@ Crea `Orchestration/OrchestratorService.cs`:
 
 ```csharp
 using System.Collections.Concurrent;
+using System.Text.Json;
 
 using Exercise4Server.Models;
 using Exercise4Server.Parsers;
@@ -485,20 +486,23 @@ public class OrchestratorService
         var sqlClient = _servers["sql"];
         var restClient = _servers["rest"];
 
-        var order = await sqlClient.CallToolAsync<dynamic>("get_order_details", new
+        var orderResponse = await sqlClient.CallToolAsync<JsonElement>("get_order_details", new
         {
             orderId = int.Parse(parameters["orderId"])
         });
 
-        if (order == null)
+        // Check if order was found
+        if (!orderResponse.TryGetProperty("found", out var foundProp) || !foundProp.GetBoolean())
         {
             return "Pedido no encontrado";
         }
 
+        var order = orderResponse.GetProperty("order");
+
         // Use order info to query REST
         var inventory = await restClient.CallToolAsync<dynamic>("check_inventory", new
         {
-            productId = order.ProductId
+            productId = order.GetProperty("productId").GetInt32()
         });
 
         var shipping = await restClient.CallToolAsync<dynamic>("get_shipping_status", new
@@ -506,7 +510,12 @@ public class OrchestratorService
             orderId = parameters["orderId"]
         });
 
-        return new { order, inventory, shipping };
+        return new
+        {
+            order = JsonSerializer.Deserialize<object>(order.GetRawText()),
+            inventory,
+            shipping
+        };
     }
 
     private async Task<object> ExecuteSalesSummaryAsync()
@@ -590,6 +599,55 @@ await app.RunAsync("http://localhost:5004");
 ### Prerequisito: Levantar Servidores MCP
 
 **⚠️ IMPORTANTE**: Antes de ejecutar las pruebas, debes tener corriendo los 3 servidores MCP que el orquestador necesita consultar:
+
+**📝 Nota sobre Tools MCP**: Los servidores `Exercise4SqlMcpServer`, `Exercise4CosmosMcpServer` y `Exercise4RestApiMcpServer` ya están implementados con todos los tools necesarios:
+
+-   **SQL Server**: `query_customers_by_country`, `get_sales_summary`, `get_order_details`
+-   **Cosmos Server**: `get_abandoned_carts`
+-   **REST API Server**: `check_inventory`, `get_shipping_status`, `get_top_products`
+
+> **💡 Detalles de Implementación - Tool `get_order_details`**:
+>
+> Este tool es especialmente importante para el patrón secuencial. Su implementación en `Exercise4SqlMcpServer/Tools/GetOrderDetailsTool.cs` incluye:
+>
+> ```csharp
+> public static object Execute(Dictionary<string, JsonElement> arguments, Order[] orders, Customer[] customers, Product[] products)
+> {
+>     var orderId = arguments["orderId"].GetInt32();
+>     var order = orders.FirstOrDefault(o => o.Id == orderId);
+>
+>     if (order == null)
+>     {
+>         return new { found = false, message = $"No se encontró el pedido con ID {orderId}" };
+>     }
+>
+>     var customer = customers.FirstOrDefault(c => c.Id == order.CustomerId);
+>     var product = products.FirstOrDefault(p => p.Id == order.ProductId);
+>
+>     return new
+>     {
+>         found = true,
+>         order = new
+>         {
+>             id = order.Id,
+>             customerId = order.CustomerId,
+>             customerName = customer?.Name ?? "Unknown",
+>             productId = order.ProductId,
+>             productName = product?.Name ?? "Unknown",
+>             quantity = order.Quantity,
+>             totalAmount = order.TotalAmount,
+>             orderDate = order.OrderDate,
+>             status = order.Status
+>         }
+>     };
+> }
+> ```
+>
+> **Características clave**:
+>
+> -   Retorna estructura con `found` (boolean) para validar si el pedido existe
+> -   Enriquece la respuesta con datos de `Customer` y `Product` usando JOINs en memoria
+> -   El orquestador usa `orderResponse.TryGetProperty("found", ...)` para validar antes de continuar
 
 ```powershell
 # Terminal 1: SQL Server
@@ -790,6 +848,84 @@ return new { order, inventory, shipping };
 
 -   Si los datos **NO dependen entre sí** → **Paralelo** (Task.WhenAll)
 -   Si una consulta **necesita resultados de otra** → **Secuencial** (await en cadena)
+
+---
+
+## 🔧 Troubleshooting
+
+### ⚠️ Problemas Comunes y Soluciones
+
+#### Error: "Unknown tool: get_order_details"
+
+**Síntoma**: Al ejecutar la Prueba 4 (estado de pedido), recibes:
+
+```json
+{
+    "answer": "❌ Error al ejecutar la consulta: MCP Server error: Internal error: Unknown tool: get_order_details"
+}
+```
+
+**Causa**: El servidor SQL MCP no tiene registrado el tool `get_order_details`.
+
+**Solución**: El tool `GetOrderDetailsTool` ya está implementado en `Exercise4SqlMcpServer`. Verifica que:
+
+1. El archivo `Exercise4SqlMcpServer/Tools/GetOrderDetailsTool.cs` existe
+2. El servidor se compiló correctamente: `dotnet build` en la carpeta del servidor SQL
+3. Reiniciaste el servidor SQL después de agregar el tool
+
+**Verificación**: Al iniciar el servidor SQL, debes ver en la consola:
+
+```text
+🔧 Tools: query_customers_by_country, get_sales_summary, get_order_details
+```
+
+Si solo ves 2 tools en lugar de 3, significa que el código no se recompiló o no se reinició el servidor.
+
+---
+
+#### Error: KeyNotFoundException en orderResponse
+
+**Síntoma**: El orquestador falla al intentar acceder a propiedades del pedido.
+
+**Causa**: El código intenta acceder directamente a `order.ProductId` cuando la respuesta del tool está envuelta en una estructura con `found` y `order`.
+
+**Solución**: Asegúrate de que el código en `OrchestratorService.cs` use el patrón correcto:
+
+```csharp
+// ❌ INCORRECTO - Acceso directo
+var order = await sqlClient.CallToolAsync<dynamic>("get_order_details", ...);
+var inventory = await restClient.CallToolAsync<dynamic>("check_inventory", new { productId = order.ProductId });
+
+// ✅ CORRECTO - Verificar found y extraer order
+var orderResponse = await sqlClient.CallToolAsync<JsonElement>("get_order_details", ...);
+if (!orderResponse.TryGetProperty("found", out var foundProp) || !foundProp.GetBoolean())
+{
+    return "Pedido no encontrado";
+}
+var order = orderResponse.GetProperty("order");
+var inventory = await restClient.CallToolAsync<dynamic>("check_inventory", new
+{
+    productId = order.GetProperty("productId").GetInt32()
+});
+```
+
+---
+
+#### Servidor no responde o timeout
+
+**Síntoma**: Todas las consultas fallan con "Failed to connect to MCP server" o "Request timed out".
+
+**Solución**: Verifica que los 4 servidores estén corriendo:
+
+```powershell
+# Verifica cada endpoint
+Invoke-RestMethod -Uri "http://localhost:5010/" -Method GET  # SQL
+Invoke-RestMethod -Uri "http://localhost:5011/" -Method GET  # Cosmos
+Invoke-RestMethod -Uri "http://localhost:5012/" -Method GET  # REST
+Invoke-RestMethod -Uri "http://localhost:5004/" -Method GET  # Orchestrator (puede fallar si no tiene endpoint /)
+```
+
+Cada uno debe responder con un objeto JSON con `status: "healthy"`.
 
 ---
 
