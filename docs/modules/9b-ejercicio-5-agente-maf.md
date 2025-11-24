@@ -51,19 +51,38 @@ flowchart TB
     SQL[(SQL Database<br/>Clientes, Pedidos)]
     Cosmos[(Cosmos DB<br/>Carritos, Sesiones)]
     API[REST API<br/>Productos, Inventario]
+    %% Flujo principal: Usuario -> Agente -> MCP Clients -> Data Sources -> Agente -> Usuario
+    User -->|"¿Cuántos clientes\nhay en España?"| Agent
 
-    User -->|"¿Cuántos clientes<br/>hay en Madrid?"| Agent
-    Agent -->|Selecciona herramienta| Agent
-    Agent -->|list_customers_by_city| McpClient1
-    McpClient1 -->|Consulta SQL| SQL
-    SQL -->|Resultados| McpClient1
-    McpClient1 -->|Datos| Agent
-    Agent -->|Respuesta en español| User
+    %% El agente decide qué herramienta usar (function calling)
+    Agent -->|"Selecciona herramienta (function calling)"| McpClient1
+    Agent -->|"Puede seleccionar otras herramientas"| McpClient2
+    Agent -->|"O REST API tools"| McpClient3
 
-    style Agent fill:#0078D4,color:#fff
-    style McpClient1 fill:#FFA500,color:#fff
-    style McpClient2 fill:#FFA500,color:#fff
-    style McpClient3 fill:#FFA500,color:#fff
+    %% Consultas hacia las fuentes de datos
+    McpClient1 -->|"Consulta SQL (list_customers_by_city)"| SQL
+    McpClient2 -->|"Consulta Cosmos (get_abandoned_carts)"| Cosmos
+    McpClient3 -->|"Consulta REST (get_low_stock_products)"| API
+
+    %% Resultados de vuelta al agente
+    SQL -->|"Resultados JSON"| McpClient1
+    Cosmos -->|"Resultados JSON"| McpClient2
+    API -->|"Resultados JSON"| McpClient3
+
+    %% El agente procesa y responde al usuario
+    McpClient1 -->|"Datos (tool output)"| Agent
+    McpClient2 -->|"Datos (tool output)"| Agent
+    McpClient3 -->|"Datos (tool output)"| Agent
+    Agent -->|"Respuesta en español"| User
+
+    %% Estilos y colores
+    style Agent fill:#0078D4,color:#fff,stroke:#005a9e,stroke-width:2px
+    style McpClient1 fill:#FFA500,color:#fff,stroke:#cc8400
+    style McpClient2 fill:#FFA500,color:#fff,stroke:#cc8400
+    style McpClient3 fill:#FFA500,color:#fff,stroke:#cc8400
+    style SQL fill:#f3f4f6,stroke:#999
+    style Cosmos fill:#f3f4f6,stroke:#999
+    style API fill:#f3f4f6,stroke:#999
 ```
 
 ---
@@ -182,31 +201,32 @@ Crea `appsettings.json`:
 Crea `McpClientHelper.cs` para gestionar conexiones a los servidores MCP:
 
 ```csharp
+using Microsoft.Extensions.Logging;
 using ModelContextProtocol.Client;
-using ModelContextProtocol.Client.Transports;
+using ModelContextProtocol.Protocol;
 
 namespace Exercise5Agent;
 
 /// <summary>
 /// Helper para crear y gestionar clientes MCP que se conectan a servidores HTTP
 /// </summary>
-public class McpClientHelper
+public static class McpClientHelper
 {
     /// <summary>
     /// Crea un cliente MCP que se conecta a un servidor MCP sobre HTTP
     /// </summary>
     /// <param name="serverName">Nombre descriptivo del servidor</param>
     /// <param name="serverUrl">URL base del servidor MCP (ej: http://localhost:5010)</param>
+    /// <param name="loggerFactory">Factory para crear loggers (opcional)</param>
     /// <returns>Cliente MCP configurado</returns>
-    public static async Task<IMcpClient> CreateHttpClientAsync(string serverName, string serverUrl)
+    public static async Task<McpClient> CreateHttpClientAsync(string serverName, string serverUrl, ILoggerFactory? loggerFactory = null)
     {
         Console.WriteLine($"🔌 Conectando a {serverName} en {serverUrl}...");
 
-        // Para servidores MCP sobre HTTP, usamos un transport personalizado
-        // Si tu servidor usa stdio (proceso local), usa StdioClientTransport
-        var transport = new HttpClientTransport(serverUrl, serverName);
+        // Usamos SimpleHttpClientTransport que internamente usa la implementación oficial
+        var transport = new SimpleHttpClientTransport(serverUrl, serverName, loggerFactory);
 
-        var client = await McpClientFactory.CreateAsync(transport);
+        var client = await McpClient.CreateAsync(transport, loggerFactory: loggerFactory);
 
         Console.WriteLine($"✅ Conectado a {serverName}");
         return client;
@@ -218,11 +238,13 @@ public class McpClientHelper
     /// <param name="serverName">Nombre del servidor</param>
     /// <param name="command">Comando para ejecutar (ej: "dotnet")</param>
     /// <param name="args">Argumentos del comando (ej: ["run", "--project", "path/to/server"])</param>
+    /// <param name="loggerFactory">Factory para crear loggers (opcional)</param>
     /// <returns>Cliente MCP configurado</returns>
-    public static async Task<IMcpClient> CreateStdioClientAsync(
+    public static async Task<McpClient> CreateStdioClientAsync(
         string serverName,
         string command,
-        string[] args)
+        string[] args,
+        ILoggerFactory? loggerFactory = null)
     {
         Console.WriteLine($"🔌 Iniciando servidor local {serverName}...");
 
@@ -233,7 +255,7 @@ public class McpClientHelper
             Arguments = [.. args]
         });
 
-        var client = await McpClientFactory.CreateAsync(transport);
+        var client = await McpClient.CreateAsync(transport, loggerFactory: loggerFactory);
 
         Console.WriteLine($"✅ Servidor {serverName} iniciado");
         return client;
@@ -242,48 +264,34 @@ public class McpClientHelper
 
 /// <summary>
 /// Transport personalizado para servidores MCP sobre HTTP
-/// Nota: Esta es una implementación simplificada para el workshop
-/// En producción, usa la implementación oficial cuando esté disponible
+/// NOTA: Este es un ejemplo simplificado para el workshop.
+/// En producción, usa la clase HttpClientTransport del SDK oficial que
+/// soporta SSE (Server-Sent Events) y Streamable HTTP correctamente.
 /// </summary>
-public class HttpClientTransport : IClientTransport
+public class SimpleHttpClientTransport : IClientTransport
 {
+    private readonly HttpClientTransportOptions _options;
     private readonly HttpClient _httpClient;
-    private readonly string _serverUrl;
-    private readonly string _serverName;
+    private readonly ILoggerFactory? _loggerFactory;
 
-    public HttpClientTransport(string serverUrl, string serverName)
+    public SimpleHttpClientTransport(string serverUrl, string serverName, ILoggerFactory? loggerFactory = null)
     {
-        _serverUrl = serverUrl.TrimEnd('/');
-        _serverName = serverName;
+        Name = serverName;
+        _options = new HttpClientTransportOptions
+        {
+            Endpoint = new Uri(serverUrl.TrimEnd('/'))
+        };
         _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
+        _loggerFactory = loggerFactory;
     }
 
-    public string Name => _serverName;
+    public string Name { get; }
 
-    public async Task<string> ReadAsync(CancellationToken cancellationToken = default)
+    public Task<ITransport> ConnectAsync(CancellationToken cancellationToken = default)
     {
-        // Implementación simplificada - en producción necesitarías SSE o WebSocket
-        var response = await _httpClient.GetAsync($"{_serverUrl}/mcp/messages", cancellationToken);
-        response.EnsureSuccessStatusCode();
-        return await response.Content.ReadAsStringAsync(cancellationToken);
-    }
-
-    public async Task WriteAsync(string message, CancellationToken cancellationToken = default)
-    {
-        var content = new StringContent(message, System.Text.Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync($"{_serverUrl}/mcp", content, cancellationToken);
-        response.EnsureSuccessStatusCode();
-    }
-
-    public void Dispose()
-    {
-        _httpClient.Dispose();
-    }
-
-    public ValueTask DisposeAsync()
-    {
-        Dispose();
-        return ValueTask.CompletedTask;
+        // Usa la implementación oficial del SDK que soporta SSE y Streamable HTTP
+        var transport = new ModelContextProtocol.Client.HttpClientTransport(_options, _httpClient, _loggerFactory);
+        return transport.ConnectAsync(cancellationToken);
     }
 }
 ```
@@ -304,9 +312,11 @@ Crea `Program.cs`:
 using Azure.AI.OpenAI;
 using Azure.Identity;
 using Microsoft.Agents.AI;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using ModelContextProtocol.Client;
 using Exercise5Agent;
+using OpenAI;
 
 // Cargar configuración
 var config = new ConfigurationBuilder()
@@ -389,7 +399,7 @@ AIAgent agent = new AzureOpenAIClient(
     .CreateAIAgent(
         instructions: instructions,
         name: agentName,
-        tools: [.. allMcpTools.Cast<AITool>()]);
+        tools: allMcpTools.Cast<AITool>().ToList());
 
 Console.WriteLine($"✅ Agente '{agentName}' creado exitosamente con {allMcpTools.Count} herramientas\n");
 

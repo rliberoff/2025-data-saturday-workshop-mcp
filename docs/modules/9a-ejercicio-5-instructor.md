@@ -181,9 +181,14 @@ AIAgent agent = new AzureOpenAIClient(...)
     .CreateAIAgent(
         instructions: "...",  // ← MUY IMPORTANTE: Define personalidad y comportamiento
         name: "...",
-        tools: [.. allMcpTools.Cast<AITool>()]  // ← Todas las herramientas MCP
+        tools: allMcpTools.Cast<AITool>().ToList()  // ← Todas las herramientas MCP
     );
 ```
+
+**Nota importante**: Asegúrate de que los alumnos tengan los using statements correctos:
+
+-   `using Microsoft.Extensions.AI;` para `AITool`
+-   `using OpenAI;` para las extensiones de `CreateAIAgent`
 
 **Punto de énfasis**:
 
@@ -223,6 +228,17 @@ Sin thread, el agente no sabría el contexto de "¿Y en Madrid?".
 ## 🔍 Puntos de Atención Durante el Ejercicio
 
 ### 1. Problemas Comunes de los Alumnos
+
+#### Errores de Compilación
+
+| Problema                                    | Causa                                         | Solución                                                                  |
+| ------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------- |
+| "AITool could not be found"                 | Falta `using Microsoft.Extensions.AI;`        | Agregar el using statement al inicio de Program.cs                        |
+| "CreateAIAgent not found"                   | Falta `using OpenAI;`                         | Agregar el using para las extensiones de OpenAI                           |
+| "IClientTransport.ConnectAsync not found"   | Implementación incorrecta de IClientTransport | Usar `Task<ITransport> ConnectAsync()` en lugar de `ReadAsync/WriteAsync` |
+| "ModelContextProtocol.Client.Transports..." | Namespace incorrecto                          | Usar `ModelContextProtocol.Client` y `ModelContextProtocol.Protocol`      |
+
+#### Errores de Ejecución
 
 | Problema                       | Causa                              | Solución                                                |
 | ------------------------------ | ---------------------------------- | ------------------------------------------------------- |
