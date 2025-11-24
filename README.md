@@ -436,15 +436,15 @@ Usuario (español) → Orquestador → [SQL Server | Cosmos DB | REST API]
 
 ### Puertos Utilizados
 
-| Ejercicio                  | Puerto | Servidor                  |
-| -------------------------- | ------ | ------------------------- |
-| Ejercicio 1                | 5000   | Exercise1StaticResources  |
-| Ejercicio 2                | 5001   | Exercise2ParametricQuery  |
-| Ejercicio 3                | 5002   | Exercise3SecureServer     |
-| Ejercicio 4 - SQL          | 5009   | SqlMcpServer     |
-| Ejercicio 4 - Cosmos       | 5010   | CosmosMcpServer  |
-| Ejercicio 4 - REST         | 5011   | RestApiMcpServer |
-| Ejercicio 4 - Orchestrator | 5012   | Exercise4VirtualAnalyst   |
+| Ejercicio                  | Puerto | Servidor                 |
+| -------------------------- | ------ | ------------------------ |
+| Ejercicio 1                | 5000   | Exercise1StaticResources |
+| Ejercicio 2                | 5001   | Exercise2ParametricQuery |
+| Ejercicio 3                | 5002   | Exercise3SecureServer    |
+| Ejercicio 4 - SQL          | 5009   | SqlMcpServer             |
+| Ejercicio 4 - Cosmos       | 5010   | CosmosMcpServer          |
+| Ejercicio 4 - REST         | 5011   | RestApiMcpServer         |
+| Ejercicio 4 - Orchestrator | 5012   | Exercise4VirtualAnalyst  |
 
 ## 📄 Licencia
 
