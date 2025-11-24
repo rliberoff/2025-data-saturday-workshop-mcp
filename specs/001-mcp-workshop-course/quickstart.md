@@ -331,36 +331,6 @@ az login
 az account show
 ```
 
-### Install Terraform (for infrastructure exercises)
-
-**Windows**:
-
-```powershell
-winget install Hashicorp.Terraform
-```
-
-**macOS**:
-
-```bash
-brew tap hashicorp/tap
-brew install hashicorp/tap/terraform
-```
-
-**Linux**:
-
-```bash
-wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip
-unzip terraform_1.6.0_linux_amd64.zip
-sudo mv terraform /usr/local/bin/
-```
-
-Verify:
-
-```bash
-terraform --version
-az --version
-```
-
 ---
 
 ## Troubleshooting

@@ -98,11 +98,8 @@ Al finalizar este taller, serás capaz de:
 -   **Azure Blob Storage**: Archivos y objetos
 -   **Azure Log Analytics**: Observabilidad
 
-### Herramientas
-
--   **Terraform**: Infrastructure as Code
--   **Visual Studio Code**: Editor recomendado
--   **Azure CLI**: Gestión de recursos
+**Visual Studio Code**: Editor recomendado  
+**Azure CLI**: Gestión de recursos
 
 ---
 
@@ -113,7 +110,6 @@ Al finalizar este taller, serás capaz de:
 -   ✅ .NET 10.0 SDK
 -   ✅ PowerShell 7+
 -   ✅ Azure CLI 2.80+
--   ✅ Terraform 1.14+
 -   ✅ Visual Studio Code (recomendado)
 -   ✅ Git (opcional)
 
@@ -140,7 +136,6 @@ Deberías ver:
 ✓ [REQUERIDO] Puertos TCP - Puertos 5000-5003 disponibles
 ✓ [REQUERIDO] NuGet Sources - NuGet.org configurado correctamente
 ✓ [REQUERIDO] Azure CLI - Azure CLI 2.80.0+ instalado
-✓ [REQUERIDO] Terraform - Terraform 1.14.0+ instalado
 ✓ [REQUERIDO] Git - Git instalado
 
 ========================================
@@ -177,7 +172,7 @@ Al finalizar, consideraremos el taller exitoso si:
 
 **❌ No te preocupes si...**
 
--   No completas todos los ejercicios a tiempo
+-   No completes todos los ejercicios a tiempo
 -   Necesitas revisar conceptos de C# durante la práctica
 -   Algunos ejercicios te resultan desafiantes
 -   No tienes experiencia previa con Azure

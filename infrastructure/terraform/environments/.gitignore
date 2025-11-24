@@ -1,9 +1,0 @@
-# Ignore auto-generated secrets files
-**/secrets.auto.tfvars
-
-# Ignore Terraform state files
-*.tfstate
-*.tfstate.*
-
-# Ignore plan files
-*.tfplan

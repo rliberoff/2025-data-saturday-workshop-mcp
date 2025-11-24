@@ -246,21 +246,7 @@
 
 ## Phase 6: Infrastructure & Deployment (Azure Resources)
 
-**Purpose**: Terraform modules for cloud deployment scenarios (optional for workshop, required for cloud exercises)
-
--   [x] T111 Create Terraform root module in infrastructure/terraform/main.tf importing all sub-modules
--   [x] T112 [P] Create Terraform variables in infrastructure/terraform/variables.tf for Azure subscription, resource group, region, naming conventions
--   [x] T113 [P] Create Terraform outputs in infrastructure/terraform/outputs.tf exposing MCP server URLs, database connection strings, monitoring workspace ID
--   [x] T114 Create Azure Container Apps module in infrastructure/terraform/modules/container-apps/main.tf for MCP server hosting per research.md section 2
--   [x] T115 [P] Create Azure App Service module in infrastructure/terraform/modules/app-service/main.tf as alternative hosting option per research.md
--   [x] T116 [P] Create Azure SQL Database module in infrastructure/terraform/modules/sql-database/main.tf for Exercise 4 SQL data source
--   [x] T117 [P] Create Azure Cosmos DB module in infrastructure/terraform/modules/cosmos-db/main.tf for Exercise 4 NoSQL data source
--   [x] T118 [P] Create Azure Blob Storage module in infrastructure/terraform/modules/storage/main.tf for static resources and sample data
--   [x] T119 [P] Create Azure Log Analytics module in infrastructure/terraform/modules/monitoring/main.tf for structured logging integration per research.md
--   [x] T120 Create deployment script in infrastructure/scripts/deploy.ps1 orchestrating Terraform apply with validation checks
--   [x] T121 [P] Create teardown script in infrastructure/scripts/teardown.ps1 for cleanup after workshop sessions
--   [x] T122 [P] Create Terraform environment configuration for dev in infrastructure/terraform/environments/dev/terraform.tfvars
--   [x] T123 [P] Create Terraform environment configuration for prod in infrastructure/terraform/environments/prod/terraform.tfvars
+**Purpose**: Infrastructure to be provisioned manually using Azure Portal or Azure CLI.
 
 ---
 

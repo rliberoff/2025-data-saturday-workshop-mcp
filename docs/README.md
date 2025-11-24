@@ -76,14 +76,13 @@ Al completar este workshop serás capaz de:
 
 ### Software Necesario
 
-| Software               | Versión | Propósito                     |
-| ---------------------- | ------- | ----------------------------- |
-| **.NET SDK**           | 10.0+   | Runtime y compilación         |
-| **Visual Studio Code** | Latest  | Editor recomendado            |
-| **PowerShell**         | 7.0+    | Scripts de verificación       |
-| **Git**                | 2.0+    | Control de versiones          |
-| **Terraform**          | 1.14.0+ | Despliegue de infraestructura |
-| **Postman/Insomnia**   | Latest  | Pruebas de API (opcional)     |
+| Software               | Versión | Propósito                 |
+| ---------------------- | ------- | ------------------------- |
+| **.NET SDK**           | 10.0+   | Runtime y compilación     |
+| **Visual Studio Code** | Latest  | Editor recomendado        |
+| **PowerShell**         | 7.0+    | Scripts de verificación   |
+| **Git**                | 2.0+    | Control de versiones      |
+| **Postman/Insomnia**   | Latest  | Pruebas de API (opcional) |
 
 ### Instalación Rápida
 
@@ -249,7 +248,6 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 ### Recursos Técnicos
 
 -   🧪 [Tests](../tests/McpWorkshop.Tests/) - 96 tests automatizados
--   ☁️ [Terraform Modules](../infrastructure/terraform/) - Despliegue en Azure
 -   📊 [Sample Data](../data/) - Datos de ejemplo incluidos en el repositorio
 
 ---

@@ -7,7 +7,7 @@
 
 ## Summary
 
-Create a comprehensive 3-hour MCP workshop with 11 structured blocks covering theory, live coding demonstrations, and progressive hands-on exercises. The workshop teaches attendees to build MCP servers for data exploitation scenarios using C# .NET with the ModelContextProtocol library (prerelease from NuGet). All infrastructure will be defined using Terraform for Azure deployment, documentation in Markdown, and diagrams in Mermaid. The workshop progresses from foundational MCP concepts through practical exercises (static resources, parametric queries, security/governance, multi-source orchestration) culminating in a group integrative challenge building a virtual analyst agent.
+Create a comprehensive 3-hour MCP workshop with 11 structured blocks covering theory, live coding demonstrations, and progressive hands-on exercises. The workshop teaches attendees to build MCP servers for data exploitation scenarios using C# .NET with the ModelContextProtocol library (prerelease from NuGet). All infrastructure must be provisioned manually in Azure (Portal or CLI). Documentation is in Markdown, and diagrams in Mermaid. The workshop progresses from foundational MCP concepts through practical exercises (static resources, parametric queries, security/governance, multi-source orchestration) culminating in a group integrative challenge building a virtual analyst agent.
 
 ## Technical Context
 
@@ -17,7 +17,7 @@ Create a comprehensive 3-hour MCP workshop with 11 structured blocks covering th
 **Testing**: xUnit for unit tests, Microsoft.AspNetCore.Mvc.Testing for integration tests, MCP protocol validation scripts  
 **Target Platform**: Cross-platform (Windows/macOS/Linux developer workstations), Azure App Service / Azure Container Apps for hosted MCP servers  
 **Project Type**: Multi-project solution (workshop content + multiple exercise projects + sample MCP servers)  
-**Infrastructure**: Terraform for Azure resource provisioning (App Service Plans, Container Apps, Storage Accounts, SQL Database, Cosmos DB, Log Analytics)  
+**Infrastructure**: Azure resource provisioning (App Service Plans, Container Apps, Storage Accounts, SQL Database, Cosmos DB, Log Analytics) to be performed manually.  
 **Documentation**: Markdown for all instructional content, Mermaid for architecture and flow diagrams  
 **Performance Goals**: MCP servers respond to tool/resource requests within 500ms p95, exercises completable within specified time constraints (15-30 min each)  
 **Constraints**: Exercises must be runnable locally without Azure dependencies for offline scenarios, all samples must use standard MCP protocol (stdin/stdout or HTTP transport), maximum 3-hour total workshop duration  
@@ -120,7 +120,6 @@ tests/                                  # Verification and testing
 └── McpWorkshop.Tests.csproj
 
 infrastructure/                         # Azure provisioning
-├── terraform/
 │   ├── modules/
 │   │   ├── app-service/               # App Service module
 │   │   ├── container-apps/            # Container Apps module
@@ -134,7 +133,6 @@ infrastructure/                         # Azure provisioning
 │   ├── main.tf
 │   ├── variables.tf
 │   ├── outputs.tf
-│   └── terraform.tfvars.example
 └── scripts/                           # Deployment automation
     ├── deploy.ps1
     └── teardown.ps1
@@ -160,7 +158,6 @@ data/                                   # Sample datasets (included in repositor
 -   **docs/**: Instructor and attendee-facing Markdown documentation organized by workshop block sequence
 -   **src/**: Complete C# solutions for all exercises (reference implementations)
 -   **tests/**: Comprehensive test suite for verification and protocol validation
--   **infrastructure/**: Terraform IaC for Azure deployment scenarios
 -   **scripts/**: Automation for setup verification, data generation, and testing
 
 This structure supports self-paced learning, instructor-led delivery, local development, and cloud deployment scenarios.
@@ -170,7 +167,6 @@ This structure supports self-paced learning, instructor-led delivery, local deve
 -   **docs/**: Instructor and attendee-facing Markdown documentation organized by workshop block sequence
 -   **src/**: Complete C# solutions for all exercises (reference implementations)
 -   **tests/**: Comprehensive test suite for verification and protocol validation
--   **infrastructure/**: Terraform IaC for Azure deployment scenarios
 -   **scripts/**: Automation for setup verification, data generation, and testing
 
 This structure supports self-paced learning, instructor-led delivery, local development, and cloud deployment scenarios.
@@ -209,7 +205,7 @@ No violations identified. Constitution check passed completely - no complexity t
 
 ✅ **V. Simplicity & Observability**: Contracts require structured logging with specific fields (timestamp, userId, requestId, duration). Exercise 3 focuses entirely on logging and observability patterns. Quickstart emphasizes clear troubleshooting steps.
 
-✅ **Technology Constraints**: Research document confirms C# .NET 8.0, ModelContextProtocol library, Azure services only. No Power Platform references. Terraform for IaC as specified.
+✅ **Technology Constraints**: Research document confirms C# .NET 8.0, ModelContextProtocol library, Azure services only. No Power Platform references. Infrastructure manually provisioned.
 
 ✅ **Development Workflow**: Documentation artifacts follow Markdown-first approach. Data model separates conceptual entities from implementation. Contracts use JSON Schema for validation. Quickstart provides step-by-step instructions.
 
