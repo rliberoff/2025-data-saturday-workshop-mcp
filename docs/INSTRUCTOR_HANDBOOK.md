@@ -394,7 +394,7 @@ app.MapControllers();
 ```powershell
 # Para workshop: usar local JSON files
 # No requiere Cosmos real
-cd src/McpWorkshop.Servers/Exercise4CosmosMcpServer/Data
+cd src/McpWorkshop.Servers/CosmosMcpServer/Data
 ls *.json  # sessions.json, cart-events.json deben existir
 ```
 

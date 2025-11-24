@@ -13,11 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpWorkshop.Tests", "tests\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "McpWorkshop.Servers", "McpWorkshop.Servers", "{C29E524E-FBD2-00F7-DC9E-D2B6F485DE60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exercise4SqlMcpServer", "src\McpWorkshop.Servers\Exercise4SqlMcpServer\Exercise4SqlMcpServer.csproj", "{3F1EC225-526F-4113-8DF3-1BD7EA72AF06}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlMcpServer", "src\McpWorkshop.Servers\SqlMcpServer\SqlMcpServer.csproj", "{3F1EC225-526F-4113-8DF3-1BD7EA72AF06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exercise4CosmosMcpServer", "src\McpWorkshop.Servers\Exercise4CosmosMcpServer\Exercise4CosmosMcpServer.csproj", "{B925C1CE-315C-4A78-891B-9E12DF1052C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosMcpServer", "src\McpWorkshop.Servers\CosmosMcpServer\CosmosMcpServer.csproj", "{B925C1CE-315C-4A78-891B-9E12DF1052C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exercise4RestApiMcpServer", "src\McpWorkshop.Servers\Exercise4RestApiMcpServer\Exercise4RestApiMcpServer.csproj", "{7980D095-B9B7-4B93-8222-0FE3A32D7024}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestApiMcpServer", "src\McpWorkshop.Servers\RestApiMcpServer\RestApiMcpServer.csproj", "{7980D095-B9B7-4B93-8222-0FE3A32D7024}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

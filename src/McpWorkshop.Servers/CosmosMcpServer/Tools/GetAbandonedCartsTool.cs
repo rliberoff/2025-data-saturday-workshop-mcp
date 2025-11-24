@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using Exercise4CosmosMcpServer.Models;
+using CosmosMcpServer.Models;
 
-namespace Exercise4CosmosMcpServer.Tools;
+namespace CosmosMcpServer.Tools;
 
 public class GetAbandonedCartsTool
 {

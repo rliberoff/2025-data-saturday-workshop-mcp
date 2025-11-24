@@ -1,6 +1,6 @@
 using System;
 
-namespace Exercise4CosmosMcpServer.Models;
+namespace CosmosMcpServer.Models;
 
 public class UserSession
 {

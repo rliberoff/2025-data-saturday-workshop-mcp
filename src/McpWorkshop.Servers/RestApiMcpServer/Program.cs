@@ -4,7 +4,7 @@ using System.IO;
 using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Exercise4RestApiMcpServer.Tools;
+using RestApiMcpServer.Tools;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -15,7 +15,7 @@ Console.WriteLine("✅ RestApiMcpServer initialized");
 app.MapGet("/", () => Results.Ok(new
 {
     status = "healthy",
-    server = "Exercise4RestApiMcpServer",
+    server = "RestApiMcpServer",
     version = "1.0.0",
     timestamp = DateTime.UtcNow
 }));

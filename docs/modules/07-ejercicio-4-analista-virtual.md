@@ -600,24 +600,23 @@ await app.RunAsync("http://localhost:5004");
 
 **⚠️ IMPORTANTE**: Antes de ejecutar las pruebas, debes tener corriendo los 3 servidores MCP que el orquestador necesita consultar:
 
-**📝 Nota sobre Tools MCP**: Los servidores `Exercise4SqlMcpServer`, `Exercise4CosmosMcpServer` y `Exercise4RestApiMcpServer` ya están implementados con todos los tools necesarios:
+**📝 Nota sobre Tools MCP**: Los servidores `SqlMcpServer`, `CosmosMcpServer` y `RestApiMcpServer` ya están implementados con todos los tools necesarios:
 
 -   **SQL Server**: `query_customers_by_country`, `get_sales_summary` y `get_order_details`
 -   **Cosmos Server**: `get_abandoned_carts` y `analyze_user_behavior`
 -   **REST API Server**: `check_inventory`, `get_shipping_status` y `get_top_products`
 
-
 ```powershell
 # Terminal 1: SQL Server
-cd src/McpWorkshop.Servers/Exercise4SqlMcpServer
+cd src/McpWorkshop.Servers/SqlMcpServer
 dotnet run
 
 # Terminal 2: Cosmos DB Server
-cd src/McpWorkshop.Servers/Exercise4CosmosMcpServer
+cd src/McpWorkshop.Servers/CosmosMcpServer
 dotnet run
 
 # Terminal 3: REST API Server
-cd src/McpWorkshop.Servers/Exercise4RestApiMcpServer
+cd src/McpWorkshop.Servers/RestApiMcpServer
 dotnet run
 
 # Terminal 4: Orchestrator (este proyecto)
@@ -825,9 +824,9 @@ return new { order, inventory, shipping };
 
 **Causa**: El servidor SQL MCP no tiene registrado el tool `get_order_details`.
 
-**Solución**: El tool `GetOrderDetailsTool` ya está implementado en `Exercise4SqlMcpServer`. Verifica que:
+**Solución**: El tool `GetOrderDetailsTool` ya está implementado en `SqlMcpServer`. Verifica que:
 
-1. El archivo `Exercise4SqlMcpServer/Tools/GetOrderDetailsTool.cs` existe
+1. El archivo `SqlMcpServer/Tools/GetOrderDetailsTool.cs` existe
 2. El servidor se compiló correctamente: `dotnet build` en la carpeta del servidor SQL
 3. Reiniciaste el servidor SQL después de agregar el tool
 

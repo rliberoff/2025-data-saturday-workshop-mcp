@@ -4,23 +4,23 @@ using System.IO;
 using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Exercise4CosmosMcpServer.Models;
-using Exercise4CosmosMcpServer.Tools;
+using SqlMcpServer.Models;
+using SqlMcpServer.Tools;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
 // Load data
-var sessions = LoadData<UserSession>("../../../data/sessions.json");
-var cartEvents = LoadData<CartEvent>("../../../data/cart-events.json");
-var abandonedCarts = LoadData<AbandonedCart>("../../../data/abandoned-carts.json");
-Console.WriteLine($"✅ Loaded {sessions.Length} sessions, {cartEvents.Length} cart events, {abandonedCarts.Length} abandoned carts");
+var customers = LoadData<Customer>("../../../data/customers.json");
+var products = LoadData<Product>("../../../data/products.json");
+var orders = LoadData<Order>("../../../data/orders.json");
+Console.WriteLine($"✅ Loaded {customers.Length} customers, {products.Length} products, {orders.Length} orders");
 
 // Health check endpoint
 app.MapGet("/", () => Results.Ok(new
 {
     status = "healthy",
-    server = "Exercise4CosmosMcpServer",
+    server = "SqlMcpServer",
     version = "1.0.0",
     timestamp = DateTime.UtcNow
 }));
@@ -59,78 +59,68 @@ app.MapPost("/mcp", async (HttpContext context) =>
 
     try
     {
-        switch (method)
+        result = method switch
         {
-            case "initialize":
-                result = new
+            "initialize" => new
+            {
+                protocolVersion = "2024-11-05",
+                capabilities = new Dictionary<string, object>
                 {
-                    protocolVersion = "2024-11-05",
-                    capabilities = new Dictionary<string, object>
+                    ["resources"] = new { },
+                    ["tools"] = new { }
+                },
+                serverInfo = new
+                {
+                    name = "SqlMcpServer",
+                    version = "1.0.0",
+                    description = "Servidor MCP para datos transaccionales (SQL)"
+                }
+            },
+
+            "resources/list" => new
+            {
+                resources = new[]
+                {
+                    new
                     {
-                        ["resources"] = new { },
-                        ["tools"] = new { }
+                        uri = "sql://workshop/customers",
+                        name = "SQL Customers",
+                        description = "Lista completa de clientes registrados",
+                        mimeType = "application/json"
                     },
-                    serverInfo = new
+                    new
                     {
-                        name = "CosmosMcpServer",
-                        version = "1.0.0",
-                        description = "Servidor MCP para analítica de comportamiento (Cosmos)"
+                        uri = "sql://workshop/orders",
+                        name = "SQL Orders",
+                        description = "Historial de pedidos realizados",
+                        mimeType = "application/json"
+                    },
+                    new
+                    {
+                        uri = "sql://workshop/products",
+                        name = "SQL Products",
+                        description = "Catálogo de productos disponibles",
+                        mimeType = "application/json"
                     }
-                };
-                break;
+                }
+            },
 
-            case "resources/list":
-                result = new
+            "resources/read" => HandleResourceRead(request),
+
+            "tools/list" => new
+            {
+                tools = new[]
                 {
-                    resources = new[]
-                    {
-                        new
-                        {
-                            uri = "cosmos://analytics/user-sessions",
-                            name = "User Sessions",
-                            description = "Sesiones de usuario con métricas de navegación",
-                            mimeType = "application/json"
-                        },
-                        new
-                        {
-                            uri = "cosmos://analytics/cart-events",
-                            name = "Cart Events",
-                            description = "Eventos del carrito de compras",
-                            mimeType = "application/json"
-                        },
-                        new
-                        {
-                            uri = "cosmos://analytics/abandoned-carts",
-                            name = "Abandoned Carts",
-                            description = "Carritos abandonados con detalles de productos y valores",
-                            mimeType = "application/json"
-                        }
-                    }
-                };
-                break;
+                    QueryCustomersByCountryTool.GetDefinition(),
+                    GetSalesSummaryTool.GetDefinition(),
+                    GetOrderDetailsTool.GetDefinition()
+                }
+            },
 
-            case "resources/read":
-                result = HandleResourceRead(request);
-                break;
+            "tools/call" => HandleToolCall(request),
 
-            case "tools/list":
-                result = new
-                {
-                    tools = new[]
-                    {
-                        GetAbandonedCartsTool.GetDefinition(),
-                        AnalyzeUserBehaviorTool.GetDefinition()
-                    }
-                };
-                break;
-
-            case "tools/call":
-                result = HandleToolCall(request);
-                break;
-
-            default:
-                throw new InvalidOperationException($"Unknown method: {method}");
-        }
+            _ => throw new InvalidOperationException($"Unknown method: {method}")
+        };
 
         context.Response.ContentType = "application/json";
         await context.Response.WriteAsync(JsonSerializer.Serialize(new
@@ -152,11 +142,11 @@ app.MapPost("/mcp", async (HttpContext context) =>
     }
 });
 
-Console.WriteLine("✅ CosmosMcpServer running on http://localhost:5011/mcp");
-Console.WriteLine("📊 Resources: user-sessions, cart-events");
-Console.WriteLine("🔧 Tools: get_abandoned_carts, analyze_user_behavior \n");
+Console.WriteLine("✅ SqlMcpServer running on http://localhost:5010/mcp");
+Console.WriteLine("📊 Resources: customers, orders, products");
+Console.WriteLine("🔧 Tools: query_customers_by_country, get_sales_summary, get_order_details \n");
 
-await app.RunAsync("http://localhost:5011");
+await app.RunAsync("http://localhost:5010");
 
 T[] LoadData<T>(string path)
 {
@@ -175,9 +165,9 @@ object HandleResourceRead(JsonElement request)
 
     var data = uri switch
     {
-        "cosmos://analytics/user-sessions" => JsonSerializer.Serialize(sessions),
-        "cosmos://analytics/cart-events" => JsonSerializer.Serialize(cartEvents),
-        "cosmos://analytics/abandoned-carts" => JsonSerializer.Serialize(abandonedCarts),
+        "sql://workshop/customers" => JsonSerializer.Serialize(customers),
+        "sql://workshop/orders" => JsonSerializer.Serialize(orders),
+        "sql://workshop/products" => JsonSerializer.Serialize(products),
         _ => throw new ArgumentException($"Unknown resource URI: {uri}")
     };
 
@@ -213,8 +203,9 @@ object HandleToolCall(JsonElement request)
 
     var toolResult = toolName switch
     {
-        "get_abandoned_carts" => GetAbandonedCartsTool.Execute(arguments, abandonedCarts),
-        "analyze_user_behavior" => AnalyzeUserBehaviorTool.Execute(arguments, sessions, cartEvents),
+        "query_customers_by_country" => QueryCustomersByCountryTool.Execute(arguments, customers),
+        "get_sales_summary" => GetSalesSummaryTool.Execute(arguments, orders),
+        "get_order_details" => GetOrderDetailsTool.Execute(arguments, orders, customers, products),
         _ => throw new InvalidOperationException($"Unknown tool: {toolName}")
     };
 

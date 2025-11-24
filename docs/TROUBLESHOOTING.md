@@ -478,13 +478,13 @@ Get-NetTCPConnection -LocalPort 5002,5003,5004 -State Listen
 
 ```powershell
 # Iniciar manualmente cada servidor:
-cd src\McpWorkshop.Servers\Exercise4SqlMcpServer
+cd src\McpWorkshop.Servers\SqlMcpServer
 Start-Process powershell -ArgumentList "dotnet run"
 
-cd ..\Exercise4CosmosMcpServer
+cd ..\CosmosMcpServer
 Start-Process powershell -ArgumentList "dotnet run"
 
-cd ..\Exercise4RestApiMcpServer
+cd ..\RestApiMcpServer
 Start-Process powershell -ArgumentList "dotnet run"
 
 # O usar script automatizado:

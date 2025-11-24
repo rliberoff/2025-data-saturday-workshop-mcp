@@ -1,6 +1,6 @@
 using System.Text.Json;
-using Exercise4SqlMcpServer.Models;
-using Exercise4CosmosMcpServer.Models;
+using SqlMcpServer.Models;
+using CosmosMcpServer.Models;
 using Xunit;
 
 namespace McpWorkshop.Tests.Unit.Models;

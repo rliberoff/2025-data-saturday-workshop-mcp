@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using Exercise4SqlMcpServer.Models;
+using SqlMcpServer.Models;
 
-namespace Exercise4SqlMcpServer.Tools;
+namespace SqlMcpServer.Tools;
 
 public class GetSalesSummaryTool
 {

@@ -22,9 +22,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\McpWorkshop.Shared\McpWorkshop.Shared.csproj" />
-    <ProjectReference Include="..\..\src\McpWorkshop.Servers\Exercise4SqlMcpServer\Exercise4SqlMcpServer.csproj" />
-    <ProjectReference Include="..\..\src\McpWorkshop.Servers\Exercise4CosmosMcpServer\Exercise4CosmosMcpServer.csproj" />
-    <ProjectReference Include="..\..\src\McpWorkshop.Servers\Exercise4RestApiMcpServer\Exercise4RestApiMcpServer.csproj" />
+    <ProjectReference Include="..\..\src\McpWorkshop.Servers\SqlMcpServer\SqlMcpServer.csproj" />
+    <ProjectReference Include="..\..\src\McpWorkshop.Servers\CosmosMcpServer\CosmosMcpServer.csproj" />
+    <ProjectReference Include="..\..\src\McpWorkshop.Servers\RestApiMcpServer\RestApiMcpServer.csproj" />
   </ItemGroup>
 
 </Project>

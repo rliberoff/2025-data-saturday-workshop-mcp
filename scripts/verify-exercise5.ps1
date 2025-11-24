@@ -295,9 +295,9 @@ if ($testsFailed -eq 0) {
     Write-Host "`nPróximos pasos:" -ForegroundColor Cyan
     Write-Host "  1. Configura tu Azure OpenAI endpoint en appsettings.json" -ForegroundColor White
     Write-Host "  2. Asegúrate de que los 3 servidores MCP estén corriendo:" -ForegroundColor White
-    Write-Host "     - dotnet run --project src/McpWorkshop.Servers/Exercise4SqlMcpServer" -ForegroundColor Gray
-    Write-Host "     - dotnet run --project src/McpWorkshop.Servers/Exercise4CosmosMcpServer" -ForegroundColor Gray
-    Write-Host "     - dotnet run --project src/McpWorkshop.Servers/Exercise4RestApiMcpServer" -ForegroundColor Gray
+    Write-Host "     - dotnet run --project src/McpWorkshop.Servers/SqlMcpServer" -ForegroundColor Gray
+    Write-Host "     - dotnet run --project src/McpWorkshop.Servers/CosmosMcpServer" -ForegroundColor Gray
+    Write-Host "     - dotnet run --project src/McpWorkshop.Servers/RestApiMcpServer" -ForegroundColor Gray
     Write-Host "  3. Ejecuta el agente:" -ForegroundColor White
     Write-Host "     dotnet run --project src/McpWorkshop.Servers/Exercise5Agent" -ForegroundColor Gray
     Write-Host ""

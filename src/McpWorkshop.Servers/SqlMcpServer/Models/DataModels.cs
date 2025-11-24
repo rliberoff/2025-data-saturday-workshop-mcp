@@ -1,6 +1,6 @@
 using System;
 
-namespace Exercise4SqlMcpServer.Models;
+namespace SqlMcpServer.Models;
 
 public class Customer
 {

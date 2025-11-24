@@ -102,13 +102,13 @@ dotnet run
 
 ```powershell
 # Ejecutar servidores independientes (cada uno en su terminal)
-cd src\McpWorkshop.Servers\Exercise4SqlMcpServer
+cd src\McpWorkshop.Servers\SqlMcpServer
 dotnet run  # Puerto 5009
 
-cd src\McpWorkshop.Servers\Exercise4CosmosMcpServer
+cd src\McpWorkshop.Servers\CosmosMcpServer
 dotnet run  # Puerto 5010
 
-cd src\McpWorkshop.Servers\Exercise4RestApiMcpServer
+cd src\McpWorkshop.Servers\RestApiMcpServer
 dotnet run  # Puerto 5011
 
 # Ejecutar orquestador
@@ -123,7 +123,7 @@ dotnet run  # Puerto 5012
 
 ```powershell
 # Asegúrate de que los 3 servidores MCP estén corriendo
-# (Exercise4SqlMcpServer, Exercise4CosmosMcpServer, Exercise4RestApiMcpServer)
+# (SqlMcpServer, CosmosMcpServer, RestApiMcpServer)
 
 # Configurar Azure OpenAI endpoint en appsettings.json
 cd src\McpWorkshop.Servers\Exercise5AgentServer
@@ -185,9 +185,9 @@ mcp-workshop/
 │       ├── Exercise1StaticResources/      # Puerto 5000: Recursos JSON estáticos
 │       ├── Exercise2ParametricQuery/      # Puerto 5001: Herramientas con parámetros
 │       ├── Exercise3SecureServer/         # Puerto 5002: JWT + Rate Limiting
-│       ├── Exercise4SqlMcpServer/         # Puerto 5009: Servidor MCP para SQL
-│       ├── Exercise4CosmosMcpServer/      # Puerto 5010: Servidor MCP para Cosmos
-│       ├── Exercise4RestApiMcpServer/     # Puerto 5011: Servidor MCP para REST APIs
+│       ├── SqlMcpServer/         # Puerto 5009: Servidor MCP para SQL
+│       ├── CosmosMcpServer/      # Puerto 5010: Servidor MCP para Cosmos
+│       ├── RestApiMcpServer/     # Puerto 5011: Servidor MCP para REST APIs
 │       ├── Exercise4VirtualAnalyst/       # Puerto 5012: Orquestador principal
 │       ├── Exercise5AgentServer/          # Agente con Microsoft Agent Framework
 │       └── McpWorkshop.Shared/            # Utilidades compartidas
@@ -369,9 +369,9 @@ Usuario (español) → Orquestador → [SQL Server | Cosmos DB | REST API]
 
 **Servidores MCP implementados**:
 
-1. **Exercise4SqlMcpServer** (Puerto 5009): Datos transaccionales (clientes, órdenes)
-2. **Exercise4CosmosMcpServer** (Puerto 5010): Comportamiento de usuarios (sesiones, carritos)
-3. **Exercise4RestApiMcpServer** (Puerto 5011): APIs externas (inventario, envíos)
+1. **SqlMcpServer** (Puerto 5009): Datos transaccionales (clientes, órdenes)
+2. **CosmosMcpServer** (Puerto 5010): Comportamiento de usuarios (sesiones, carritos)
+3. **RestApiMcpServer** (Puerto 5011): APIs externas (inventario, envíos)
 4. **Exercise4VirtualAnalyst** (Puerto 5012): Orquestador principal
 
 **Preguntas de ejemplo**:
@@ -441,9 +441,9 @@ Usuario (español) → Orquestador → [SQL Server | Cosmos DB | REST API]
 | Ejercicio 1                | 5000   | Exercise1StaticResources  |
 | Ejercicio 2                | 5001   | Exercise2ParametricQuery  |
 | Ejercicio 3                | 5002   | Exercise3SecureServer     |
-| Ejercicio 4 - SQL          | 5009   | Exercise4SqlMcpServer     |
-| Ejercicio 4 - Cosmos       | 5010   | Exercise4CosmosMcpServer  |
-| Ejercicio 4 - REST         | 5011   | Exercise4RestApiMcpServer |
+| Ejercicio 4 - SQL          | 5009   | SqlMcpServer     |
+| Ejercicio 4 - Cosmos       | 5010   | CosmosMcpServer  |
+| Ejercicio 4 - REST         | 5011   | RestApiMcpServer |
 | Ejercicio 4 - Orchestrator | 5012   | Exercise4VirtualAnalyst   |
 
 ## 📄 Licencia

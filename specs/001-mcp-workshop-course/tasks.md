@@ -182,20 +182,20 @@
 
 ### Exercise 4: Virtual Analyst Orchestration (30 min group challenge)
 
--   [x] T079 [US2] Create SqlMcpServer reference implementation in src/McpWorkshop.Servers/Exercise4SqlMcpServer/Program.cs exposing SQL resources and tools per contracts/exercise-4-virtual-analyst.json mcpServers[0]
--   [x] T080 [US2] Implement sql://workshop/customers resource in src/McpWorkshop.Servers/Exercise4SqlMcpServer/Resources/CustomersResource.cs (implemented via Data/customers.json with resources/read handler in Program.cs)
--   [x] T081 [P] [US2] Implement sql://workshop/orders resource in src/McpWorkshop.Servers/Exercise4SqlMcpServer/Resources/OrdersResource.cs (implemented via Data/orders.json with resources/read handler in Program.cs)
--   [x] T082 [P] [US2] Implement sql://workshop/products resource in src/McpWorkshop.Servers/Exercise4SqlMcpServer/Resources/ProductsResource.cs (implemented via Data/products.json with resources/read handler in Program.cs)
--   [x] T083 [US2] Implement query_customers_by_country tool in src/McpWorkshop.Servers/Exercise4SqlMcpServer/Tools/QueryCustomersByCountryTool.cs per contract inputSchema
--   [x] T084 [P] [US2] Implement get_sales_summary tool in src/McpWorkshop.Servers/Exercise4SqlMcpServer/Tools/GetSalesSummaryTool.cs per contract
--   [x] T085 [P] [US2] Create CosmosMcpServer reference implementation in src/McpWorkshop.Servers/Exercise4CosmosMcpServer/Program.cs exposing Cosmos resources and tools per contracts/exercise-4-virtual-analyst.json mcpServers[1]
--   [x] T086 [P] [US2] Implement cosmos://analytics/user-sessions resource in src/McpWorkshop.Servers/Exercise4CosmosMcpServer/Resources/UserSessionsResource.cs (implemented via Data/sessions.json with resources/read handler in Program.cs)
--   [x] T087 [P] [US2] Implement cosmos://analytics/cart-events resource in src/McpWorkshop.Servers/Exercise4CosmosMcpServer/Resources/CartEventsResource.cs (implemented via Data/cart-events.json with resources/read handler in Program.cs)
--   [x] T088 [US2] Implement get_abandoned_carts tool in src/McpWorkshop.Servers/Exercise4CosmosMcpServer/Tools/GetAbandonedCartsTool.cs per contract inputSchema
--   [x] T089 [P] [US2] Implement analyze_user_behavior tool in src/McpWorkshop.Servers/Exercise4CosmosMcpServer/Tools/AnalyzeUserBehaviorTool.cs per contract
--   [x] T090 [P] [US2] Create RestApiMcpServer reference implementation in src/McpWorkshop.Servers/Exercise4RestApiMcpServer/Program.cs exposing REST tools per contracts/exercise-4-virtual-analyst.json mcpServers[2]
--   [x] T091 [P] [US2] Implement check_inventory tool in src/McpWorkshop.Servers/Exercise4RestApiMcpServer/Tools/CheckInventoryTool.cs per contract inputSchema
--   [x] T092 [P] [US2] Implement get_shipping_status tool in src/McpWorkshop.Servers/Exercise4RestApiMcpServer/Tools/GetShippingStatusTool.cs per contract
+-   [x] T079 [US2] Create SqlMcpServer reference implementation in src/McpWorkshop.Servers/SqlMcpServer/Program.cs exposing SQL resources and tools per contracts/exercise-4-virtual-analyst.json mcpServers[0]
+-   [x] T080 [US2] Implement sql://workshop/customers resource in src/McpWorkshop.Servers/SqlMcpServer/Resources/CustomersResource.cs (implemented via Data/customers.json with resources/read handler in Program.cs)
+-   [x] T081 [P] [US2] Implement sql://workshop/orders resource in src/McpWorkshop.Servers/SqlMcpServer/Resources/OrdersResource.cs (implemented via Data/orders.json with resources/read handler in Program.cs)
+-   [x] T082 [P] [US2] Implement sql://workshop/products resource in src/McpWorkshop.Servers/SqlMcpServer/Resources/ProductsResource.cs (implemented via Data/products.json with resources/read handler in Program.cs)
+-   [x] T083 [US2] Implement query_customers_by_country tool in src/McpWorkshop.Servers/SqlMcpServer/Tools/QueryCustomersByCountryTool.cs per contract inputSchema
+-   [x] T084 [P] [US2] Implement get_sales_summary tool in src/McpWorkshop.Servers/SqlMcpServer/Tools/GetSalesSummaryTool.cs per contract
+-   [x] T085 [P] [US2] Create CosmosMcpServer reference implementation in src/McpWorkshop.Servers/CosmosMcpServer/Program.cs exposing Cosmos resources and tools per contracts/exercise-4-virtual-analyst.json mcpServers[1]
+-   [x] T086 [P] [US2] Implement cosmos://analytics/user-sessions resource in src/McpWorkshop.Servers/CosmosMcpServer/Resources/UserSessionsResource.cs (implemented via Data/sessions.json with resources/read handler in Program.cs)
+-   [x] T087 [P] [US2] Implement cosmos://analytics/cart-events resource in src/McpWorkshop.Servers/CosmosMcpServer/Resources/CartEventsResource.cs (implemented via Data/cart-events.json with resources/read handler in Program.cs)
+-   [x] T088 [US2] Implement get_abandoned_carts tool in src/McpWorkshop.Servers/CosmosMcpServer/Tools/GetAbandonedCartsTool.cs per contract inputSchema
+-   [x] T089 [P] [US2] Implement analyze_user_behavior tool in src/McpWorkshop.Servers/CosmosMcpServer/Tools/AnalyzeUserBehaviorTool.cs per contract
+-   [x] T090 [P] [US2] Create RestApiMcpServer reference implementation in src/McpWorkshop.Servers/RestApiMcpServer/Program.cs exposing REST tools per contracts/exercise-4-virtual-analyst.json mcpServers[2]
+-   [x] T091 [P] [US2] Implement check_inventory tool in src/McpWorkshop.Servers/RestApiMcpServer/Tools/CheckInventoryTool.cs per contract inputSchema
+-   [x] T092 [P] [US2] Implement get_shipping_status tool in src/McpWorkshop.Servers/RestApiMcpServer/Tools/GetShippingStatusTool.cs per contract
 -   [x] T093 [US2] Create OrchestratorService in src/McpWorkshop.Servers/Exercise4VirtualAnalyst/Services/OrchestratorService.cs coordinating SQL, Cosmos, REST servers per contract architecture.components[0]
 -   [x] T094 [US2] Implement natural language query parser in src/McpWorkshop.Servers/Exercise4VirtualAnalyst/Parsers/SpanishQueryParser.cs for Spanish questions per contract scenario.exampleQuestions using keyword/pattern matching (MVP approach) with extensibility point for future LLM integration
 -   [x] T095 [US2] Implement parallel integration pattern in src/McpWorkshop.Servers/Exercise4VirtualAnalyst/Services/OrchestratorService.cs per contract integrationPatterns.parallel (Task.WhenAll for sales_summary)
