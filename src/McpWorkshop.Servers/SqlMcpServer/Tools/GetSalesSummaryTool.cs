@@ -1,13 +1,21 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+
 using SqlMcpServer.Models;
 
 namespace SqlMcpServer.Tools;
 
-public class GetSalesSummaryTool
+/// <summary>
+/// MCP tool for calculating aggregated sales statistics.
+/// </summary>
+public static class GetSalesSummaryTool
 {
+    /// <summary>
+    /// Gets the tool definition for MCP protocol.
+    /// </summary>
+    /// <returns>An object containing the tool definition with name, description, and input schema.</returns>
     public static object GetDefinition()
     {
         return new
@@ -22,23 +30,29 @@ public class GetSalesSummaryTool
                     ["startDate"] = new Dictionary<string, object>
                     {
                         ["type"] = "string",
-                        ["description"] = "Fecha inicial del período a analizar (opcional, formato: YYYY-MM-DD, ejemplo: '2024-01-01')"
+                        ["description"] = "Fecha inicial del período a analizar (opcional, formato: YYYY-MM-DD, ejemplo: '2024-01-01')",
                     },
                     ["endDate"] = new Dictionary<string, object>
                     {
                         ["type"] = "string",
-                        ["description"] = "Fecha final del período a analizar (opcional, formato: YYYY-MM-DD, ejemplo: '2024-12-31')"
+                        ["description"] = "Fecha final del período a analizar (opcional, formato: YYYY-MM-DD, ejemplo: '2024-12-31')",
                     },
                     ["status"] = new Dictionary<string, object>
                     {
                         ["type"] = "string",
-                        ["description"] = "Filtrar por estado del pedido (opcional, valores: 'completed', 'pending', 'cancelled')"
+                        ["description"] = "Filtrar por estado del pedido (opcional, valores: 'completed', 'pending', 'cancelled')",
                     }
-                }
-            }
+                },
+            },
         };
     }
 
+    /// <summary>
+    /// Executes the sales summary calculation with optional date range and status filtering.
+    /// </summary>
+    /// <param name="arguments">Dictionary containing optional startDate, endDate, and status parameters.</param>
+    /// <param name="orders">Array of orders to analyze.</param>
+    /// <returns>An object containing the sales summary and statistics.</returns>
     public static object Execute(Dictionary<string, JsonElement> arguments, Order[] orders)
     {
         DateTime? startDate = null;
@@ -65,13 +79,19 @@ public class GetSalesSummaryTool
         var filtered = orders.AsEnumerable();
 
         if (startDate.HasValue)
+        {
             filtered = filtered.Where(o => o.OrderDate >= startDate.Value);
+        }
 
         if (endDate.HasValue)
+        {
             filtered = filtered.Where(o => o.OrderDate <= endDate.Value);
+        }
 
         if (!string.IsNullOrEmpty(status))
+        {
             filtered = filtered.Where(o => o.Status.Equals(status, StringComparison.OrdinalIgnoreCase));
+        }
 
         var ordersList = filtered.ToList();
         var totalSales = ordersList.Sum(o => o.TotalAmount);
@@ -99,7 +119,7 @@ public class GetSalesSummaryTool
                        $"Total Pedidos: {totalOrders}\n" +
                        $"Valor Promedio: €{averageOrderValue:F2}\n\n" +
                        $"Desglose por Estado:\n" +
-                       string.Join("\n", statusBreakdown.Select(s => $"- {s.status}: {s.count} pedidos (€{s.total:F2})"))
+                       string.Join("\n", statusBreakdown.Select(s => $"- {s.status}: {s.count} pedidos (€{s.total:F2})")),
         };
 
         object resourceContent = new Dictionary<string, object>
@@ -116,16 +136,16 @@ public class GetSalesSummaryTool
                         totalSales,
                         totalOrders,
                         averageOrderValue,
-                        period = periodText
+                        period = periodText,
                     },
-                    breakdown = statusBreakdown
-                })
-            }
+                    breakdown = statusBreakdown,
+                }),
+            },
         };
 
         var result = new Dictionary<string, object>
         {
-            ["content"] = new[] { textContent, resourceContent }
+            ["content"] = new[] { textContent, resourceContent },
         };
 
         // Trace: log result

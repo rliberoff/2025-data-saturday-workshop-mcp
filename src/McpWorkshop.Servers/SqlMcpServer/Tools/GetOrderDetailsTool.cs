@@ -1,13 +1,21 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+
 using SqlMcpServer.Models;
 
 namespace SqlMcpServer.Tools;
 
+/// <summary>
+/// MCP tool for retrieving detailed information about a specific order.
+/// </summary>
 public static class GetOrderDetailsTool
 {
+    /// <summary>
+    /// Gets the tool definition for MCP protocol.
+    /// </summary>
+    /// <returns>An object containing the tool definition with name, description, and input schema.</returns>
     public static object GetDefinition()
     {
         return new
@@ -22,14 +30,23 @@ public static class GetOrderDetailsTool
                     ["orderId"] = new Dictionary<string, object>
                     {
                         ["type"] = "integer",
-                        ["description"] = "El número o ID del pedido a consultar (ejemplo: 1001, 1002, etc.)"
-                    }
+                        ["description"] = "El número o ID del pedido a consultar (ejemplo: 1001, 1002, etc.)",
+                    },
                 },
-                ["required"] = new[] { "orderId" }
-            }
+                ["required"] = new[] { "orderId" },
+            },
         };
     }
 
+    /// <summary>
+    /// Executes the order details retrieval for a specified order ID.
+    /// </summary>
+    /// <param name="arguments">Dictionary containing the orderId parameter.</param>
+    /// <param name="orders">Array of orders to search.</param>
+    /// <param name="customers">Array of customers for lookup.</param>
+    /// <param name="products">Array of products for lookup.</param>
+    /// <returns>An object containing the order details including customer and product information.</returns>
+    /// <exception cref="ArgumentException">Thrown when the orderId parameter is missing.</exception>
     public static object Execute(Dictionary<string, JsonElement> arguments, Order[] orders, Customer[] customers, Product[] products)
     {
         if (!arguments.ContainsKey("orderId"))
@@ -46,7 +63,7 @@ public static class GetOrderDetailsTool
             var notFoundResult = new
             {
                 found = false,
-                message = $"No se encontró el pedido con ID {orderId}"
+                message = $"No se encontró el pedido con ID {orderId}",
             };
 
             // Trace: log result
@@ -73,8 +90,8 @@ public static class GetOrderDetailsTool
                 quantity = order.Quantity,
                 totalAmount = order.TotalAmount,
                 orderDate = order.OrderDate,
-                status = order.Status
-            }
+                status = order.Status,
+            },
         };
 
         // Trace: log result

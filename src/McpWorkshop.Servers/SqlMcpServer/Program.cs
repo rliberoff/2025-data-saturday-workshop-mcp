@@ -1,9 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+
 using SqlMcpServer.Models;
 using SqlMcpServer.Tools;
 
@@ -22,10 +24,10 @@ app.MapGet("/", () => Results.Ok(new
     status = "healthy",
     server = "SqlMcpServer",
     version = "1.0.0",
-    timestamp = DateTime.UtcNow
+    timestamp = DateTime.UtcNow,
 }));
 
-app.MapPost("/mcp", async (HttpContext context) =>
+app.MapPost("/mcp", async context =>
 {
     using var reader = new StreamReader(context.Request.Body);
     var requestBody = await reader.ReadToEndAsync();
@@ -45,9 +47,9 @@ app.MapPost("/mcp", async (HttpContext context) =>
             error = new
             {
                 code = -32600,
-                message = "Invalid Request: missing 'method' field"
+                message = "Invalid Request: missing 'method' field",
             },
-            id = request.TryGetProperty("id", out var idProp) ? idProp : (object?)null
+            id = request.TryGetProperty("id", out var idProp) ? idProp : (object?)null,
         });
         return;
     }
@@ -67,14 +69,14 @@ app.MapPost("/mcp", async (HttpContext context) =>
                 capabilities = new Dictionary<string, object>
                 {
                     ["resources"] = new { },
-                    ["tools"] = new { }
+                    ["tools"] = new { },
                 },
                 serverInfo = new
                 {
                     name = "SqlMcpServer",
                     version = "1.0.0",
-                    description = "Servidor MCP para datos transaccionales (SQL)"
-                }
+                    description = "Servidor MCP para datos transaccionales (SQL)",
+                },
             },
 
             "resources/list" => new
@@ -86,23 +88,23 @@ app.MapPost("/mcp", async (HttpContext context) =>
                         uri = "sql://workshop/customers",
                         name = "SQL Customers",
                         description = "Lista completa de clientes registrados",
-                        mimeType = "application/json"
+                        mimeType = "application/json",
                     },
                     new
                     {
                         uri = "sql://workshop/orders",
                         name = "SQL Orders",
                         description = "Historial de pedidos realizados",
-                        mimeType = "application/json"
+                        mimeType = "application/json",
                     },
                     new
                     {
                         uri = "sql://workshop/products",
                         name = "SQL Products",
                         description = "Catálogo de productos disponibles",
-                        mimeType = "application/json"
-                    }
-                }
+                        mimeType = "application/json",
+                    },
+                },
             },
 
             "resources/read" => HandleResourceRead(request),
@@ -113,13 +115,13 @@ app.MapPost("/mcp", async (HttpContext context) =>
                 {
                     QueryCustomersByCountryTool.GetDefinition(),
                     GetSalesSummaryTool.GetDefinition(),
-                    GetOrderDetailsTool.GetDefinition()
-                }
+                    GetOrderDetailsTool.GetDefinition(),
+                },
             },
 
             "tools/call" => HandleToolCall(request),
 
-            _ => throw new InvalidOperationException($"Unknown method: {method}")
+            _ => throw new InvalidOperationException($"Unknown method: {method}"),
         };
 
         context.Response.ContentType = "application/json";
@@ -127,7 +129,7 @@ app.MapPost("/mcp", async (HttpContext context) =>
         {
             jsonrpc = "2.0",
             result,
-            id
+            id,
         }));
     }
     catch (Exception ex)
@@ -137,7 +139,7 @@ app.MapPost("/mcp", async (HttpContext context) =>
         {
             jsonrpc = "2.0",
             error = new { code = -32603, message = $"Internal error: {ex.Message}" },
-            id
+            id,
         }));
     }
 });
@@ -153,7 +155,7 @@ T[] LoadData<T>(string path)
     var json = File.ReadAllText(path);
     var options = new JsonSerializerOptions
     {
-        PropertyNameCaseInsensitive = true
+        PropertyNameCaseInsensitive = true,
     };
     return JsonSerializer.Deserialize<T[]>(json, options) ?? Array.Empty<T>();
 }
@@ -168,7 +170,7 @@ object HandleResourceRead(JsonElement request)
         "sql://workshop/customers" => JsonSerializer.Serialize(customers),
         "sql://workshop/orders" => JsonSerializer.Serialize(orders),
         "sql://workshop/products" => JsonSerializer.Serialize(products),
-        _ => throw new ArgumentException($"Unknown resource URI: {uri}")
+        _ => throw new ArgumentException($"Unknown resource URI: {uri}"),
     };
 
     return new
@@ -181,7 +183,7 @@ object HandleResourceRead(JsonElement request)
                 mimeType = "application/json",
                 text = data
             }
-        }
+        },
     };
 }
 
@@ -206,7 +208,7 @@ object HandleToolCall(JsonElement request)
         "query_customers_by_country" => QueryCustomersByCountryTool.Execute(arguments, customers),
         "get_sales_summary" => GetSalesSummaryTool.Execute(arguments, orders),
         "get_order_details" => GetOrderDetailsTool.Execute(arguments, orders, customers, products),
-        _ => throw new InvalidOperationException($"Unknown tool: {toolName}")
+        _ => throw new InvalidOperationException($"Unknown tool: {toolName}"),
     };
 
     // Envolver el resultado en el formato MCP correcto
@@ -218,7 +220,7 @@ object HandleToolCall(JsonElement request)
             {
                 type = "text",
                 text = JsonSerializer.Serialize(toolResult)
-            }
-        }
+            },
+        },
     };
 }
