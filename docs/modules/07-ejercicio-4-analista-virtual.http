@@ -1,0 +1,38 @@
+# Prueba 1: Clientes nuevos en España
+POST http://localhost:5004/query
+Content-Type: application/json
+
+{ "query": "¿Cuántos clientes nuevos registrados en España este mes?" }
+
+###
+
+# Prueba 2: Carritos abandonados
+POST http://localhost:5004/query
+Content-Type: application/json
+
+{ "query": "¿Qué usuarios abandonaron carritos en las últimas 24 horas?" }
+
+###
+
+# Prueba 3: Resumen de ventas (Patrón paralelo)
+POST http://localhost:5004/query
+Content-Type: application/json
+
+{ "query": "Dame un resumen de ventas de esta semana más productos más vendidos" }
+
+###
+
+# TODO
+# Prueba 4: Estado de pedido (Patrón secuencial)
+POST http://localhost:5004/query
+Content-Type: application/json
+
+{ "query": "¿Cuál es el estado del pedido #1002?" }
+
+###
+
+# Prueba 5: Caching
+POST http://localhost:5004/query
+Content-Type: application/json
+
+{ "query": "¿Cuántos clientes nuevos en España?" }
