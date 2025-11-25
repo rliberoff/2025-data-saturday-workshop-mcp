@@ -1,6 +1,6 @@
 # Taller MCP: Model Context Protocol en Azure
 
-Taller práctico de 3 horas para aprender a construir servidores MCP que explotan datos desde diversas fuentes utilizando C# .NET 10.0, Azure y Terraform.
+Taller práctico de 3 horas para aprender a construir servidores MCP que explotan datos desde diversas fuentes utilizando C# .NET 10.0 y Azure.
 
 ## 🎯 Descripción
 
@@ -177,8 +177,8 @@ mcp-workshop/
 │   ├── AGENDA.md                  # Cronograma detallado 180 minutos
 │   ├── INSTRUCTOR_HANDBOOK.md     # Guía para instructores
 │   ├── QUICK_REFERENCE.md         # Cheat sheet de MCP y C#
-│   ├── TROUBLESHOOTING.md         # Solución de problemas
-│   └── AZURE_DEPLOYMENT.md        # Despliegue en Azure con Terraform
+│   └── TROUBLESHOOTING.md         # Solución de problemas
+│
 │
 ├── src/                           # Código fuente
 │   └── McpWorkshop.Servers/
@@ -202,24 +202,15 @@ mcp-workshop/
 │       ├── Protocol/              # Validación de conformidad JSON-RPC
 │       └── Performance/           # Benchmarks de rendimiento
 │
-├── infrastructure/                # Infraestructura como código
-│   └── terraform/
-│       ├── main.tf               # Configuración raíz
-│       ├── variables.tf
-│       ├── outputs.tf
-│       └── modules/
-│           ├── container-apps/   # Azure Container Apps para hosting
-│           ├── sql-database/     # Azure SQL para datos relacionales
-│           ├── cosmos-db/        # Azure Cosmos DB NoSQL
-│           ├── storage/          # Azure Blob Storage
-│           └── monitoring/       # Log Analytics + App Insights
 │
 ├── scripts/                       # Scripts de automatización
+│   ├── create-sample-data.ps1    # Generar o actualizar datos de ejemplo
 │   ├── verify-setup.ps1          # Verificación de prerrequisitos
 │   ├── verify-exercise1.ps1      # Validación Ejercicio 1
 │   ├── verify-exercise2.ps1      # Validación Ejercicio 2
 │   ├── verify-exercise3.ps1      # Validación Ejercicio 3
 │   ├── verify-exercise4.ps1      # Validación Ejercicio 4
+│   ├── verify-exercise5.ps1      # Validación Ejercicio 5
 │   └── run-all-tests.ps1         # Ejecutar suite completa de tests
 │
 ├── specs/                         # Especificaciones del proyecto
@@ -230,6 +221,7 @@ mcp-workshop/
 │       ├── contracts/            # Contratos JSON de cada ejercicio
 │       └── research.md           # Investigación técnica
 │
+├── LICENSE                        # Licencia MIT
 ├── QUICKSTART.md                  # Guía de inicio rápido
 ├── README.md                      # Este archivo
 └── McpWorkshop.sln               # Solución .NET
@@ -252,11 +244,6 @@ mcp-workshop/
 - 50 integration tests (86% passing, 14% skipped con documentación)
 - 25 protocol validation tests
 - 8 performance tests
-
-**Infraestructura**:
-
-- 18 archivos Terraform para despliegue completo en Azure
-- Módulos para Container Apps, SQL, Cosmos DB, Storage, Monitoring
 
 ## 🎓 Ejercicios Prácticos
 
@@ -430,7 +417,6 @@ Usuario (español) → Orquestador → [SQL Server | Cosmos DB | REST API]
 
 ### Infraestructura y Testing
 
-- **IaC**: Terraform 1.5+
 - **Testing**: xUnit 3.1+, Microsoft.AspNetCore.Mvc.Testing
 - **Scripting**: PowerShell 7+
 

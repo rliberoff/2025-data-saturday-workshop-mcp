@@ -175,30 +175,6 @@ catch {
     Add-Check -Name "Azure CLI" -Status "FAIL" -Message "Azure CLI no instalado"
 }
 
-# Verificar Terraform
-try {
-    $tfVersion = terraform version -json 2>$null | ConvertFrom-Json
-    if ($tfVersion.terraform_version) {
-        # Verificar que sea versión 1.14.0 o superior
-        $versionParts = $tfVersion.terraform_version -replace 'v', '' -split '\.'
-        $major = [int]$versionParts[0]
-        $minor = [int]$versionParts[1]
-        
-        if ($major -gt 1 -or ($major -eq 1 -and $minor -ge 14)) {
-            Add-Check -Name "Terraform" -Status "PASS" -Message "Terraform 1.14.0+ instalado" -Version $tfVersion.terraform_version
-        }
-        else {
-            Add-Check -Name "Terraform" -Status "WARN" -Message "Terraform $($tfVersion.terraform_version) instalado. Se recomienda 1.14.0+" -Version $tfVersion.terraform_version
-        }
-    }
-    else {
-        Add-Check -Name "Terraform" -Status "FAIL" -Message "Terraform no encontrado"
-    }
-}
-catch {
-    Add-Check -Name "Terraform" -Status "FAIL" -Message "Terraform no instalado"
-}
-
 # Verificar Git
 try {
     $gitVersion = git --version 2>$null

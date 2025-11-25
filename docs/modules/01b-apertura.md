@@ -194,8 +194,8 @@ mcp-workshop/
 │   ├── modules/                  # Documentación de cada bloque del taller
 │   ├── QUICK_REFERENCE.md        # Referencia rápida de comandos y patrones
 │   ├── TROUBLESHOOTING.md        # Solución de problemas comunes
-│   ├── AZURE_DEPLOYMENT.md       # Guía de despliegue en Azure
 │   └── README.md                 # Documentación principal del workshop
+|
 ├── src/
 │   ├── McpWorkshop.Shared/       # Librería compartida (helpers, logging, config)
 │   └── McpWorkshop.Servers/      # Servidores MCP de cada ejercicio
@@ -203,20 +203,20 @@ mcp-workshop/
 │       ├── Exercise2ParametricQuery/
 │       ├── Exercise3SecureServer/
 │       └── Exercise4VirtualAnalyst/
+|
 ├── tests/
 │   └── McpWorkshop.Tests/        # Tests automatizados de los ejercicios
+|
 ├── scripts/
+│   ├── create-sample-data.ps1    # Genera o actualiza datos de ejemplo
 │   ├── verify-setup.ps1          # Verifica entorno y dependencias
 │   ├── verify-exercise1.ps1      # Valida Ejercicio 1
 │   ├── verify-exercise2.ps1      # Valida Ejercicio 2
 │   ├── verify-exercise3.ps1      # Valida Ejercicio 3
 │   ├── verify-exercise4.ps1      # Valida Ejercicio 4
+│   ├── verify-exercise5.ps1      # Valida Ejercicio 5
 │   └── run-all-tests.ps1         # Ejecuta todos los tests
-├── infrastructure/
-│   ├── terraform/                # Módulos de Terraform para Azure
-│   └── scripts/
-│       ├── deploy.ps1            # Script de despliegue
-│       └── teardown.ps1          # Script de limpieza
+|
 ├── data/                         # Datos de ejemplo (incluidos en el repo)
 ├── McpWorkshop.sln               # Solución de Visual Studio
 └── README.md                     # Guía de inicio rápido del repositorio

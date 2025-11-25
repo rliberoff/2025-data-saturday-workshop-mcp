@@ -270,7 +270,7 @@ flowchart LR
 
 -   Logs de Azure Log Analytics
 -   Métricas de Application Insights
--   Estado de infraestructura (Terraform state)
+-   Estado de infraestructura
 
 **Solución MCP**:
 

@@ -92,7 +92,6 @@ CON MCP:
 **Preguntas frecuentes anticipadas**:
 
 - **"¿Hay grabación?"** → [Respuesta según tu caso]
-- **"¿Necesito conocer Terraform?"** → "No, lo veremos juntos y está documentado"
 - **"¿Funciona en Mac/Linux?"** → "Sí, .NET 10.0 es multiplataforma"
 
 ---

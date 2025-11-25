@@ -36,7 +36,6 @@ dotnet build McpWorkshop.sln
 ✓ [REQUERIDO] Puertos TCP - Puertos 5000-5003 disponibles
 ✓ [REQUERIDO] NuGet Sources - NuGet.org configurado correctamente
 ✓ [REQUERIDO] Azure CLI - Azure CLI 2.80.0+ instalado
-✓ [REQUERIDO] Terraform - Terraform 1.14.0+ instalado
 ✓ [REQUERIDO] Git - Git instalado
 
 ========================================
