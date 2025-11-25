@@ -793,19 +793,7 @@ File.WriteAllText("conversation_log.json",
     JsonSerializer.Serialize(conversationLog, new JsonSerializerOptions { WriteIndented = true }));
 ```
 
-### Extensión 3: Agregar Modo de Debug
-
-Muestra qué herramientas se están llamando:
-
-```csharp
-agent.OnToolCall += (sender, tool) =>
-{
-    Console.WriteLine($"\n🔧 [DEBUG] Llamando herramienta: {tool.Name}");
-    Console.WriteLine($"   Parámetros: {JsonSerializer.Serialize(tool.Arguments)}");
-};
-```
-
-### Extensión 4: Agregar Comandos Especiales
+### Extensión 3: Agregar Comandos Especiales
 
 ```csharp
 if (userInput.StartsWith("/"))
