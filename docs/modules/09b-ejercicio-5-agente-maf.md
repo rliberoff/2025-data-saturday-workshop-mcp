@@ -782,11 +782,11 @@ Console.WriteLine();
 Guarda las conversaciones en un archivo:
 
 ```csharp
-var conversationLog = new List<(string role, string message, DateTime timestamp)>();
+var conversationLog = new List<object>();
 
 // Después de cada interacción
-conversationLog.Add(("user", userInput, DateTime.UtcNow));
-conversationLog.Add(("agent", response, DateTime.UtcNow));
+conversationLog.Add(new { role = "user", message = userInput, timestamp = DateTime.UtcNow });
+conversationLog.Add(new { role = "agent", message = response, timestamp = DateTime.UtcNow });
 
 // Al salir
 File.WriteAllText("conversation_log.json",
