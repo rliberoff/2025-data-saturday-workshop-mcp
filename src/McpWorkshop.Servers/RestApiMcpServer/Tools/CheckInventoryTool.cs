@@ -1,12 +1,18 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 
 namespace RestApiMcpServer.Tools;
 
-public class CheckInventoryTool
+/// <summary>
+/// MCP tool for checking product inventory availability.
+/// </summary>
+public static class CheckInventoryTool
 {
+    /// <summary>
+    /// Gets the tool definition for MCP protocol.
+    /// </summary>
+    /// <returns>An object containing the tool definition with name, description, and input schema.</returns>
     public static object GetDefinition()
     {
         return new
@@ -24,15 +30,23 @@ public class CheckInventoryTool
                         ["description"] = "ID del producto a verificar"
                     }
                 },
-                ["required"] = new[] { "productId" }
-            }
+                ["required"] = new[] { "productId" },
+            },
         };
     }
 
+    /// <summary>
+    /// Executes the inventory check for a specified product.
+    /// </summary>
+    /// <param name="arguments">Dictionary containing the productId parameter.</param>
+    /// <returns>An object containing the inventory status and details.</returns>
+    /// <exception cref="ArgumentException">Thrown when the productId parameter is missing.</exception>
     public static object Execute(Dictionary<string, JsonElement> arguments)
     {
         if (!arguments.ContainsKey("productId"))
+        {
             throw new ArgumentException("El parámetro 'productId' es requerido");
+        }
 
         var productId = arguments["productId"].GetInt32();
 
@@ -43,7 +57,8 @@ public class CheckInventoryTool
         var random = new Random(productId);
         var inStock = random.Next(0, 100) > 20;
         var quantity = inStock ? random.Next(5, 50) : 0;
-        var warehouse = new[] { "Madrid", "Barcelona", "Valencia" }[random.Next(0, 3)];
+        var warehouses = new[] { "Madrid", "Barcelona", "Valencia" };
+        var warehouse = warehouses[random.Next(0, 3)];
 
         var result = new
         {
@@ -56,9 +71,9 @@ public class CheckInventoryTool
                            $"Estado: {(inStock ? "✅ DISPONIBLE" : "❌ AGOTADO")}\n" +
                            $"Cantidad: {quantity} unidades\n" +
                            $"Almacén: {warehouse}\n" +
-                           $"Última actualización: {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC"
-                }
-            }
+                           $"Última actualización: {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC",
+                },
+            },
         };
 
         // Trace: log result

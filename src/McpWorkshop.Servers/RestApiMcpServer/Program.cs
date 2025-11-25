@@ -1,9 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+
 using RestApiMcpServer.Tools;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,10 +19,10 @@ app.MapGet("/", () => Results.Ok(new
     status = "healthy",
     server = "RestApiMcpServer",
     version = "1.0.0",
-    timestamp = DateTime.UtcNow
+    timestamp = DateTime.UtcNow,
 }));
 
-app.MapPost("/mcp", async (HttpContext context) =>
+app.MapPost("/mcp", async context =>
 {
     using var reader = new StreamReader(context.Request.Body);
     var requestBody = await reader.ReadToEndAsync();
@@ -40,9 +42,9 @@ app.MapPost("/mcp", async (HttpContext context) =>
             error = new
             {
                 code = -32600,
-                message = "Invalid Request: missing 'method' field"
+                message = "Invalid Request: missing 'method' field",
             },
-            id = request.TryGetProperty("id", out var idProp) ? idProp : (object?)null
+            id = request.TryGetProperty("id", out var idProp) ? idProp : (object?)null,
         });
         return;
     }
@@ -54,51 +56,40 @@ app.MapPost("/mcp", async (HttpContext context) =>
 
     try
     {
-        switch (method)
+        result = method switch
         {
-            case "initialize":
-                result = new
+            "initialize" => new
+            {
+                protocolVersion = "2024-11-05",
+                capabilities = new Dictionary<string, object>
                 {
-                    protocolVersion = "2024-11-05",
-                    capabilities = new Dictionary<string, object>
-                    {
-                        ["tools"] = new { }
-                    },
-                    serverInfo = new
-                    {
-                        name = "RestApiMcpServer",
-                        version = "1.0.0",
-                        description = "Servidor MCP para APIs externas (REST)"
-                    }
-                };
-                break;
-
-            case "tools/list":
-                result = new
+                    ["tools"] = new { },
+                },
+                serverInfo = new
                 {
-                    tools = new[]
-                    {
+                    name = "RestApiMcpServer",
+                    version = "1.0.0",
+                    description = "Servidor MCP para APIs externas (REST)",
+                },
+            },
+            "tools/list" => new
+            {
+                tools = new[]
+                {
                         CheckInventoryTool.GetDefinition(),
                         GetShippingStatusTool.GetDefinition(),
                         GetTopProductsTool.GetDefinition()
-                    }
-                };
-                break;
-
-            case "tools/call":
-                result = HandleToolCall(request);
-                break;
-
-            default:
-                throw new InvalidOperationException($"Unknown method: {method}");
-        }
-
+                },
+            },
+            "tools/call" => HandleToolCall(request),
+            _ => throw new InvalidOperationException($"Unknown method: {method}"),
+        };
         context.Response.ContentType = "application/json";
         await context.Response.WriteAsync(JsonSerializer.Serialize(new
         {
             jsonrpc = "2.0",
             result,
-            id
+            id,
         }));
     }
     catch (Exception ex)
@@ -108,7 +99,7 @@ app.MapPost("/mcp", async (HttpContext context) =>
         {
             jsonrpc = "2.0",
             error = new { code = -32603, message = $"Internal error: {ex.Message}" },
-            id
+            id,
         }));
     }
 });
@@ -139,7 +130,7 @@ static object HandleToolCall(JsonElement request)
         "check_inventory" => CheckInventoryTool.Execute(arguments),
         "get_shipping_status" => GetShippingStatusTool.Execute(arguments),
         "get_top_products" => GetTopProductsTool.Execute(arguments),
-        _ => throw new InvalidOperationException($"Unknown tool: {toolName}")
+        _ => throw new InvalidOperationException($"Unknown tool: {toolName}"),
     };
 
     // Envolver el resultado en el formato MCP correcto
@@ -150,8 +141,8 @@ static object HandleToolCall(JsonElement request)
             new
             {
                 type = "text",
-                text = JsonSerializer.Serialize(toolResult)
+                text = JsonSerializer.Serialize(toolResult),
             }
-        }
+        },
     };
 }

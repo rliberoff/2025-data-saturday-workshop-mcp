@@ -1,12 +1,19 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 
 namespace RestApiMcpServer.Tools;
 
-public class GetTopProductsTool
+/// <summary>
+/// MCP tool for retrieving top-selling products with sales statistics.
+/// </summary>
+public static class GetTopProductsTool
 {
+    /// <summary>
+    /// Gets the tool definition for MCP protocol.
+    /// </summary>
+    /// <returns>An object containing the tool definition with name, description, and input schema.</returns>
     public static object GetDefinition()
     {
         return new
@@ -29,34 +36,33 @@ public class GetTopProductsTool
                         ["type"] = "string",
                         ["description"] = "Período de análisis",
                         ["enum"] = new[] { "day", "week", "month" },
-                        ["default"] = "week"
+                        ["default"] = "week",
                     }
-                }
-            }
+                },
+            },
         };
     }
 
+    /// <summary>
+    /// Executes the top products query with optional filtering parameters.
+    /// </summary>
+    /// <param name="arguments">Dictionary containing optional limit and period parameters.</param>
+    /// <returns>An object containing the top products ranking and statistics.</returns>
     public static object Execute(Dictionary<string, JsonElement> arguments)
     {
         // Manejar caso cuando arguments puede ser null o vacío
-        arguments ??= new Dictionary<string, JsonElement>();
+        arguments ??= [];
 
         var limit = 10;
-        if (arguments.ContainsKey("limit"))
+        if (arguments.ContainsKey("limit") && arguments["limit"].ValueKind == JsonValueKind.Number)
         {
-            if (arguments["limit"].ValueKind == JsonValueKind.Number)
-            {
-                limit = arguments["limit"].GetInt32();
-            }
+            limit = arguments["limit"].GetInt32();
         }
 
         var period = "week";
-        if (arguments.ContainsKey("period"))
+        if (arguments.ContainsKey("period") && arguments["period"].ValueKind == JsonValueKind.String)
         {
-            if (arguments["period"].ValueKind == JsonValueKind.String)
-            {
-                period = arguments["period"].GetString() ?? "week";
-            }
+            period = arguments["period"].GetString() ?? "week";
         }
 
         // Simulate API call delay
@@ -74,7 +80,7 @@ public class GetTopProductsTool
             new { id = 107, name = "Auriculares Sony WH-1000XM5", sales = 87, revenue = 30189.00m },
             new { id = 108, name = "Dock USB-C Dell", sales = 76, revenue = 15124.00m },
             new { id = 109, name = "SSD Samsung 2TB", sales = 65, revenue = 12935.00m },
-            new { id = 110, name = "Router Asus RT-AX88U", sales = 54, revenue = 13446.00m }
+            new { id = 110, name = "Router Asus RT-AX88U", sales = 54, revenue = 13446.00m },
         };
 
         var topProducts = products.Take(limit).ToList();
@@ -86,7 +92,7 @@ public class GetTopProductsTool
             "day" => "HOY",
             "week" => "ESTA SEMANA",
             "month" => "ESTE MES",
-            _ => period.ToUpper()
+            _ => period.ToUpper(),
         };
 
         var result = new
@@ -101,9 +107,9 @@ public class GetTopProductsTool
                            $"Ingresos Totales: €{totalRevenue:N2}\n\n" +
                            $"Ranking:\n" +
                            string.Join("\n", topProducts.Select((p, i) =>
-                               $"{i + 1}. {p.name}: {p.sales} ventas (€{p.revenue:N2})"))
-                }
-            }
+                               $"{i + 1}. {p.name}: {p.sales} ventas (€{p.revenue:N2})")),
+                },
+            },
         };
 
         // Trace: log result
