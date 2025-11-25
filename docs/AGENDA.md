@@ -9,15 +9,15 @@
 
 ## 📋 Resumen Ejecutivo
 
-Este taller intensivo de 3 horas te enseñará a crear servidores MCP (Model Context Protocol) en C# para conectar modelos de IA con tus fuentes de datos. A través de 4 ejercicios progresivos, aprenderás desde los fundamentos hasta la orquestación multi-fuente y seguridad empresarial.
+Este taller intensivo de 3 horas te enseñará a crear servidores MCP (Model Context Protocol) en C# para conectar modelos de IA con tus fuentes de datos. A través de 5 ejercicios progresivos, aprenderás desde los fundamentos hasta la orquestación multi-fuente y seguridad empresarial.
 
 **Al finalizar, serás capaz de**:
 
--   ✅ Crear servidores MCP desde cero en .NET
--   ✅ Implementar recursos (data sources) y herramientas (acciones)
--   ✅ Añadir autenticación JWT y rate limiting
--   ✅ Orquestar múltiples servidores MCP en arquitecturas distribuidas
--   ✅ Desplegar servidores MCP en Azure de forma segura
+- ✅ Crear servidores MCP desde cero en .NET
+- ✅ Implementar recursos (data sources) y herramientas (acciones)
+- ✅ Añadir autenticación JWT y rate limiting
+- ✅ Orquestar múltiples servidores MCP en arquitecturas distribuidas
+- ✅ Desplegar servidores MCP en Azure de forma segura
 
 ---
 
@@ -53,10 +53,10 @@ Este taller intensivo de 3 horas te enseñará a crear servidores MCP (Model Con
 
 **Contenido**:
 
--   Bienvenida y presentación del instructor
--   Objetivos del taller y agenda
--   Logística (WiFi, repositorio GitHub, descansos)
--   Verificación de requisitos técnicos (dotnet --version, VS Code)
+- Bienvenida y presentación del instructor
+- Objetivos del taller y agenda
+- Logística (WiFi, repositorio GitHub, descansos)
+- Verificación de requisitos técnicos (dotnet --version, VS Code)
 
 **Entregable**: Repositorio clonado y verificación completada.
 
@@ -70,13 +70,13 @@ Este taller intensivo de 3 horas te enseñará a crear servidores MCP (Model Con
 
 **Contenido**:
 
--   Definición de MCP (Model Context Protocol)
--   Analogía USB-C: "Un servidor, múltiples clientes"
--   Arquitectura cliente-servidor
--   Flujo de comunicación (initialize → discover → execute)
--   JSON-RPC 2.0 como protocolo base
--   MCP vs Plugins tradicionales
--   Casos de uso empresariales: CRM enrichment, DevOps, compliance
+- Definición de MCP (Model Context Protocol)
+- Analogía USB-C: "Un servidor, múltiples clientes"
+- Arquitectura cliente-servidor
+- Flujo de comunicación (initialize → discover → execute)
+- JSON-RPC 2.0 como protocolo base
+- MCP vs Plugins tradicionales
+- Casos de uso empresariales: CRM enrichment, DevOps, compliance
 
 **Diagrama clave**:
 
@@ -121,15 +121,15 @@ Café, networking, verificar que todos siguen el ritmo.
 
 **Tarea**: Crear `Exercise1Server` que expone:
 
--   **Recurso**: `customers` (lee `data/customers.json`)
--   **Recurso**: `products` (lee `data/products.json`)
--   Handlers: `initialize`, `resources/list`, `resources/read`
+- **Recurso**: `customers` (lee `data/customers.json`)
+- **Recurso**: `products` (lee `data/products.json`)
+- Handlers: `initialize`, `resources/list`, `resources/read`
 
 **Criterios de éxito**:
 
--   [ ] Servidor responde a `initialize`
--   [ ] `resources/list` devuelve 2 recursos
--   [ ] `resources/read` con uri `customers` devuelve JSON válido
+- [ ] Servidor responde a `initialize`
+- [ ] `resources/list` devuelve 2 recursos
+- [ ] `resources/read` con uri `customers` devuelve JSON válido
 
 **Tiempo**: 15 minutos guiados con checkpoints cada 3 minutos.
 
@@ -149,9 +149,9 @@ Café, networking, verificar que todos siguen el ritmo.
 
 **Conceptos nuevos**:
 
--   Diferencia entre `resources` (data sources) y `tools` (acciones)
--   JSON Schema para validar parámetros
--   Método `tools/list` y `tools/call`
+- Diferencia entre `resources` (data sources) y `tools` (acciones)
+- JSON Schema para validar parámetros
+- Método `tools/list` y `tools/call`
 
 **Tiempo**: 20 minutos semi-independientes con soporte roaming.
 
@@ -171,23 +171,23 @@ Pausa breve, estirar piernas.
 
 **Tarea**: Crear `Exercise3Server` con:
 
--   **JwtAuthenticationService**: Generar y validar JWT tokens
--   **ScopeAuthorizationService**: Verificar scopes (read/write/admin)
--   **RateLimitingService**: 10 req/min base, 50 req/min premium
--   **Middlewares**: `AuthenticationMiddleware` y `RateLimitingMiddleware`
--   **Endpoint `/auth/token`**: Generar tokens para testing
+- **JwtAuthenticationService**: Generar y validar JWT tokens
+- **ScopeAuthorizationService**: Verificar scopes (read/write/admin)
+- **RateLimitingService**: 10 req/min base, 50 req/min premium
+- **Middlewares**: `AuthenticationMiddleware` y `RateLimitingMiddleware`
+- **Endpoint `/auth/token`**: Generar tokens para testing
 
 **Conceptos nuevos**:
 
--   JWT structure (Header.Payload.Signature)
--   Scope-based authorization (least privilege)
--   Rate limiting con sliding window
+- JWT structure (Header.Payload.Signature)
+- Scope-based authorization (least privilege)
+- Rate limiting con sliding window
 
 **Pruebas**:
 
--   Generar token con scope "read"
--   Acceder a `resources/read` → ✅ Éxito
--   Intentar `tools/call` → ❌ 401 Unauthorized (requiere "write")
+- Generar token con scope "read"
+- Acceder a `resources/read` → ✅ Éxito
+- Intentar `tools/call` → ❌ 401 Unauthorized (requiere "write")
 
 **Tiempo**: 20 minutos con plantillas pre-creadas.
 
@@ -201,13 +201,13 @@ Pausa breve, estirar piernas.
 
 **Contenido** (Sesión):
 
--   **Anti-patterns**: Hardcoded secrets, validación deshabilitada
--   **Azure AD integration**: Delegar autenticación a Azure AD/Entra ID
--   **Azure Key Vault**: Gestión centralizada de secretos
--   **Refresh tokens**: Access token 15 min + Refresh token 7 días
--   **Auditoría**: Logging estructurado con Application Insights
--   **GDPR**: Derecho al olvido, portabilidad, consentimiento
--   **Arquitectura Azure**: APIM → AppGW + WAF → Container Apps → Key Vault
+- **Anti-patterns**: Hardcoded secrets, validación deshabilitada
+- **Azure AD integration**: Delegar autenticación a Azure AD/Entra ID
+- **Azure Key Vault**: Gestión centralizada de secretos
+- **Refresh tokens**: Access token 15 min + Refresh token 7 días
+- **Auditoría**: Logging estructurado con Application Insights
+- **GDPR**: Derecho al olvido, portabilidad, consentimiento
+- **Arquitectura Azure**: APIM → AppGW + WAF → Container Apps → Key Vault
 
 **Diagrama arquitectura**:
 
@@ -243,20 +243,20 @@ Crear `Exercise4VirtualAnalyst` que:
 1. **Parsea queries en español**: "¿Cuántos clientes nuevos en Madrid?"
 2. **Identifica intent**: `new_customers`, `abandoned_carts`, `order_status`, `sales_summary`
 3. **Orquesta llamadas**:
-    - SQL MCP Server (datos transaccionales)
-    - Cosmos MCP Server (comportamiento usuarios)
-    - REST API MCP Server (inventario, envíos)
+   - SQL MCP Server (datos transaccionales)
+   - Cosmos MCP Server (comportamiento usuarios)
+   - REST API MCP Server (inventario, envíos)
 4. **Patrones de ejecución**:
-    - Paralelo: Consultas independientes simultáneas
-    - Secuencial: Resultado N usado en consulta N+1
+   - Paralelo: Consultas independientes simultáneas
+   - Secuencial: Resultado N usado en consulta N+1
 5. **Caching**: TTL 5 minutos para queries frecuentes
 
 **Rúbrica** (grupos evaluados):
 
--   40% Funcionalidad (parser + orquestación)
--   30% Arquitectura (código modular)
--   20% Performance (uso correcto de paralelismo)
--   10% Documentación
+- 40% Funcionalidad (parser + orquestación)
+- 30% Arquitectura (código modular)
+- 20% Performance (uso correcto de paralelismo)
+- 10% Documentación
 
 **Tiempo**: 25 minutos (desafío más complejo del taller).
 
@@ -279,9 +279,9 @@ Crear `Exercise4VirtualAnalyst` que:
 
 **Benchmark**:
 
--   Secuencial (3 queries × 500ms): **1500ms**
--   Paralelo: **500ms** (3x más rápido)
--   Paralelo + Cache: **50ms** (30x más rápido)
+- Secuencial (3 queries × 500ms): **1500ms**
+- Paralelo: **500ms** (3x más rápido)
+- Paralelo + Cache: **50ms** (30x más rápido)
 
 **[📄 Documentación completa →](./modules/08-orquestacion-multifuente.md)**
 
@@ -314,16 +314,16 @@ Agente:  [Mantiene contexto, usa list_customers_by_country]
 
 **Conceptos clave**:
 
--   **Microsoft Agent Framework (MAF)**: Framework para crear agentes conversacionales
--   **Function Calling**: LLM decide qué herramienta MCP usar
--   **AgentThread**: Mantiene el contexto de la conversación
--   **Transport Layer**: HTTP vs Stdio para conectar con MCP servers
+- **Microsoft Agent Framework (MAF)**: Framework para crear agentes conversacionales
+- **Function Calling**: LLM decide qué herramienta MCP usar
+- **AgentThread**: Mantiene el contexto de la conversación
+- **Transport Layer**: HTTP vs Stdio para conectar con MCP servers
 
 **Componentes**:
 
--   `McpClientHelper.cs`: Helper para conectar a servidores MCP
--   `appsettings.json`: Configuración de Azure OpenAI y servidores MCP
--   `Program.cs`: Loop de conversación interactivo
+- `McpClientHelper.cs`: Helper para conectar a servidores MCP
+- `appsettings.json`: Configuración de Azure OpenAI y servidores MCP
+- `Program.cs`: Loop de conversación interactivo
 
 **Tiempo**: 30 minutos (ejercicio de culminación del taller).
 
@@ -353,17 +353,17 @@ ROI = ((Beneficio Anual - Costo Inversión) / Costo Inversión) × 100%
 
 **Roadmap MCP**:
 
--   ✅ Q1 2025: Especificación estable, SDKs oficiales
--   🚧 Q2 2025: WebSocket transport, MCP Registry, OAuth 2.0
--   🔮 Q3 2025: MCP Gateway, Marketplace
--   💡 2026: MCP 2.0 (multimodal), Edge computing, Federated learning
+- ✅ Q1 2025: Especificación estable, SDKs oficiales
+- 🚧 Q2 2025: WebSocket transport, MCP Registry, OAuth 2.0
+- 🔮 Q3 2025: MCP Gateway, Marketplace
+- 💡 2026: MCP 2.0 (multimodal), Edge computing, Federated learning
 
 **Estrategias de monetización**:
 
--   SaaS (29-299€/mes)
--   Licencias empresariales (50,000€)
--   Consultoría (400€/día)
--   Marketplace commission (30%)
+- SaaS (29-299€/mes)
+- Licencias empresariales (50,000€)
+- Consultoría (400€/día)
+- Marketplace commission (30%)
 
 **[📄 Documentación completa →](./modules/10-roadmap-casos-b2b.md)**
 
@@ -375,26 +375,26 @@ ROI = ((Beneficio Anual - Costo Inversión) / Costo Inversión) × 100%
 
 **Formato 3-2-1**:
 
--   **3 cosas que aprendiste**
--   **2 cosas que harás mañana**
--   **1 pregunta sin respuesta**
+- **3 cosas que aprendiste**
+- **2 cosas que harás mañana**
+- **1 pregunta sin respuesta**
 
 **Encuesta de satisfacción** (2-3 min):
 
--   Escala 1-5: Contenido, claridad, ritmo, ejercicios, aplicabilidad
--   Abiertas: ¿Qué fue lo mejor? ¿Qué mejorar? ¿Qué tema faltó?
+- Escala 1-5: Contenido, claridad, ritmo, ejercicios, aplicabilidad
+- Abiertas: ¿Qué fue lo mejor? ¿Qué mejorar? ¿Qué tema faltó?
 
 **Próximos pasos**:
 
--   Semana 1: Implementar 1er servidor MCP
--   Semana 2-4: Autenticación + deploy Azure
--   Mes 2: Orquestación en caso real
--   Mes 3+: Producción y escalado
+- Semana 1: Implementar 1er servidor MCP
+- Semana 2-4: Autenticación + deploy Azure
+- Mes 2: Orquestación en caso real
+- Mes 3+: Producción y escalado
 
 **Recursos**:
 
--   Especificación MCP: https://modelcontextprotocol.io/specification/2025-06-18
--   Repo del taller: [GitHub URL]
+- Especificación MCP: https://modelcontextprotocol.io/specification/2025-06-18
+- Repo del taller: [GitHub URL]
 
 **[📄 Documentación completa →](./modules/11-cierre.md)**
 
@@ -419,42 +419,42 @@ ROI = ((Beneficio Anual - Costo Inversión) / Costo Inversión) × 100%
 
 **Software (pre-instalado)**:
 
--   [ ] .NET 10.0 SDK (verificar con `dotnet --version`)
--   [ ] Visual Studio Code
--   [ ] PowerShell 7+ (verificar con `pwsh --version`)
--   [ ] Git (verificar con `git --version`)
+- [ ] .NET 10.0 SDK (verificar con `dotnet --version`)
+- [ ] Visual Studio Code
+- [ ] PowerShell 7+ (verificar con `pwsh --version`)
+- [ ] Git (verificar con `git --version`)
 
 **Hardware**:
 
--   [ ] Laptop con Windows/macOS/Linux
--   [ ] 8GB RAM mínimo (16GB recomendado)
--   [ ] 2GB espacio disco libre
+- [ ] Laptop con Windows/macOS/Linux
+- [ ] 8GB RAM mínimo (16GB recomendado)
+- [ ] 2GB espacio disco libre
 
 **Acceso**:
 
--   [ ] Repositorio GitHub del taller clonado
--   [ ] WiFi funcional (probar `dotnet restore`)
+- [ ] Repositorio GitHub del taller clonado
+- [ ] WiFi funcional (probar `dotnet restore`)
 
 ### Para Instructor
 
 **Técnicos**:
 
--   [ ] Proyector/pantalla funcional (probar resolución)
--   [ ] Micrófono (si sala >30 personas)
--   [ ] Backup de código en USB (por si falla internet)
--   [ ] Terminal con fuente grande (mínimo 18pt)
+- [ ] Proyector/pantalla funcional (probar resolución)
+- [ ] Micrófono (si sala >30 personas)
+- [ ] Backup de código en USB (por si falla internet)
+- [ ] Terminal con fuente grande (mínimo 18pt)
 
 **Documentación**:
 
--   [ ] Slides de bloques 2, 7, 9, 10 (teoría)
--   [ ] Código de referencia de ejercicios 1-4
--   [ ] Script de contingencias impreso
+- [ ] Slides de bloques 2, 7, 9, 10 (teoría)
+- [ ] Código de referencia de ejercicios 1-4
+- [ ] Script de contingencias impreso
 
 **Logística**:
 
--   [ ] QR de encuesta feedback
--   [ ] Marcadores para whiteboard (explicar diagramas)
--   [ ] Cronómetro visible (gestión del tiempo)
+- [ ] QR de encuesta feedback
+- [ ] Marcadores para whiteboard (explicar diagramas)
+- [ ] Cronómetro visible (gestión del tiempo)
 
 ---
 
@@ -521,25 +521,25 @@ ROI = ((Beneficio Anual - Costo Inversión) / Costo Inversión) × 100%
 
 **Email recordatorio**:
 
--   Verificar requisitos técnicos
--   Clonar repositorio
--   Confirmar asistencia
+- Verificar requisitos técnicos
+- Clonar repositorio
+- Confirmar asistencia
 
 ### Durante el Taller
 
 **Canales**:
 
--   Chat en sala (preguntas rápidas)
--   Roaming durante ejercicios (soporte personalizado)
+- Chat en sala (preguntas rápidas)
+- Roaming durante ejercicios (soporte personalizado)
 
 ### Después del Taller (24h)
 
 **Email seguimiento**:
 
--   Enlace a código completo
--   Recursos adicionales
--   Encuesta (si no completada)
--   Certificado de asistencia
+- Enlace a código completo
+- Recursos adicionales
+- Encuesta (si no completada)
+- Certificado de asistencia
 
 ---
 
@@ -547,12 +547,12 @@ ROI = ((Beneficio Anual - Costo Inversión) / Costo Inversión) × 100%
 
 **Contenido mínimo**:
 
--   Nombre del participante
--   Título del taller: "Model Context Protocol (MCP) en C#"
--   Evento: Data Saturday Madrid 2025
--   Duración: 3 horas
--   Contenido cubierto: Fundamentos, desarrollo, seguridad, orquestación, Azure
--   Firma del instructor y fecha
+- Nombre del participante
+- Título del taller: "Model Context Protocol (MCP) en C#"
+- Evento: Data Saturday Madrid 2025
+- Duración: 3 horas
+- Contenido cubierto: Fundamentos, desarrollo, seguridad, orquestación, Azure
+- Firma del instructor y fecha
 
 **Generación**: Script PowerShell `scripts/generate-certificates.ps1`
 
@@ -562,10 +562,10 @@ ROI = ((Beneficio Anual - Costo Inversión) / Costo Inversión) × 100%
 
 Este taller es posible gracias a:
 
--   **Anthropic** por crear la especificación MCP
--   **Microsoft** por el SDK .NET y Azure
--   **Data Saturday Madrid** por el espacio y oportunidad
--   **Comunidad MCP** por feedback y mejoras continuas
+- **Anthropic** por crear la especificación MCP
+- **Microsoft** por el SDK .NET y Azure
+- **Data Saturday Madrid** por el espacio y oportunidad
+- **Comunidad MCP** por feedback y mejoras continuas
 
 ---
 
@@ -573,15 +573,16 @@ Este taller es posible gracias a:
 
 **v1.0.0** (Noviembre 2025)
 
--   Versión inicial completa
--   11 bloques, 4 ejercicios, 3 horas
--   Orientado a .NET 10.0 y Azure
+- Versión inicial completa
+- 11 bloques, 5 ejercicios, 3 horas
+- Orientado a .NET 10.0 y Azure
+- Incluye ejercicio avanzado con Microsoft Agent Framework
 
 **Roadmap futuro**:
 
--   v1.1.0: Añadir Ejercicio 5 (WebSocket transport)
--   v1.2.0: Añadir módulo de testing con xUnit
--   v2.0.0: Versión extendida de 6 horas con deployment completo
+- v1.1.0: Añadir soporte para WebSocket transport
+- v1.2.0: Ampliar módulo de testing con xUnit y cobertura de código
+- v2.0.0: Versión extendida de 6 horas con deployment completo a Azure
 
 ---
 
@@ -597,14 +598,14 @@ Este taller es posible gracias a:
 
 **¿Preguntas sobre el taller?**
 
--   Email: [instructor@email.com]
--   LinkedIn: [linkedin.com/in/instructor]
--   Discord MCP: @instructor
+- Email: [instructor@email.com]
+- LinkedIn: [linkedin.com/in/instructor]
+- Discord MCP: @instructor
 
 **¿Quieres replicar este taller en tu empresa/evento?**
 
--   Todo el material es open source (licencia CC BY-SA 4.0)
--   Contacta para soporte o personalización
+- Todo el material es open source (licencia CC BY-SA 4.0)
+- Contacta para soporte o personalización
 
 ---
 

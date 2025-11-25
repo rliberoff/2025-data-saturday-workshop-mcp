@@ -19,13 +19,13 @@ Model Context Protocol es un protocolo estándar para exponer datos y capacidade
 
 1. **Apertura** (10 min) - Introducción y contexto
 2. **Fundamentos** (25 min) - Conceptos MCP, arquitectura, casos de uso
-3. **Anatomía de un Proveedor** (20 min) - Live coding de servidor MCP
-4. **Ejercicio 1** (15 min) - Recursos estáticos
-5. **Ejercicio 2** (20 min) - Consultas paramétricas
-6. **Ejercicio 3** (20 min) - Seguridad y gobernanza
-7. **Seguridad y Gobernanza** (15 min) - Corto inciso para hablar sobre patrones empresariales
-8. **Ejercicio 4** (30 min) - Reto integrador: Analista virtual
-9. **Orquestación Multi-Fuente** (15 min) - Patrones de integración
+3. **Anatomía de un Proveedor + Ejercicio 1** (30 min) - Live coding y recursos estáticos
+4. **Ejercicio 2** (20 min) - Consultas paramétricas
+5. **Ejercicio 3** (20 min) - Seguridad JWT y rate limiting
+6. **Seguridad y Gobernanza** (15 min) - Patrones empresariales
+7. **Ejercicio 4** (25 min) - Reto integrador: Analista virtual
+8. **Orquestación Multi-Fuente** (15 min) - Patrones de integración
+9. **Ejercicio 5** (30 min) - Agente de IA con Microsoft Agent Framework
 10. **Hoja de Ruta y Casos B2B** (10 min) - Escenarios de negocio
 11. **Cierre** (10 min) - Retrospectiva y siguientes pasos
 
@@ -33,10 +33,10 @@ Model Context Protocol es un protocolo estándar para exponer datos y capacidade
 
 ### Prerequisitos
 
--   **SDK**: .NET 10.0 o superior
--   **IDE**: Visual Studio 2022 o VS Code con C# Dev Kit
--   **Tools**: Git, PowerShell 7+
--   **Azure** (opcional): Cuenta de Azure para ejercicios cloud
+- **SDK**: .NET 10.0 o superior
+- **IDE**: Visual Studio 2022 o VS Code con C# Dev Kit
+- **Tools**: Git, PowerShell 7+
+- **Azure** (opcional): Cuenta de Azure para ejercicios cloud
 
 ### Instalación
 
@@ -138,25 +138,25 @@ dotnet run
 
 ## 📖 Documentación
 
--   **[Agenda Completa](docs/AGENDA.md)** - Cronograma detallado del taller
--   **[Quick Reference](docs/QUICK_REFERENCE.md)** - Referencia rápida MCP y C#
--   **[Instructor Handbook](docs/INSTRUCTOR_HANDBOOK.md)** - Guía de facilitación
--   **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Solución de problemas comunes
--   **[Azure Deployment](docs/AZURE_DEPLOYMENT.md)** - Despliegue en Azure
+- **[Agenda Completa](docs/AGENDA.md)** - Cronograma detallado del taller
+- **[Quick Reference](docs/QUICK_REFERENCE.md)** - Referencia rápida MCP y C#
+- **[Instructor Handbook](docs/INSTRUCTOR_HANDBOOK.md)** - Guía de facilitación
+- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Solución de problemas comunes
+- **[Azure Deployment](docs/AZURE_DEPLOYMENT.md)** - Despliegue en Azure
 
 ### Módulos por Bloque
 
--   [01 - Apertura](docs/modules/01b-apertura.md)
--   [02 - Fundamentos](docs/modules/02b-fundamentos.md)
--   [03 - Ejercicio 1: Anatomía de un Proveedor MCP](docs/modules/03b-ejercicio-1-anatomia-proveedor.md)
--   [04 - Ejercicio 2: Consultas Paramétricas](docs/modules/04b-ejercicio-2-consultas-parametricas.md)
--   [05 - Ejercicio 3: Seguridad](docs/modules/05b-ejercicio-3-seguridad.md)
--   [06 - Seguridad & Gobernanza](docs/modules/06b-seguridad-gobernanza.md)
--   [07 - Ejercicio 4: Analista Virtual](docs/modules/07-ejercicio-4-analista-virtual.md)
--   [08 - Orquestación Multi-Fuente](docs/modules/08-orquestacion-multifuente.md)
--   [09 - Ejercicio 5: Agente con Microsoft Agent Framework](docs/modules/9b-ejercicio-5-agente-maf.md)
--   [10 - Roadmap & Casos B2B](docs/modules/10-roadmap-casos-b2b.md)
--   [11 - Cierre](docs/modules/11-cierre.md)
+- [01 - Apertura](docs/modules/01b-apertura.md)
+- [02 - Fundamentos](docs/modules/02b-fundamentos.md)
+- [03 - Ejercicio 1: Anatomía de un Proveedor MCP](docs/modules/03b-ejercicio-1-anatomia-proveedor.md)
+- [04 - Ejercicio 2: Consultas Paramétricas](docs/modules/04b-ejercicio-2-consultas-parametricas.md)
+- [05 - Ejercicio 3: Seguridad](docs/modules/05b-ejercicio-3-seguridad.md)
+- [06 - Seguridad & Gobernanza](docs/modules/06b-seguridad-gobernanza.md)
+- [07 - Ejercicio 4: Analista Virtual](docs/modules/07-ejercicio-4-analista-virtual.md)
+- [08 - Orquestación Multi-Fuente](docs/modules/08-orquestacion-multifuente.md)
+- [09 - Ejercicio 5: Agente con Microsoft Agent Framework](docs/modules/9b-ejercicio-5-agente-maf.md)
+- [10 - Roadmap & Casos B2B](docs/modules/10-roadmap-casos-b2b.md)
+- [11 - Cierre](docs/modules/11-cierre.md)
 
 ## 🏗️ Estructura del Proyecto
 
@@ -239,24 +239,24 @@ mcp-workshop/
 
 **Servidores MCP (7 implementaciones)**:
 
--   3 servidores de ejercicios individuales (1-3)
--   4 servidores para ejercicio grupal (4)
+- 3 servidores de ejercicios individuales (1-3)
+- 4 servidores para ejercicio grupal (4)
 
 **Documentación (28 archivos)**:
 
--   19 módulos educativos (con versiones para instructor)
--   9 guías de soporte (agenda, handbook, troubleshooting, etc.)
+- 19 módulos educativos (con versiones para instructor)
+- 9 guías de soporte (agenda, handbook, troubleshooting, etc.)
 
 **Tests (83 tests totales)**:
 
--   50 integration tests (86% passing, 14% skipped con documentación)
--   25 protocol validation tests
--   8 performance tests
+- 50 integration tests (86% passing, 14% skipped con documentación)
+- 25 protocol validation tests
+- 8 performance tests
 
 **Infraestructura**:
 
--   18 archivos Terraform para despliegue completo en Azure
--   Módulos para Container Apps, SQL, Cosmos DB, Storage, Monitoring
+- 18 archivos Terraform para despliegue completo en Azure
+- Módulos para Container Apps, SQL, Cosmos DB, Storage, Monitoring
 
 ## 🎓 Ejercicios Prácticos
 
@@ -266,10 +266,10 @@ mcp-workshop/
 
 **Conceptos clave**:
 
--   Implementación de `resources/list` para descubrimiento
--   Implementación de `resources/read` para acceso a datos
--   Estructura de recursos MCP (URI, nombre, descripción)
--   Serialización JSON de datos estáticos
+- Implementación de `resources/list` para descubrimiento
+- Implementación de `resources/read` para acceso a datos
+- Estructura de recursos MCP (URI, nombre, descripción)
+- Serialización JSON de datos estáticos
 
 **Servidor**: `Exercise1StaticResources` (Puerto 5000)
 
@@ -289,11 +289,11 @@ mcp-workshop/
 
 **Conceptos clave**:
 
--   Implementación de `tools/list` para exponer capacidades
--   Implementación de `tools/call` para ejecutar herramientas
--   Esquemas de validación de parámetros (JSON Schema)
--   Herramientas: `GetCustomers`, `SearchOrders`, `CalculateTotal`
--   Paginación y filtros opcionales
+- Implementación de `tools/list` para exponer capacidades
+- Implementación de `tools/call` para ejecutar herramientas
+- Esquemas de validación de parámetros (JSON Schema)
+- Herramientas: `GetCustomers`, `SearchOrders`, `CalculateTotal`
+- Paginación y filtros opcionales
 
 **Servidor**: `Exercise2ParametricQuery` (Puerto 5001)
 
@@ -319,20 +319,20 @@ mcp-workshop/
 
 **Conceptos clave**:
 
--   Autenticación con tokens JWT (JSON Web Tokens)
--   Autorización basada en scopes (`read`, `write`, `admin`)
--   Rate limiting por tier de usuario (Base: 10 req/min, Premium: 50 req/min)
--   Middleware de seguridad en ASP.NET Core
--   Logging estructurado de eventos de seguridad
--   Respuestas HTTP 401 (Unauthorized) y 403 (Forbidden)
+- Autenticación con tokens JWT (JSON Web Tokens)
+- Autorización basada en scopes (`read`, `write`, `admin`)
+- Rate limiting por tier de usuario (Base: 10 req/min, Premium: 50 req/min)
+- Middleware de seguridad en ASP.NET Core
+- Logging estructurado de eventos de seguridad
+- Respuestas HTTP 401 (Unauthorized) y 403 (Forbidden)
 
 **Servidor**: `Exercise3SecureServer` (Puerto 5002)
 
 **Scopes disponibles**:
 
--   `read`: Solo lectura de recursos
--   `write`: Lectura y modificación
--   `admin`: Acceso completo incluyendo configuración
+- `read`: Solo lectura de recursos
+- `write`: Lectura y modificación
+- `admin`: Acceso completo incluyendo configuración
 
 **Verificación**:
 
@@ -350,12 +350,12 @@ mcp-workshop/
 
 **Conceptos clave**:
 
--   Arquitectura multi-servidor (3 servidores MCP independientes)
--   Patrones de orquestación: paralelo, secuencial, fan-out
--   Parser de lenguaje natural (español) para routing de consultas
--   Caching con TTL para optimización
--   Manejo de errores y fallbacks
--   Síntesis de resultados de múltiples fuentes
+- Arquitectura multi-servidor (3 servidores MCP independientes)
+- Patrones de orquestación: paralelo, secuencial, fan-out
+- Parser de lenguaje natural (español) para routing de consultas
+- Caching con TTL para optimización
+- Manejo de errores y fallbacks
+- Síntesis de resultados de múltiples fuentes
 
 **Arquitectura**:
 
@@ -376,10 +376,10 @@ Usuario (español) → Orquestador → [SQL Server | Cosmos DB | REST API]
 
 **Preguntas de ejemplo**:
 
--   "¿Cuántos clientes nuevos registrados en Madrid este mes?"
--   "¿Qué usuarios abandonaron carritos en las últimas 24 horas?"
--   "¿Cuál es el estado del pedido #1234 y su inventario asociado?"
--   "Dame un resumen de ventas de la semana más productos más vendidos"
+- "¿Cuántos clientes nuevos registrados en Madrid este mes?"
+- "¿Qué usuarios abandonaron carritos en las últimas 24 horas?"
+- "¿Cuál es el estado del pedido #1234 y su inventario asociado?"
+- "Dame un resumen de ventas de la semana más productos más vendidos"
 
 **Verificación**:
 
@@ -395,11 +395,11 @@ Usuario (español) → Orquestador → [SQL Server | Cosmos DB | REST API]
 
 **Conceptos clave**:
 
--   Integración de múltiples servidores MCP (SQL, Cosmos, REST API)
--   Descubrimiento automático de herramientas (`ListToolsAsync()`)
--   Microsoft Agent Framework (MAF) para agentes conversacionales
--   Comprensión de lenguaje natural en español
--   Mantenimiento de contexto conversacional (multi-turno)
+- Integración de múltiples servidores MCP (SQL, Cosmos, REST API)
+- Descubrimiento automático de herramientas (`ListToolsAsync()`)
+- Microsoft Agent Framework (MAF) para agentes conversacionales
+- Comprensión de lenguaje natural en español
+- Mantenimiento de contexto conversacional (multi-turno)
 
 **Servidor**: `Exercise5AgentServer`
 
@@ -415,36 +415,37 @@ Usuario (español) → Orquestador → [SQL Server | Cosmos DB | REST API]
 
 ### Stack Principal
 
--   **Lenguaje**: C# .NET 10.0
--   **Framework Web**: ASP.NET Core Minimal APIs
--   **MCP Library**: ModelContextProtocol (NuGet prerelease)
--   **Autenticación**: System.IdentityModel.Tokens.Jwt
--   **Serialización**: System.Text.Json
+- **Lenguaje**: C# .NET 10.0
+- **Framework Web**: ASP.NET Core Minimal APIs
+- **MCP Library**: ModelContextProtocol (NuGet prerelease)
+- **Autenticación**: System.IdentityModel.Tokens.Jwt
+- **Serialización**: System.Text.Json
 
 ### Azure Services (Opcionales - Ejercicio 4)
 
--   **Hosting**: Azure Container Apps, Azure App Service
--   **Datos**: Azure SQL Database, Azure Cosmos DB
--   **Storage**: Azure Blob Storage
--   **Monitoring**: Azure Log Analytics, Application Insights
+- **Hosting**: Azure Container Apps, Azure App Service
+- **Datos**: Azure SQL Database, Azure Cosmos DB
+- **Storage**: Azure Blob Storage
+- **Monitoring**: Azure Log Analytics, Application Insights
 
 ### Infraestructura y Testing
 
--   **IaC**: Terraform 1.5+
--   **Testing**: xUnit 3.1+, Microsoft.AspNetCore.Mvc.Testing
--   **Scripting**: PowerShell 7+
+- **IaC**: Terraform 1.5+
+- **Testing**: xUnit 3.1+, Microsoft.AspNetCore.Mvc.Testing
+- **Scripting**: PowerShell 7+
 
 ### Puertos Utilizados
 
 | Ejercicio                  | Puerto | Servidor                 |
 | -------------------------- | ------ | ------------------------ |
-| Ejercicio 1                | 5000   | Exercise1StaticResources |
-| Ejercicio 2                | 5001   | Exercise2ParametricQuery |
-| Ejercicio 3                | 5002   | Exercise3SecureServer    |
+| Ejercicio 1                | 5000   | Exercise1Server |
+| Ejercicio 2                | 5001   | Exercise2Server |
+| Ejercicio 3                | 5002   | Exercise3Server    |
 | Ejercicio 4 - SQL          | 5009   | SqlMcpServer             |
 | Ejercicio 4 - Cosmos       | 5010   | CosmosMcpServer          |
 | Ejercicio 4 - REST         | 5011   | RestApiMcpServer         |
-| Ejercicio 4 - Orchestrator | 5012   | Exercise4VirtualAnalyst  |
+| Ejercicio 4 - Orchestrator | 5012   | Exercise4Server  |
+| Ejercicio 5 - Agente       | 5014   | Exercise5Agent          |
 
 ## 📄 Licencia
 
@@ -458,4 +459,4 @@ Este taller fue construido utilizando [GitHub Spec-Kit](https://github.com/githu
 
 ---
 
-**¡Disfruta del taller y construye servidores MCP increíbles! 🚀**
+## **¡Disfruta del taller y construye servidores MCP increíbles! 🚀**

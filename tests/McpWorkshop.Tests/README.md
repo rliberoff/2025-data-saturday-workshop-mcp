@@ -83,13 +83,13 @@ Run tests without rebuilding (faster for repeated runs):
 
 **Key Tests**:
 
--   ✅ Request/response structure validation
--   ✅ Error code compliance (-32700 to -32603)
--   ✅ Protocol version enforcement ("2.0")
--   ✅ Batch request handling
--   ✅ Notification format (no id field)
--   ✅ Server info structure (name, version, protocolVersion)
--   ✅ Capabilities reporting
+- ✅ Request/response structure validation
+- ✅ Error code compliance (-32700 to -32603)
+- ✅ Protocol version enforcement ("2.0")
+- ✅ Batch request handling
+- ✅ Notification format (no id field)
+- ✅ Server info structure (name, version, protocolVersion)
+- ✅ Capabilities reporting
 
 **Contract Reference**: `specs/001-mcp-workshop-course/contracts/mcp-server-base.json`
 
@@ -97,62 +97,72 @@ Run tests without rebuilding (faster for repeated runs):
 
 #### Exercise 1: Static Resources (15 tests)
 
--   Initialize server and verify server info
--   List all available resources
--   Read resource content
--   Validate JSON structure of resources
--   Error handling (invalid URIs)
--   Response time validation (<500ms)
--   State consistency across multiple requests
+- Initialize server and verify server info
+- List all available resources
+- Read resource content
+- Validate JSON structure of resources
+- Error handling (invalid URIs)
+- Response time validation (<500ms)
+- State consistency across multiple requests
 
 #### Exercise 2: Parametric Query Tools (18 tests)
 
--   List available tools (GetCustomers, SearchOrders, CalculateTotal)
--   Validate tool input schemas
--   Execute tools with various parameters
--   Pagination support (page, pageSize)
--   Filtering support (status, date ranges)
--   Empty result handling
--   Error handling (invalid tool names, missing parameters)
--   Response time validation (<1000ms)
+- List available tools (GetCustomers, SearchOrders, CalculateTotal)
+- Validate tool input schemas
+- Execute tools with various parameters
+- Pagination support (page, pageSize)
+- Filtering support (status, date ranges)
+- Empty result handling
+- Error handling (invalid tool names, missing parameters)
+- Response time validation (<1000ms)
 
 #### Exercise 3: Security & Authentication (17 tests)
 
--   Reject unauthenticated requests (401 Unauthorized)
--   Validate JWT token structure
--   Role-based access control (viewer, editor, admin)
--   Token expiration handling
--   Issuer/audience validation
--   Rate limiting enforcement (429 Too Many Requests)
--   Security headers (X-Content-Type-Options, X-Frame-Options)
--   CORS configuration
--   Audit logging
+- Reject unauthenticated requests (401 Unauthorized)
+- Validate JWT token structure
+- Role-based access control (viewer, editor, admin)
+- Token expiration handling
+- Issuer/audience validation
+- Rate limiting enforcement (429 Too Many Requests)
+- Security headers (X-Content-Type-Options, X-Frame-Options)
+- CORS configuration
+- Audit logging
 
 #### Exercise 4: Multi-server Orchestration (8 tests)
 
--   VirtualAnalyst coordinates multiple MCP servers
--   SQL MCP Server provides customer data
--   Cosmos MCP Server provides session data
--   REST MCP Server calls external APIs
--   Caching behavior validation
--   Error graceful degradation
--   JSON-RPC format for server-to-server communication
+- VirtualAnalyst coordinates multiple MCP servers
+- SQL MCP Server provides customer data
+- Cosmos MCP Server provides session data
+- REST MCP Server calls external APIs
+- Caching behavior validation
+- Error graceful degradation
+- JSON-RPC format for server-to-server communication
+
+#### Exercise 5: AI Agent with Microsoft Agent Framework (TBD tests)
+
+- Agent initialization and configuration
+- MCP server integration with agent
+- Natural language query processing
+- Multi-turn conversation handling
+- Tool selection and execution
+- Response generation and formatting
+- Error handling and fallback strategies
 
 ### 3. Performance Tests (`Performance/`)
 
 **Targets** (from `plan.md`):
 
--   **Resources**: p95 < 500ms
--   **Tools**: p95 < 1000ms
+- **Resources**: p95 < 500ms
+- **Tools**: p95 < 1000ms
 
 **Tests**:
 
--   ✅ Resource read p95 benchmark (100 iterations)
--   ✅ Tool execution p95 benchmark (100 iterations)
--   ✅ Initialize endpoint latency (<100ms)
--   ✅ Resources list latency (<100ms average)
--   ✅ Concurrent request performance (50 simultaneous)
--   ✅ Memory usage validation (no leaks after 1000 requests)
+- ✅ Resource read p95 benchmark (100 iterations)
+- ✅ Tool execution p95 benchmark (100 iterations)
+- ✅ Initialize endpoint latency (<100ms)
+- ✅ Resources list latency (<100ms average)
+- ✅ Concurrent request performance (50 simultaneous)
+- ✅ Memory usage validation (no leaks after 1000 requests)
 
 ### 4. End-to-End Tests (`EndToEnd/`)
 
@@ -197,7 +207,7 @@ graph TD
 - name: Upload Coverage
   uses: codecov/codecov-action@v3
   with:
-      files: ./coverage/coverage.opencover.xml
+    files: ./coverage/coverage.opencover.xml
 ```
 
 ### Azure DevOps Example
@@ -206,22 +216,22 @@ graph TD
 - task: PowerShell@2
   displayName: "Run All Tests"
   inputs:
-      filePath: "scripts/run-all-tests.ps1"
-      arguments: "-Configuration Release -Coverage $true"
+    filePath: "scripts/run-all-tests.ps1"
+    arguments: "-Configuration Release -Coverage $true"
 
 - task: PublishCodeCoverageResults@1
   inputs:
-      codeCoverageTool: "cobertura"
-      summaryFileLocation: "coverage/coverage.opencover.xml"
+    codeCoverageTool: "cobertura"
+    summaryFileLocation: "coverage/coverage.opencover.xml"
 ```
 
 ## Coverage Requirements
 
 **Minimum Coverage Targets**:
 
--   Shared Libraries (`McpWorkshop.Shared`): 80%
--   Reference Servers (`McpWorkshop.Servers`): 70%
--   Overall Project: 75%
+- Shared Libraries (`McpWorkshop.Shared`): 80%
+- Reference Servers (`McpWorkshop.Servers`): 70%
+- Overall Project: 75%
 
 ## Troubleshooting
 
@@ -229,39 +239,39 @@ graph TD
 
 **Issue**: "The type or namespace name 'Program' could not be found"
 
--   **Cause**: Reference server projects not exposing `Program` class for testing
--   **Fix**: Add `<InternalsVisibleTo Include="McpWorkshop.Tests" />` to server `.csproj`
+- **Cause**: Reference server projects not exposing `Program` class for testing
+- **Fix**: Add `<InternalsVisibleTo Include="McpWorkshop.Tests" />` to server `.csproj`
 
 **Issue**: "Connection refused" or "Server not responding"
 
--   **Cause**: WebApplicationFactory cannot start test server
--   **Fix**: Check server `Program.cs` has proper WebApplicationBuilder configuration
+- **Cause**: WebApplicationFactory cannot start test server
+- **Fix**: Check server `Program.cs` has proper WebApplicationBuilder configuration
 
 ### Performance Test Failures
 
 **Issue**: "P95 response time exceeded target"
 
--   **Cause**: System under load or debug build
--   **Fix**: Run in Release mode: `.\scripts\run-all-tests.ps1 -Configuration Release`
+- **Cause**: System under load or debug build
+- **Fix**: Run in Release mode: `.\scripts\run-all-tests.ps1 -Configuration Release`
 
 **Issue**: "Memory usage exceeded 50MB threshold"
 
--   **Cause**: Memory leak in server code
--   **Fix**: Review object disposal patterns, use `using` statements for HttpClient
+- **Cause**: Memory leak in server code
+- **Fix**: Review object disposal patterns, use `using` statements for HttpClient
 
 ### Coverage Report Not Generated
 
 **Issue**: "reportgenerator not installed"
 
--   **Fix**: Install global tool:
-    ```powershell
-    dotnet tool install -g dotnet-reportgenerator-globaltool
-    ```
+- **Fix**: Install global tool:
+  ```powershell
+  dotnet tool install -g dotnet-reportgenerator-globaltool
+  ```
 
 **Issue**: "No coverage files found"
 
--   **Cause**: Coverage collector not running
--   **Fix**: Ensure `coverlet.collector` package is installed in test project
+- **Cause**: Coverage collector not running
+- **Fix**: Ensure `coverlet.collector` package is installed in test project
 
 ## Writing New Tests
 
@@ -284,10 +294,10 @@ public async Task MethodName_StateUnderTest_ExpectedBehavior()
 
 ### xUnit Attributes
 
--   `[Fact]` - Single test case
--   `[Theory]` - Parameterized test with multiple cases
--   `[InlineData]` - Data for theory test
--   `[Trait]` - Test categorization (e.g., `[Trait("Category", "Integration")]`)
+- `[Fact]` - Single test case
+- `[Theory]` - Parameterized test with multiple cases
+- `[InlineData]` - Data for theory test
+- `[Trait]` - Test categorization (e.g., `[Trait("Category", "Integration")]`)
 
 ### WebApplicationFactory Usage
 
@@ -322,20 +332,20 @@ public class MyIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
 
 ### Test Review Checklist
 
--   [ ] Test name clearly describes scenario
--   [ ] Arrange-Act-Assert pattern followed
--   [ ] Assertions are specific and meaningful
--   [ ] Test is isolated (no dependencies on other tests)
--   [ ] Async/await used correctly
--   [ ] Resources disposed properly (`using` statements)
--   [ ] Error cases tested alongside happy paths
+- [ ] Test name clearly describes scenario
+- [ ] Arrange-Act-Assert pattern followed
+- [ ] Assertions are specific and meaningful
+- [ ] Test is isolated (no dependencies on other tests)
+- [ ] Async/await used correctly
+- [ ] Resources disposed properly (`using` statements)
+- [ ] Error cases tested alongside happy paths
 
 ## Resources
 
--   **xUnit Documentation**: https://xunit.net/docs/getting-started/netcore/cmdline
--   **ASP.NET Core Testing**: https://learn.microsoft.com/aspnet/core/test/integration-tests
--   **Code Coverage Tools**: https://github.com/coverlet-coverage/coverlet
--   **MCP Specification**: `specs/001-mcp-workshop-course/contracts/`
+- **xUnit Documentation**: https://xunit.net/docs/getting-started/netcore/cmdline
+- **ASP.NET Core Testing**: https://learn.microsoft.com/aspnet/core/test/integration-tests
+- **Code Coverage Tools**: https://github.com/coverlet-coverage/coverlet
+- **MCP Specification**: `specs/001-mcp-workshop-course/contracts/`
 
 ## Support
 

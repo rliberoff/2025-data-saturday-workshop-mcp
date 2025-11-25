@@ -26,9 +26,9 @@
 
 **Puntos clave**:
 
--   ✅ **Usa tu nombre completo** y rol (si aplica)
--   ✅ **Pide participación inmediata** (manos levantadas) para romper el hielo
--   ✅ **Valida niveles de experiencia** sin hacer sentir mal a nadie
+- ✅ **Usa tu nombre completo** y rol (si aplica)
+- ✅ **Pide participación inmediata** (manos levantadas) para romper el hielo
+- ✅ **Valida niveles de experiencia** sin hacer sentir mal a nadie
 
 ### Promesa del Taller
 
@@ -76,24 +76,24 @@ CON MCP:
 
 1. **Estructura 3-fases**:
 
-    - Fase 1 (Bloques 1-3): "Fundamentos y primera demo"
-    - Fase 2 (Bloques 4-8): "Ejercicios progresivos - aquí aprenderán haciendo"
-    - Fase 3 (Bloques 9-11): "Producción y cierre"
+   - Fase 1 (Bloques 1-3): "Fundamentos y primera demo"
+   - Fase 2 (Bloques 4-8): "Ejercicios progresivos - aquí aprenderán haciendo"
+   - Fase 3 (Bloques 9-11): "Producción y cierre"
 
 2. **Ejercicios prácticos** (resalta en amarillo si tienes diapositivas):
 
-    - Ejercicio 1: Guiado (instructor ayuda paso a paso)
-    - Ejercicios 2-3: Independientes (con asistencia disponible)
-    - Ejercicio 4: Integración completa (desafío final)
+   - Ejercicio 1: Guiado (instructor ayuda paso a paso)
+   - Ejercicios 2-3: Independientes (con asistencia disponible)
+   - Ejercicio 4: Integración completa (desafío final)
 
 3. **Tiempo buffer**:
-    > "_Verán que tengo tiempos asignados, pero si necesitamos 5 minutos extra en un ejercicio, los tomaremos del cierre. Lo importante es que todos logren avanzar._"
+   > "_Verán que tengo tiempos asignados, pero si necesitamos 5 minutos extra en un ejercicio, los tomaremos del cierre. Lo importante es que todos logren avanzar._"
 
 **Preguntas frecuentes anticipadas**:
 
--   **"¿Hay grabación?"** → [Respuesta según tu caso]
--   **"¿Necesito conocer Terraform?"** → "No, lo veremos juntos y está documentado"
--   **"¿Funciona en Mac/Linux?"** → "Sí, .NET 10.0 es multiplataforma"
+- **"¿Hay grabación?"** → [Respuesta según tu caso]
+- **"¿Necesito conocer Terraform?"** → "No, lo veremos juntos y está documentado"
+- **"¿Funciona en Mac/Linux?"** → "Sí, .NET 10.0 es multiplataforma"
 
 ---
 
@@ -125,19 +125,19 @@ CON MCP:
 
 **Checklist del instructor** (completar 15 min antes):
 
--   [ ] Proyector conectado y funcionando
--   [ ] Repositorio GitHub abierto en pantalla compartida
--   [ ] Visual Studio Code abierto con `McpWorkshop.sln` cargado
--   [ ] Terminal PowerShell visible (fuente grande: 16-18pt)
--   [ ] Script `verify-setup.ps1` listo para ejecutar
--   [ ] Timer visible (recomendado: https://onlinealarmkur.com/timer/es/ o app móvil)
--   [ ] Agua y micrófono funcionando
+- [ ] Proyector conectado y funcionando
+- [ ] Repositorio GitHub abierto en pantalla compartida
+- [ ] Visual Studio Code abierto con `McpWorkshop.sln` cargado
+- [ ] Terminal PowerShell visible (fuente grande: 16-18pt)
+- [ ] Script `verify-setup.ps1` listo para ejecutar
+- [ ] Timer visible (recomendado: https://onlinealarmkur.com/timer/es/ o app móvil)
+- [ ] Agua y micrófono funcionando
 
 ### Materiales para Distribuir
 
--   [ ] URL del repositorio GitHub escrita en pizarra
--   [ ] Enlace a guía rápida (si es digital)
--   [ ] Código QR para acceso rápido (opcional)
+- [ ] URL del repositorio GitHub escrita en pizarra
+- [ ] Enlace a guía rápida (si es digital)
+- [ ] Código QR para acceso rápido (opcional)
 
 ---
 
@@ -147,19 +147,19 @@ Al finalizar estos 10 minutos, deberías observar:
 
 ✅ **Engagement**:
 
--   Asistentes tienen laptops abiertas y Visual Studio Code iniciándose
--   Al menos 2-3 preguntas o comentarios en chat/presencial
--   Ambiente relajado (sonrisas, movimiento)
+- Asistentes tienen laptops abiertas y Visual Studio Code iniciándose
+- Al menos 2-3 preguntas o comentarios en chat/presencial
+- Ambiente relajado (sonrisas, movimiento)
 
 ✅ **Comprensión**:
 
--   Asistentes pueden responder: "¿Qué es MCP en una frase?" → "Protocolo estándar para conectar IA a datos"
--   Entienden que habrá 4 ejercicios prácticos
+- Asistentes pueden responder: "¿Qué es MCP en una frase?" → "Protocolo estándar para conectar IA a datos"
+- Entienden que habrá 5 ejercicios prácticos
 
 ✅ **Preparación técnica**:
 
--   La mayoría tiene el repositorio clonado o descargado
--   No hay preguntas técnicas bloqueantes (se resolverán en Bloque 2)
+- La mayoría tiene el repositorio clonado o descargado
+- No hay preguntas técnicas bloqueantes (se resolverán en Bloque 2)
 
 ---
 
@@ -169,15 +169,15 @@ Al finalizar estos 10 minutos, deberías observar:
 
 **Cortar de aquí**:
 
--   ❌ Recursos adicionales detallados (están en documentación)
--   ❌ Explicación profunda de prerequisitos (lo harán en verify-setup)
--   ❌ Presentación exhaustiva de tecnologías (vendrán naturalmente)
+- ❌ Recursos adicionales detallados (están en documentación)
+- ❌ Explicación profunda de prerequisitos (lo harán en verify-setup)
+- ❌ Presentación exhaustiva de tecnologías (vendrán naturalmente)
 
 **Mantener sí o sí**:
 
--   ✅ Promesa del taller (qué van a lograr)
--   ✅ Agenda visual (tabla de bloques)
--   ✅ Cultura de aprendizaje (seguridad psicológica)
+- ✅ Promesa del taller (qué van a lograr)
+- ✅ Agenda visual (tabla de bloques)
+- ✅ Cultura de aprendizaje (seguridad psicológica)
 
 ### Si Hay Problemas Técnicos de Proyección
 
@@ -213,15 +213,15 @@ La documentación es autocontenida y pueden seguir sin proyector.
 
 ### Lo que Funciona Bien
 
--   ✅ **Analogía USB-C**: Resonó muy bien en talleres pasados
--   ✅ **Mostrar cronómetro visible**: Genera disciplina de tiempo
--   ✅ **Pedir manos levantadas temprano**: Rompe barrera de participación
+- ✅ **Analogía USB-C**: Resonó muy bien en talleres pasados
+- ✅ **Mostrar cronómetro visible**: Genera disciplina de tiempo
+- ✅ **Pedir manos levantadas temprano**: Rompe barrera de participación
 
 ### Lo que NO Hacer
 
--   ❌ **No profundizar en JSON-RPC aquí**: Demasiado técnico, viene en Bloque 3
--   ❌ **No mostrar código todavía**: Genera ansiedad innecesaria
--   ❌ **No prometer Azure gratis**: Costos aplican, ser transparente
+- ❌ **No profundizar en JSON-RPC aquí**: Demasiado técnico, viene en Bloque 3
+- ❌ **No mostrar código todavía**: Genera ansiedad innecesaria
+- ❌ **No prometer Azure gratis**: Costos aplican, ser transparente
 
 ### Feedback de Asistentes
 
@@ -235,10 +235,10 @@ La documentación es autocontenida y pueden seguir sin proyector.
 
 **Después del taller**, registra:
 
--   ¿Cuánto tiempo real tomó este bloque? \***\*\_\*\***
--   ¿Qué pregunta no anticipaste? **\*\*\*\***\_**\*\*\*\***
--   ¿Qué analogía funcionó mejor? **\*\*\*\***\_**\*\*\*\***
--   ¿Hubo problemas técnicos? **\*\*\*\***\_\_\_\_**\*\*\*\***
+- ¿Cuánto tiempo real tomó este bloque? \***\*\_\*\***
+- ¿Qué pregunta no anticipaste? **\*\*\*\***\_**\*\*\*\***
+- ¿Qué analogía funcionó mejor? **\*\*\*\***\_**\*\*\*\***
+- ¿Hubo problemas técnicos? **\*\*\*\***\_\_\_\_**\*\*\*\***
 
 ---
 

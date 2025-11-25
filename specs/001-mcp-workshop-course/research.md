@@ -71,6 +71,7 @@ app.MapMcpTool("query_data", async (QueryRequest request) => {
 - Exercise 2: Show tool registration with parameter validation
 - Exercise 3: Implement middleware for security concerns
 - Exercise 4: Orchestrate multiple MCP servers using client library
+- Exercise 5: Build AI agent with Microsoft Agent Framework integrating MCP servers
 
 **Documentation Needs**:
 
@@ -271,42 +272,42 @@ sequenceDiagram
 
 1. **Initialization**:
 
-    ```json
-    {
-        "jsonrpc": "2.0",
-        "method": "initialize",
-        "params": {
-            "protocolVersion": "2024-11-05",
-            "capabilities": {},
-            "clientInfo": { "name": "workshop-client", "version": "1.0.0" }
-        },
-        "id": 1
-    }
-    ```
+   ```json
+   {
+     "jsonrpc": "2.0",
+     "method": "initialize",
+     "params": {
+       "protocolVersion": "2024-11-05",
+       "capabilities": {},
+       "clientInfo": { "name": "workshop-client", "version": "1.0.0" }
+     },
+     "id": 1
+   }
+   ```
 
 2. **Resource Discovery**:
 
-    ```json
-    {
-        "jsonrpc": "2.0",
-        "method": "resources/list",
-        "id": 2
-    }
-    ```
+   ```json
+   {
+     "jsonrpc": "2.0",
+     "method": "resources/list",
+     "id": 2
+   }
+   ```
 
 3. **Tool Invocation**:
 
-    ```json
-    {
-        "jsonrpc": "2.0",
-        "method": "tools/call",
-        "params": {
-            "name": "query_customers",
-            "arguments": { "filter": "active=true" }
-        },
-        "id": 3
-    }
-    ```
+   ```json
+   {
+     "jsonrpc": "2.0",
+     "method": "tools/call",
+     "params": {
+       "name": "query_customers",
+       "arguments": { "filter": "active=true" }
+     },
+     "id": 3
+   }
+   ```
 
 **Testing Strategy**:
 
@@ -493,20 +494,20 @@ public class LocalFileAdapter : IDataAdapter {
 
 ```json
 {
-    "DataAdapters": {
-        "Enabled": ["sql", "cosmos", "local"],
-        "Sql": {
-            "ConnectionString": "...",
-            "Schemas": ["dbo", "analytics"]
-        },
-        "Cosmos": {
-            "Endpoint": "...",
-            "Database": "workshop-db"
-        },
-        "Local": {
-            "DataDirectory": "./sample-data"
-        }
+  "DataAdapters": {
+    "Enabled": ["sql", "cosmos", "local"],
+    "Sql": {
+      "ConnectionString": "...",
+      "Schemas": ["dbo", "analytics"]
+    },
+    "Cosmos": {
+      "Endpoint": "...",
+      "Database": "workshop-db"
+    },
+    "Local": {
+      "DataDirectory": "./sample-data"
     }
+  }
 }
 ```
 

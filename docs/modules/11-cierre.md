@@ -32,10 +32,10 @@ Al completar este bloque, habrás:
 
 **Ejemplos esperados**:
 
--   "Cómo crear un servidor MCP desde cero en C#"
--   "Diferencia entre recursos y herramientas MCP"
--   "Implementar autenticación JWT en servidores MCP"
--   "Orquestar múltiples servidores MCP con patrones paralelos"
+- "Cómo crear un servidor MCP desde cero en C#"
+- "Diferencia entre recursos y herramientas MCP"
+- "Implementar autenticación JWT en servidores MCP"
+- "Orquestar múltiples servidores MCP con patrones paralelos"
 
 **Acción del instructor**: Pedir a 3-4 voluntarios que compartan 1 aprendizaje cada uno.
 
@@ -47,10 +47,10 @@ Al completar este bloque, habrás:
 
 **Ejemplos esperados**:
 
--   "Evaluar si MCP puede reemplazar nuestras 15 APIs REST internas"
--   "Crear un prototipo de servidor MCP para nuestro sistema de tickets"
--   "Presentar MCP a mi equipo de arquitectura"
--   "Investigar cómo conectar nuestro Cosmos DB a Claude Desktop"
+- "Evaluar si MCP puede reemplazar nuestras 15 APIs REST internas"
+- "Crear un prototipo de servidor MCP para nuestro sistema de tickets"
+- "Presentar MCP a mi equipo de arquitectura"
+- "Investigar cómo conectar nuestro Cosmos DB a Claude Desktop"
 
 **Acción del instructor**: Anotad las acciones más frecuentes para futuros talleres.
 
@@ -62,10 +62,10 @@ Al completar este bloque, habrás:
 
 **Ejemplos esperados**:
 
--   "¿Cómo manejo autenticación con Azure AD en producción?"
--   "¿MCP funciona con modelos open source (Llama, Mistral)?"
--   "¿Cómo monitoreo la salud de 10 servidores MCP en producción?"
--   "¿Hay límites de throughput en servidores MCP?"
+- "¿Cómo manejo autenticación con Azure AD en producción?"
+- "¿MCP funciona con modelos open source (Llama, Mistral)?"
+- "¿Cómo monitoreo la salud de 10 servidores MCP en producción?"
+- "¿Hay límites de throughput en servidores MCP?"
 
 **Acción del instructor**: Responde brevemente o deriva a recursos (ver sección Recursos).
 
@@ -146,27 +146,27 @@ flowchart TB
 
 ### Documentación Oficial
 
--   **Especificación MCP**: https://modelcontextprotocol.io/specification/2025-06-18
--   **SDK .NET**: https://github.com/modelcontextprotocol/dotnet-sdk
--   **Ejemplos oficiales**: https://github.com/modelcontextprotocol/servers
+- **Especificación MCP**: https://modelcontextprotocol.io/specification/2025-06-18
+- **SDK .NET**: https://github.com/modelcontextprotocol/dotnet-sdk
+- **Ejemplos oficiales**: https://github.com/modelcontextprotocol/servers
 
 ### Comunidad
 
--   **Discord oficial MCP**: https://discord.gg/modelcontextprotocol
--   **GitHub Discussions**: https://github.com/modelcontextprotocol/specification/discussions
--   **Stack Overflow**: Tag `model-context-protocol`
+- **Discord oficial MCP**: https://discord.gg/modelcontextprotocol
+- **GitHub Discussions**: https://github.com/modelcontextprotocol/specification/discussions
+- **Stack Overflow**: Tag `model-context-protocol`
 
 ### Tutoriales Avanzados
 
--   **Azure Container Apps deployment**: https://learn.microsoft.com/azure/container-apps/
--   **JWT best practices**: https://auth0.com/docs/secure/tokens/json-web-tokens
--   **Distributed tracing con App Insights**: https://learn.microsoft.com/azure/azure-monitor/app/distributed-tracing
+- **Azure Container Apps deployment**: https://learn.microsoft.com/azure/container-apps/
+- **JWT best practices**: https://auth0.com/docs/secure/tokens/json-web-tokens
+- **Distributed tracing con App Insights**: https://learn.microsoft.com/azure/azure-monitor/app/distributed-tracing
 
 ### Repositorio del Taller
 
--   **Código completo**: [URL del repo GitHub del taller]
--   **Soluciones de ejercicios**: `/src/McpWorkshop.Servers/`
--   **Scripts de verificación**: `/scripts/`
+- **Código completo**: [URL del repo GitHub del taller]
+- **Soluciones de ejercicios**: `/src/McpWorkshop.Servers/`
+- **Scripts de verificación**: `/scripts/`
 
 ---
 
@@ -182,26 +182,26 @@ flowchart TB
 
 #### Técnicas
 
--   "¿MCP soporta autenticación con certificados X.509?"
+- "¿MCP soporta autenticación con certificados X.509?"
 
-    -   **Respuesta**: Sí, puedes validar certificados en el middleware de autenticación. Ver docs de ASP.NET Core Client Certificate Authentication.
+  - **Respuesta**: Sí, puedes validar certificados en el middleware de autenticación. Ver docs de ASP.NET Core Client Certificate Authentication.
 
--   "¿Puedo exponer un servidor MCP en WebSocket en vez de HTTP?"
-    -   **Respuesta**: La spec MCP soporta múltiples transportes. WebSocket está en roadmap Q2 2025. Ahora: HTTP (REST) o stdio.
+- "¿Puedo exponer un servidor MCP en WebSocket en vez de HTTP?"
+  - **Respuesta**: La spec MCP soporta múltiples transportes. WebSocket está en roadmap Q2 2025. Ahora: HTTP (REST) o stdio.
 
 #### De Negocio
 
--   "¿Cuánto cuesta Azure para hostear 10 servidores MCP?"
+- "¿Cuánto cuesta Azure para hostear 10 servidores MCP?"
 
-    -   **Respuesta**: ~500-750€/mes con Azure Container Apps (asumiendo tráfico moderado). Usa Azure Pricing Calculator para estimaciones precisas.
+  - **Respuesta**: ~500-750€/mes con Azure Container Apps (asumiendo tráfico moderado). Usa Azure Pricing Calculator para estimaciones precisas.
 
--   "¿Hay empresas usando MCP en producción?"
-    -   **Respuesta**: Anthropic (creadores de Claude) usa MCP internamente. Varias startups en beta. Especificación es de Nov 2024, aún early adopters.
+- "¿Hay empresas usando MCP en producción?"
+  - **Respuesta**: Anthropic (creadores de Claude) usa MCP internamente. Varias startups en beta. Especificación es de Nov 2024, aún early adopters.
 
 #### Roadmap
 
--   "¿Cuándo habrá soporte oficial para Java?"
-    -   **Respuesta**: SDK comunitario ya existe (buscar en GitHub). SDK oficial: roadmap H2 2025 probable.
+- "¿Cuándo habrá soporte oficial para Java?"
+  - **Respuesta**: SDK comunitario ya existe (buscar en GitHub). SDK oficial: roadmap H2 2025 probable.
 
 **Manejo de preguntas sin respuesta**:
 
@@ -215,9 +215,9 @@ flowchart TB
 
 > "¡Felicidades! En 3 horas habéis:
 >
-> -   ✅ Creado 4 servidores MCP funcionales
-> -   ✅ Implementado recursos, herramientas, autenticación, orquestación
-> -   ✅ Aprendido mejores prácticas de seguridad y arquitectura
+> - ✅ Creado 4 servidores MCP funcionales
+> - ✅ Implementado recursos, herramientas, autenticación, orquestación
+> - ✅ Aprendido mejores prácticas de seguridad y arquitectura
 >
 > MCP es una tecnología emergente con potencial ENORME. Estáis entre los primeros en España en dominarla. Mi consejo:
 >
@@ -327,13 +327,13 @@ Write-Host "Certificado generado para $Nombre" -ForegroundColor Green
 
 ## 📋 Checklist del Instructor (Post-Taller)
 
--   [ ] Recoger feedback encuesta (mínimo 50% respuestas)
--   [ ] Enviar email seguimiento con recursos en 24h
--   [ ] Publicar código completo en GitHub (si no estaba ya)
--   [ ] Actualizar material del taller según feedback
--   [ ] Responder preguntas individuales en 48h
--   [ ] Compartir resumen de encuesta con participantes en 1 semana
--   [ ] Documentar lecciones aprendidas para próxima edición
+- [ ] Recoger feedback encuesta (mínimo 50% respuestas)
+- [ ] Enviar email seguimiento con recursos en 24h
+- [ ] Publicar código completo en GitHub (si no estaba ya)
+- [ ] Actualizar material del taller según feedback
+- [ ] Responder preguntas individuales en 48h
+- [ ] Compartir resumen de encuesta con participantes en 1 semana
+- [ ] Documentar lecciones aprendidas para próxima edición
 
 ---
 
@@ -345,22 +345,22 @@ Write-Host "Certificado generado para $Nombre" -ForegroundColor Green
 | --------------------------- | ---------------------------- | ------------------------- |
 | **Satisfacción general**    | ≥4.0/5.0                     | _[Completar post-taller]_ |
 | **Aplicabilidad**           | ≥75% responde 4-5            | _[Completar post-taller]_ |
-| **Completación ejercicios** | ≥80% completa 3/4 ejercicios | _[Completar post-taller]_ |
+| **Completación ejercicios** | ≥80% completa 4/5 ejercicios | _[Completar post-taller]_ |
 | **Recomendación**           | ≥70% recomendaría            | _[Completar post-taller]_ |
 
 ### Análisis de Mejora
 
 **¿Qué funcionó bien?**
 
--   [Completar post-taller]
+- [Completar post-taller]
 
 **¿Qué mejorar?**
 
--   [Completar post-taller]
+- [Completar post-taller]
 
 **Cambios para próxima edición**:
 
--   [Completar post-taller]
+- [Completar post-taller]
 
 ---
 
@@ -374,9 +374,9 @@ Write-Host "Certificado generado para $Nombre" -ForegroundColor Green
 
 > "Gracias especiales a:
 >
-> -   **Anthropic** por crear la especificación MCP
-> -   **Microsoft** por el SDK .NET y Azure
-> -   **Data Saturday Madrid** por la oportunidad de compartir
-> -   **Y a VOSOTROS** por vuestro tiempo, energía, y pasión por aprender
+> - **Anthropic** por crear la especificación MCP
+> - **Microsoft** por el SDK .NET y Azure
+> - **Data Saturday Madrid** por la oportunidad de compartir
+> - **Y a VOSOTROS** por vuestro tiempo, energía, y pasión por aprender
 >
 > ¡Nos vemos en la próxima!"

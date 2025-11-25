@@ -4,10 +4,10 @@
 
 ### Requisitos del Sistema
 
--   **SDK .NET**: 10.0 o superior
--   **IDE**: Visual Studio 2022 o VS Code con C# Dev Kit
--   **PowerShell**: 7.0 o superior
--   **Git**: Para clonar el repositorio
+- **SDK .NET**: 10.0 o superior
+- **IDE**: Visual Studio 2022 o VS Code con C# Dev Kit
+- **PowerShell**: 7.0 o superior
+- **Git**: Para clonar el repositorio
 
 ### Instalación
 
@@ -169,6 +169,32 @@ Invoke-RestMethod -Uri "http://localhost:5003/tools/call" -Method POST `
     -ContentType "application/json"
 ```
 
+### Ejercicio 5: Agente de IA con Microsoft Agent Framework
+
+**Objetivo**: Crear un agente de IA que integra múltiples servidores MCP usando Microsoft Agent Framework.
+
+```powershell
+# 1. Instalar dependencias
+cd src\McpWorkshop.Servers\Exercise5AgentFramework
+dotnet restore
+
+# 2. Ejecutar agente
+dotnet run
+
+# 3. Verificar (en otra terminal)
+cd ..\..\..\
+.\scripts\verify-exercise5.ps1
+```
+
+**Prueba manual**:
+
+```powershell
+# Interactuar con el agente de IA
+Invoke-RestMethod -Uri "http://localhost:5004/agent/query" -Method POST `
+    -Body '{"query":"Analiza las ventas del último trimestre y sugiere acciones"}' `
+    -ContentType "application/json"
+```
+
 ---
 
 ## Referencia Rápida
@@ -195,10 +221,11 @@ Get-Process dotnet | Stop-Process -Force
 
 | Servidor                   | Puerto |
 | -------------------------- | ------ |
-| Exercise1StaticResources   | 5000   |
-| Exercise2ParametricQuery   | 5001   |
-| Exercise3SecureServer      | 5002   |
-| Exercise4VirtualAnalyst    | 5003   |
+| Exercise1Server            | 5000   |
+| Exercise2Server            | 5001   |
+| Exercise3Server            | 5002   |
+| Exercise4Server            | 5003   |
+| Exercise5Agent             | 5004   |
 | SqlMcpServer (backend)     | 5010   |
 | CosmosMcpServer (backend)  | 5011   |
 | RestApiMcpServer (backend) | 5012   |
@@ -209,12 +236,12 @@ Get-Process dotnet | Stop-Process -Force
 
 ```json
 {
-    "jsonrpc": "2.0",
-    "method": "resources/list | resources/read | tools/list | tools/call",
-    "params": {
-        /* parámetros específicos del método */
-    },
-    "id": 1
+  "jsonrpc": "2.0",
+  "method": "resources/list | resources/read | tools/list | tools/call",
+  "params": {
+    /* parámetros específicos del método */
+  },
+  "id": 1
 }
 ```
 
@@ -222,20 +249,20 @@ Get-Process dotnet | Stop-Process -Force
 
 ```json
 {
-    "jsonrpc": "2.0",
-    "result": {
-        /* datos de respuesta */
-    },
-    "id": 1
+  "jsonrpc": "2.0",
+  "result": {
+    /* datos de respuesta */
+  },
+  "id": 1
 }
 ```
 
 ### Métodos del Protocolo MCP
 
--   **resources/list**: Obtener recursos disponibles
--   **resources/read**: Leer contenido de un recurso
--   **tools/list**: Obtener herramientas disponibles
--   **tools/call**: Ejecutar una herramienta con argumentos
+- **resources/list**: Obtener recursos disponibles
+- **resources/read**: Leer contenido de un recurso
+- **tools/list**: Obtener herramientas disponibles
+- **tools/call**: Ejecutar una herramienta con argumentos
 
 ---
 
@@ -255,9 +282,9 @@ taskkill /PID <PID> /F
 
 Asegúrate de que los 3 servidores backend están ejecutándose:
 
--   SqlMcpServer (5010)
--   CosmosMcpServer (5011)
--   RestApiMcpServer (5012)
+- SqlMcpServer (5010)
+- CosmosMcpServer (5011)
+- RestApiMcpServer (5012)
 
 ### Errores de Compilación
 
@@ -278,11 +305,11 @@ dotnet build
 
 ## Ayuda y Documentación
 
--   **Documentación Completa**: [docs/README.md](docs/README.md)
--   **Agenda**: [docs/AGENDA.md](docs/AGENDA.md)
--   **Referencia Rápida**: [docs/QUICK_REFERENCE.md](docs/QUICK_REFERENCE.md)
--   **Solución de Problemas**: [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)
--   **Guía del Instructor**: [docs/INSTRUCTOR_HANDBOOK.md](docs/INSTRUCTOR_HANDBOOK.md)
+- **Documentación Completa**: [docs/README.md](docs/README.md)
+- **Agenda**: [docs/AGENDA.md](docs/AGENDA.md)
+- **Referencia Rápida**: [docs/QUICK_REFERENCE.md](docs/QUICK_REFERENCE.md)
+- **Solución de Problemas**: [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)
+- **Guía del Instructor**: [docs/INSTRUCTOR_HANDBOOK.md](docs/INSTRUCTOR_HANDBOOK.md)
 
 ---
 
@@ -290,17 +317,17 @@ dotnet build
 
 ### Continuar Aprendiendo
 
--   Explora el despliegue en Azure: [docs/AZURE_DEPLOYMENT.md](docs/AZURE_DEPLOYMENT.md)
--   Revisa las notas del instructor para obtener conocimientos más profundos
--   Experimenta con herramientas y recursos personalizados
--   Únete a las discusiones de la comunidad MCP
+- Explora el despliegue en Azure: [docs/AZURE_DEPLOYMENT.md](docs/AZURE_DEPLOYMENT.md)
+- Revisa las notas del instructor para obtener conocimientos más profundos
+- Experimenta con herramientas y recursos personalizados
+- Únete a las discusiones de la comunidad MCP
 
 ### Comparte tu Opinión
 
--   Reporta problemas: GitHub Issues
--   Sugiere mejoras: Pull Requests
--   Comparte tus servidores MCP: Escaparate de la comunidad
+- Reporta problemas: GitHub Issues
+- Sugiere mejoras: Pull Requests
+- Comparte tus servidores MCP: Escaparate de la comunidad
 
 ---
 
-**¡Feliz Aprendizaje! 🎓🚀**
+## **¡Feliz Aprendizaje! 🎓**
