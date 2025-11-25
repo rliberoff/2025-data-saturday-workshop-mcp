@@ -376,7 +376,7 @@ Invoke-WebRequest -Uri "http://localhost:5001" -Method GET
 ```json
 {
     "status": "healthy",
-    "server": "Exercise1StaticResources",
+    "server": "Exercise1Server",
     "version": "1.0.0",
     "timestamp": "2024-11-22T10:30:00Z"
 }
