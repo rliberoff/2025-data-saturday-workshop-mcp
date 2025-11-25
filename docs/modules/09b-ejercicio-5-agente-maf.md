@@ -463,6 +463,8 @@ var config = new ConfigurationBuilder()
 
 var endpoint = config["AzureOpenAI:Endpoint"]
     ?? throw new InvalidOperationException("AzureOpenAI:Endpoint no configurado");
+var apiKey = config["AzureOpenAI:ApiKey"]
+    ?? throw new InvalidOperationException("AzureOpenAI:ApiKey no configurado");    
 var deploymentName = config["AzureOpenAI:DeploymentName"] ?? "gpt-4o";
 var agentName = config["Agent:Name"] ?? "Asistente de Ventas";
 var instructions = config["Agent:Instructions"]
@@ -532,7 +534,7 @@ Console.WriteLine("🧠 Creando agente con Azure OpenAI...\n");
 
 AIAgent agent = new AzureOpenAIClient(
     new Uri(endpoint),
-    new DefaultAzureCredential()) // O usa new AzureCliCredential() para desarrollo local
+    new System.ClientModel.ApiKeyCredential(apiKey))
     .GetChatClient(deploymentName)
     .CreateAIAgent(
         instructions: instructions,
