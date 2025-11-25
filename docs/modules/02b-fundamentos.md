@@ -406,6 +406,7 @@ Authorization: Bearer <token>
 
 | Cliente            | Tipo                 | Uso Principal                         |
 | ------------------ | -------------------- | ------------------------------------- |
+| **Visual Studio Code** | Editor de código           | Conexión usando GitHub Copilot  |
 | **Claude Desktop** | App nativa           | Asistente personal con datos locales  |
 | **Cursor IDE**     | Editor de código     | Copilot con contexto del proyecto     |
 | **Continue.dev**   | VS Code Extension    | Autocomplete con contexto empresarial |

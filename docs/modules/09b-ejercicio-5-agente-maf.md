@@ -463,6 +463,8 @@ var config = new ConfigurationBuilder()
 
 var endpoint = config["AzureOpenAI:Endpoint"]
     ?? throw new InvalidOperationException("AzureOpenAI:Endpoint no configurado");
+var apiKey = config["AzureOpenAI:ApiKey"]
+    ?? throw new InvalidOperationException("AzureOpenAI:ApiKey no configurado");    
 var deploymentName = config["AzureOpenAI:DeploymentName"] ?? "gpt-4o";
 var agentName = config["Agent:Name"] ?? "Asistente de Ventas";
 var instructions = config["Agent:Instructions"]
@@ -532,7 +534,7 @@ Console.WriteLine("🧠 Creando agente con Azure OpenAI...\n");
 
 AIAgent agent = new AzureOpenAIClient(
     new Uri(endpoint),
-    new DefaultAzureCredential()) // O usa new AzureCliCredential() para desarrollo local
+    new System.ClientModel.ApiKeyCredential(apiKey))
     .GetChatClient(deploymentName)
     .CreateAIAgent(
         instructions: instructions,
@@ -780,30 +782,18 @@ Console.WriteLine();
 Guarda las conversaciones en un archivo:
 
 ```csharp
-var conversationLog = new List<(string role, string message, DateTime timestamp)>();
+var conversationLog = new List<object>();
 
 // Después de cada interacción
-conversationLog.Add(("user", userInput, DateTime.UtcNow));
-conversationLog.Add(("agent", response, DateTime.UtcNow));
+conversationLog.Add(new { role = "user", message = userInput, timestamp = DateTime.UtcNow });
+conversationLog.Add(new { role = "agent", message = response, timestamp = DateTime.UtcNow });
 
 // Al salir
 File.WriteAllText("conversation_log.json",
     JsonSerializer.Serialize(conversationLog, new JsonSerializerOptions { WriteIndented = true }));
 ```
 
-### Extensión 3: Agregar Modo de Debug
-
-Muestra qué herramientas se están llamando:
-
-```csharp
-agent.OnToolCall += (sender, tool) =>
-{
-    Console.WriteLine($"\n🔧 [DEBUG] Llamando herramienta: {tool.Name}");
-    Console.WriteLine($"   Parámetros: {JsonSerializer.Serialize(tool.Arguments)}");
-};
-```
-
-### Extensión 4: Agregar Comandos Especiales
+### Extensión 3: Agregar Comandos Especiales
 
 ```csharp
 if (userInput.StartsWith("/"))
@@ -818,8 +808,8 @@ if (userInput.StartsWith("/"))
             continue;
 
         case "/tools":
-            Console.WriteLine($"\n📋 Herramientas disponibles ({allMcpTools.Count}):");
-            foreach (var tool in allMcpTools)
+            Console.WriteLine($"\n📋 Herramientas disponibles ({allAITools.Count}):");
+            foreach (var tool in allAITools)
             {
                 Console.WriteLine($"   - {tool.Name}: {tool.Description}");
             }

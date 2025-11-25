@@ -1,0 +1,83 @@
+# Verificar Health Check
+GET http://localhost:5001
+###
+
+# Test 1: Initialize (Todos lo ejecutan)
+POST http://localhost:5001/mcp
+Content-Type: application/json
+
+{
+    "jsonrpc": "2.0",
+    "method": "initialize",
+    "params": {
+        "protocolVersion": "2024-11-05",
+        "capabilities": {},
+        "clientInfo": { "name": "WorkshopClient", "version": "1.0.0" }
+    },
+    "id": "init-001"
+}
+
+###
+
+# Test 2: Resources/List
+POST http://localhost:5001/mcp
+Content-Type: application/json
+
+{
+    "jsonrpc": "2.0",
+    "method": "resources/list",
+    "params": {},
+    "id": "list-001"
+}
+
+###
+
+# Test 3: Resources/Read (Customers)
+POST http://localhost:5001/mcp
+Content-Type: application/json
+
+{
+    "jsonrpc": "2.0",
+    "method": "resources/read",
+    "params": { "uri": "mcp://customers" },
+    "id": "read-001"
+}
+
+###
+
+# Test 4: Resources/Read (Products)
+POST http://localhost:5001/mcp
+Content-Type: application/json
+
+{
+    "jsonrpc": "2.0",
+    "method": "resources/read",
+    "params": { "uri": "mcp://products" },
+    "id": "read-002"
+}
+
+###
+
+# Extensión 1: Resources/Read (Orders)
+POST http://localhost:5001/mcp
+Content-Type: application/json
+
+{
+    "jsonrpc": "2.0",
+    "method": "resources/read",
+    "params": { "uri": "mcp://orders" },
+    "id": "read-003"
+}
+
+###
+
+# Extensión 2: Resources/Read (Products by country)
+POST http://localhost:5001/mcp
+Content-Type: application/json
+
+{
+    "jsonrpc": "2.0",
+    "method": "resources/read",
+    "params": { "uri": "mcp://products", "country": "US" },
+    "id": "read-002"
+}
