@@ -1,11 +1,13 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
+
 using CosmosMcpServer.Models;
 using CosmosMcpServer.Tools;
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -22,10 +24,10 @@ app.MapGet("/", () => Results.Ok(new
     status = "healthy",
     server = "CosmosMcpServer",
     version = "1.0.0",
-    timestamp = DateTime.UtcNow
+    timestamp = DateTime.UtcNow,
 }));
 
-app.MapPost("/mcp", async (HttpContext context) =>
+app.MapPost("/mcp", async context =>
 {
     using var reader = new StreamReader(context.Request.Body);
     var requestBody = await reader.ReadToEndAsync();
@@ -45,9 +47,9 @@ app.MapPost("/mcp", async (HttpContext context) =>
             error = new
             {
                 code = -32600,
-                message = "Invalid Request: missing 'method' field"
+                message = "Invalid Request: missing 'method' field",
             },
-            id = request.TryGetProperty("id", out var idProp) ? idProp : (object?)null
+            id = request.TryGetProperty("id", out var idProp) ? idProp : (object?)null,
         });
         return;
     }
@@ -68,14 +70,14 @@ app.MapPost("/mcp", async (HttpContext context) =>
                     capabilities = new Dictionary<string, object>
                     {
                         ["resources"] = new { },
-                        ["tools"] = new { }
+                        ["tools"] = new { },
                     },
                     serverInfo = new
                     {
                         name = "CosmosMcpServer",
                         version = "1.0.0",
-                        description = "Servidor MCP para analítica de comportamiento (Cosmos)"
-                    }
+                        description = "Servidor MCP para analítica de comportamiento (Cosmos)",
+                    },
                 };
                 break;
 
@@ -89,23 +91,23 @@ app.MapPost("/mcp", async (HttpContext context) =>
                             uri = "cosmos://analytics/user-sessions",
                             name = "User Sessions",
                             description = "Sesiones de usuario con métricas de navegación",
-                            mimeType = "application/json"
+                            mimeType = "application/json",
                         },
                         new
                         {
                             uri = "cosmos://analytics/cart-events",
                             name = "Cart Events",
                             description = "Eventos del carrito de compras",
-                            mimeType = "application/json"
+                            mimeType = "application/json",
                         },
                         new
                         {
                             uri = "cosmos://analytics/abandoned-carts",
                             name = "Abandoned Carts",
                             description = "Carritos abandonados con detalles de productos y valores",
-                            mimeType = "application/json"
-                        }
-                    }
+                            mimeType = "application/json",
+                        },
+                    },
                 };
                 break;
 
@@ -120,7 +122,7 @@ app.MapPost("/mcp", async (HttpContext context) =>
                     {
                         GetAbandonedCartsTool.GetDefinition(),
                         AnalyzeUserBehaviorTool.GetDefinition()
-                    }
+                    },
                 };
                 break;
 
@@ -137,7 +139,7 @@ app.MapPost("/mcp", async (HttpContext context) =>
         {
             jsonrpc = "2.0",
             result,
-            id
+            id,
         }));
     }
     catch (Exception ex)
@@ -147,7 +149,7 @@ app.MapPost("/mcp", async (HttpContext context) =>
         {
             jsonrpc = "2.0",
             error = new { code = -32603, message = $"Internal error: {ex.Message}" },
-            id
+            id,
         }));
     }
 });
@@ -178,7 +180,7 @@ object HandleResourceRead(JsonElement request)
         "cosmos://analytics/user-sessions" => JsonSerializer.Serialize(sessions),
         "cosmos://analytics/cart-events" => JsonSerializer.Serialize(cartEvents),
         "cosmos://analytics/abandoned-carts" => JsonSerializer.Serialize(abandonedCarts),
-        _ => throw new ArgumentException($"Unknown resource URI: {uri}")
+        _ => throw new ArgumentException($"Unknown resource URI: {uri}"),
     };
 
     return new
@@ -189,9 +191,9 @@ object HandleResourceRead(JsonElement request)
             {
                 uri,
                 mimeType = "application/json",
-                text = data
+                text = data,
             }
-        }
+        },
     };
 }
 
@@ -215,7 +217,7 @@ object HandleToolCall(JsonElement request)
     {
         "get_abandoned_carts" => GetAbandonedCartsTool.Execute(arguments, abandonedCarts),
         "analyze_user_behavior" => AnalyzeUserBehaviorTool.Execute(arguments, sessions, cartEvents),
-        _ => throw new InvalidOperationException($"Unknown tool: {toolName}")
+        _ => throw new InvalidOperationException($"Unknown tool: {toolName}"),
     };
 
     // Envolver el resultado en el formato MCP correcto
@@ -226,8 +228,8 @@ object HandleToolCall(JsonElement request)
             new
             {
                 type = "text",
-                text = JsonSerializer.Serialize(toolResult)
-            }
-        }
+                text = JsonSerializer.Serialize(toolResult),
+            },
+        },
     };
 }

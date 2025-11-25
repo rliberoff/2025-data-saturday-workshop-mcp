@@ -1,13 +1,21 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+
 using CosmosMcpServer.Models;
 
 namespace CosmosMcpServer.Tools;
 
-public class AnalyzeUserBehaviorTool
+/// <summary>
+/// MCP tool for analyzing user behavior patterns and metrics.
+/// </summary>
+public static class AnalyzeUserBehaviorTool
 {
+    /// <summary>
+    /// Gets the tool definition for MCP protocol.
+    /// </summary>
+    /// <returns>An object containing the tool definition with name, description, and input schema.</returns>
     public static object GetDefinition()
     {
         return new
@@ -32,15 +40,25 @@ public class AnalyzeUserBehaviorTool
                         ["default"] = "sessions"
                     }
                 },
-                ["required"] = new[] { "userId" }
-            }
+                ["required"] = new[] { "userId" },
+            },
         };
     }
 
+    /// <summary>
+    /// Executes the user behavior analysis for a specified user.
+    /// </summary>
+    /// <param name="arguments">Dictionary containing userId and optional metricType parameters.</param>
+    /// <param name="sessions">Array of user sessions to analyze.</param>
+    /// <param name="cartEvents">Array of cart events to analyze.</param>
+    /// <returns>An object containing the user behavior analysis and metrics.</returns>
+    /// <exception cref="ArgumentException">Thrown when the userId parameter is missing.</exception>
     public static object Execute(Dictionary<string, JsonElement> arguments, UserSession[] sessions, CartEvent[] cartEvents)
     {
         if (!arguments.ContainsKey("userId"))
+        {
             throw new ArgumentException("El parámetro 'userId' es requerido");
+        }
 
         var userId = arguments["userId"].GetString() ?? string.Empty;
         var metricType = arguments.ContainsKey("metricType") && arguments["metricType"].ValueKind == JsonValueKind.String
@@ -70,7 +88,7 @@ public class AnalyzeUserBehaviorTool
                        $"Duración promedio sesión: {avgSessionDuration:F1} minutos\n" +
                        $"Items agregados al carrito: {addToCartCount}\n" +
                        $"Ha realizado checkout: {(hasCheckout ? "Sí" : "No")}\n\n" +
-                       $"Métrica solicitada: {metricType}"
+                       $"Métrica solicitada: {metricType}",
         };
 
         object resourceContent = new Dictionary<string, object>
@@ -90,17 +108,17 @@ public class AnalyzeUserBehaviorTool
                         totalActions,
                         avgSessionDuration,
                         addToCartCount,
-                        hasCheckout
+                        hasCheckout,
                     },
                     sessions = userSessions,
-                    cartEvents = userCartEvents
+                    cartEvents = userCartEvents,
                 })
-            }
+            },
         };
 
         var result = new Dictionary<string, object>
         {
-            ["content"] = new[] { textContent, resourceContent }
+            ["content"] = new[] { textContent, resourceContent },
         };
 
         // Trace: log result
