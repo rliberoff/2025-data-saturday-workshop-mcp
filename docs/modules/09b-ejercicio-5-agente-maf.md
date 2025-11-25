@@ -808,8 +808,8 @@ if (userInput.StartsWith("/"))
             continue;
 
         case "/tools":
-            Console.WriteLine($"\n📋 Herramientas disponibles ({allMcpTools.Count}):");
-            foreach (var tool in allMcpTools)
+            Console.WriteLine($"\n📋 Herramientas disponibles ({allAITools.Count}):");
+            foreach (var tool in allAITools)
             {
                 Console.WriteLine($"   - {tool.Name}: {tool.Description}");
             }
