@@ -22,7 +22,6 @@ Content-Type: application/json
 
 ###
 
-# TODO
 # Prueba 4: Estado de pedido (Patrón secuencial)
 POST http://localhost:5004/query
 Content-Type: application/json
