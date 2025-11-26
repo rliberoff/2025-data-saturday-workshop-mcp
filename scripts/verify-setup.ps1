@@ -6,7 +6,7 @@
     Este script valida:
     - .NET 10.0 SDK instalado
     - PowerShell 7+ instalado
-    - Puertos 5000-5003 disponibles
+    - Puertos 5001-5004, y 5010-5012 disponibles
     - Paquetes NuGet necesarios disponibles
     - Azure CLI instalado
     - Terraform instalado
@@ -110,7 +110,7 @@ catch {
 }
 
 # Verificar puertos disponibles
-$portsToCheck = 5000..5003
+$portsToCheck = 5001..5004 + 5010..5012
 $portsAvailable = $true
 $busyPorts = @()
 
@@ -128,7 +128,7 @@ foreach ($port in $portsToCheck) {
 }
 
 if ($portsAvailable) {
-    Add-Check -Name "Puertos TCP" -Status "PASS" -Message "Puertos 5000-5003 disponibles"
+    Add-Check -Name "Puertos TCP" -Status "PASS" -Message "Puertos 5001-5004 y 5010-5012 disponibles"
 }
 else {
     $busyList = $busyPorts -join ", "

@@ -23,13 +23,13 @@
 
 ### Checklist Pre-Live Coding
 
--   [ ] Terminal PowerShell abierta y visible (fuente 16-18pt)
--   [ ] Visual Studio Code con solución `McpWorkshop.sln` cargada
--   [ ] Ejecutar `.\scripts\create-sample-data.ps1` para generar datos de ejemplo
--   [ ] Verificar que los archivos JSON fueron creados en `data/` (customers.json, products.json, etc.)
--   [ ] Segunda terminal preparada para pruebas (split screen)
--   [ ] Snippets de código preparados (por si hay problemas de tipeo)
--   [ ] Backup: Carpeta `DemoServer-backup/` con código completo
+- [ ] Terminal PowerShell abierta y visible (fuente 16-18pt)
+- [ ] Visual Studio Code con solución `McpWorkshop.sln` cargada
+- [ ] Ejecutar `.\scripts\create-sample-data.ps1` para generar datos de ejemplo
+- [ ] Verificar que los archivos JSON fueron creados en `data/` (customers.json, products.json, etc.)
+- [ ] Segunda terminal preparada para pruebas (split screen)
+- [ ] Snippets de código preparados (por si hay problemas de tipeo)
+- [ ] Backup: Carpeta `DemoServer-backup/` con código completo
 
 **CRÍTICO**: Ten el código completo en un snippet accesible. Si hay problemas técnicos, pega y explica.
 
@@ -360,14 +360,14 @@ dotnet run
 
 ```
 info: Microsoft.Hosting.Lifetime[14]
-      Now listening on: http://localhost:5000
+      Now listening on: http://localhost:5001
 info: Microsoft.Hosting.Lifetime[0]
       Application started. Press Ctrl+C to shut down.
 ```
 
 **Narración**:
 
-> "¡El servidor está corriendo! Puerto 5000. Ahora vamos a probarlo."
+> "¡El servidor está corriendo! Puerto 5001. Ahora vamos a probarlo."
 
 **Abrir segunda terminal** (split screen) para pruebas.
 
@@ -391,7 +391,7 @@ $body = @{
     id = "init-001"
 } | ConvertTo-Json -Depth 10
 
-Invoke-RestMethod -Uri "http://localhost:5000/mcp" -Method POST -Body $body -ContentType "application/json"
+Invoke-RestMethod -Uri "http://localhost:5001/mcp" -Method POST -Body $body -ContentType "application/json"
 ```
 
 **Mostrar resultado en pantalla** (JSON formateado).
@@ -410,7 +410,7 @@ $body = @{
     id = "list-001"
 } | ConvertTo-Json
 
-Invoke-RestMethod -Uri "http://localhost:5000/mcp" -Method POST -Body $body -ContentType "application/json"
+Invoke-RestMethod -Uri "http://localhost:5001/mcp" -Method POST -Body $body -ContentType "application/json"
 ```
 
 **Narración**:
@@ -427,7 +427,7 @@ $body = @{
     id = "read-001"
 } | ConvertTo-Json
 
-Invoke-RestMethod -Uri "http://localhost:5000/mcp" -Method POST -Body $body -ContentType "application/json"
+Invoke-RestMethod -Uri "http://localhost:5001/mcp" -Method POST -Body $body -ContentType "application/json"
 ```
 
 **Resultado**: JSON con array de clientes.
@@ -464,16 +464,16 @@ dotnet run
 **Alternativa**: Usa `curl` (si está instalado):
 
 ```bash
-curl -X POST http://localhost:5000/mcp \
+curl -X POST http://localhost:5001/mcp \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"initialize","params":{},"id":"init"}'
 ```
 
-### Si el Puerto 5000 Está Ocupado
+### Si el Puerto 5001 Está Ocupado
 
 ```csharp
 // Cambiar en Program.cs
-app.Run("http://localhost:5001");
+await app.RunAsync("http://localhost:5005");
 ```
 
 **Re-ejecutar**: `dotnet run`
@@ -486,27 +486,27 @@ Al finalizar, deberías observar:
 
 ✅ **Servidor funcional**:
 
--   Compiló sin errores
--   Responde en http://localhost:5000
--   Logs estructurados visibles
+- Compiló sin errores
+- Responde en http://localhost:5001
+- Logs estructurados visibles
 
 ✅ **3 tests exitosos**:
 
--   Initialize devolvió serverInfo
--   Resources/list mostró `mcp://customers`
--   Resources/read devolvió JSON de clientes
+- Initialize devolvió serverInfo
+- Resources/list mostró `mcp://customers`
+- Resources/read devolvió JSON de clientes
 
 ✅ **Comprensión de audiencia**:
 
--   Entienden el flujo initialize → list → read
--   Ven la conexión entre código C# y JSON-RPC
--   Están listos para crear su propio servidor
+- Entienden el flujo initialize → list → read
+- Ven la conexión entre código C# y JSON-RPC
+- Están listos para crear su propio servidor
 
 ❌ **Señales de alarma**:
 
--   Errores de compilación no resueltos en 2 minutos → usar backup
--   Más de 3 preguntas sobre sintaxis C# → demasiado bajo nivel
--   Confusión sobre qué es cliente vs servidor → repetir en Ejercicio 1
+- Errores de compilación no resueltos en 2 minutos → usar backup
+- Más de 3 preguntas sobre sintaxis C# → demasiado bajo nivel
+- Confusión sobre qué es cliente vs servidor → repetir en Ejercicio 1
 
 ---
 
@@ -520,9 +520,9 @@ Al finalizar, deberías observar:
 
 **Acción física**:
 
--   Detener el servidor (Ctrl+C)
--   Proyectar las instrucciones del Ejercicio 1
--   Iniciar cronómetro visible (15 minutos)
+- Detener el servidor (Ctrl+C)
+- Proyectar las instrucciones del Ejercicio 1
+- Iniciar cronómetro visible (15 minutos)
 
 ---
 
@@ -530,10 +530,10 @@ Al finalizar, deberías observar:
 
 **Para mejorar en próximos talleres**:
 
--   ¿Cuánto tiempo real tomó? \***\*\_\_\*\***
--   ¿Qué error inesperado surgió? \***\*\_\_\*\***
--   ¿Qué analogía funcionó mejor? \***\*\_\_\*\***
--   ¿La audiencia pudo seguir el ritmo? \***\*\_\_\*\***
+- ¿Cuánto tiempo real tomó? \***\*\_\_\*\***
+- ¿Qué error inesperado surgió? \***\*\_\_\*\***
+- ¿Qué analogía funcionó mejor? \***\*\_\_\*\***
+- ¿La audiencia pudo seguir el ritmo? \***\*\_\_\*\***
 
 ---
 

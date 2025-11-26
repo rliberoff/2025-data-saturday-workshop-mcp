@@ -263,10 +263,18 @@ cd mcp-workshop
 .\scripts\verify-setup.ps1
 
 # Salida esperada:
-# ✓ .NET SDK 10.0.x detectado
-# ✓ PowerShell 7.x detectado
-# ✓ Puertos 5000-5004 disponibles
-# ✓ Todos los paquetes NuGet restaurados
+# ✓ [REQUERIDO] .NET SDK - Versión correcta instalada
+# ✓ [REQUERIDO] PowerShell - PowerShell 7+ instalado
+# ✓ [REQUERIDO] Puertos TCP - Puertos 5001-5004 y 5010-5012 disponibles
+# ✓ [REQUERIDO] NuGet Sources - NuGet.org configurado correctamente
+# ✓ [REQUERIDO] Azure CLI - Azure CLI 2.80.0+ instalado
+# ✓ [REQUERIDO] Git - Git instalado
+
+# ========================================
+# Estado general: PASS
+# ========================================
+
+# ✅ El entorno está listo para el taller MCP
 ```
 
 ### 2. Ejecutar el Primer Ejemplo
@@ -287,6 +295,7 @@ $body = @{
     id = 1
 } | ConvertTo-Json
 
+```powershell
 Invoke-RestMethod -Uri http://localhost:5000 -Method Post -Body $body -ContentType "application/json"
 ```
 
@@ -393,11 +402,11 @@ Más casos en [Roadmap & Casos B2B](./modules/09-roadmap-casos-b2b.md)
 
 ### Problemas Comunes
 
-**Error: "Port 5000 already in use"**
+**Error: "Port 5001 already in use"**
 
 ```powershell
 # Cambiar puerto en appsettings.json o usar variable de entorno
-$env:ASPNETCORE_URLS="http://localhost:5001"
+$env:ASPNETCORE_URLS="http://localhost:5005"
 dotnet run
 ```
 

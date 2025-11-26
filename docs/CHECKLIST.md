@@ -331,11 +331,8 @@ Checklist de validación completa para instructores. Ejecutar 24 horas antes del
 # Ejecutar este script 15 minutos antes del inicio:
 .\scripts\verify-setup.ps1 -Verbose
 
-# Iniciar todos los servidores de Exercise 4 (para demo final):
-.\scripts\start-exercise4-servers.ps1
-
 # Verificar health de cada servidor:
-@(5000,5001,5002,5003,5004) | ForEach-Object {
+@(5000,5001,5002,5003,5010,5011,5012) | ForEach-Object {
     try {
         Invoke-RestMethod "http://localhost:$_/health"
         Write-Host "✅ Server on port $_ is healthy" -ForegroundColor Green
@@ -368,16 +365,6 @@ Al finalizar esta checklist, debes poder responder **SÍ** a:
 5. ¿Tienes al menos 2 planes B para cada categoría crítica?
 
 **Si alguna respuesta es NO**: Resolver antes de iniciar el workshop.
-
----
-
-## 📞 Contactos de Emergencia
-
-Anotar aquí:
-
-- **Soporte técnico del venue**: **\*\*\*\***\_\_\_**\*\*\*\***
-- **Coordinador del evento**: **\*\*\*\***\_\_\_**\*\*\*\***
-- **Colega de respaldo** (para pair facilitation): **\*\*\*\***\_\_\_**\*\*\*\***
 
 ---
 

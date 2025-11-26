@@ -351,8 +351,8 @@ Usuario (español) → Orquestador → [SQL Server | Cosmos DB | REST API]
 | Ejercicio 4 - SQL          | 5010   | SqlMcpServer     |
 | Ejercicio 4 - Cosmos       | 5011   | CosmosMcpServer  |
 | Ejercicio 4 - REST         | 5012   | RestApiMcpServer |
-| Ejercicio 4 - Orquestador  | 5004   | Exercise4Server  |
-| Ejercicio 5 - Agente       | 5005   | Exercise5Agent   |
+| Ejercicio 4 - Orquestador  | 5003   | Exercise4Server  |
+| Ejercicio 5 - Agente       | N/A    | Exercise5Agent   |
 
 ## 📄 Licencia
 

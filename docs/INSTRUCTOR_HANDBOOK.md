@@ -1,20 +1,20 @@
-# MCP Workshop - Instructor Handbook
+# MCP Workshop - Manual del Instructor
 
 Guía completa para facilitar el taller de Model Context Protocol de 3 horas con máximo impacto pedagógico.
 
 ## 📋 Índice Rápido
 
-- [Preparación Pre-Workshop](#preparación-pre-workshop)
-- [Timing & Gestión del Reloj](#timing--gestión-del-reloj)
-- [Estrategias de Facilitación](#estrategias-de-facilitación)
-- [Manejo de Ejercicios](#manejo-de-ejercicios)
-- [Troubleshooting en Vivo](#troubleshooting-en-vivo)
-- [Engagement & Participación](#engagement--participación)
-- [Contingencias](#contingencias)
+- [Preparación Pre-Taller](#-preparación-pre-taller)
+- [Cronometraje y Gestión del Tiempo](#️-cronometraje-y-gestión-del-tiempo)
+- [Estrategias de Facilitación](#-estrategias-de-facilitación)
+- [Manejo de Ejercicios](#-manejo-de-ejercicios)
+- [Resolución de Problemas en Vivo](#-resolución-de-problemas-en-vivo)
+- [Participación y Compromiso](#-participación-y-compromiso)
+- [Contingencias](#-contingencias)
 
 ---
 
-## ⏱️ Timing & Gestión del Reloj
+## ⏱️ Cronometraje y Gestión del Tiempo
 
 ### Cronometraje Estricto (3h total, ±5 min)
 
@@ -42,11 +42,11 @@ Guía completa para facilitar el taller de Model Context Protocol de 3 horas con
 
 ---
 
-## 🎯 Preparación Pre-Workshop
+## 🎯 Preparación Pre-Taller
 
 ### 72 Horas Antes
 
-**Checklist Técnico**:
+**Lista de Verificación Técnica**:
 
 ```powershell
 # Ejecutar validación completa
@@ -88,7 +88,7 @@ Copy-Item -Recurse src\McpWorkshop.Servers backup\solutions
 - [ ] Imprimir 3-4 copias del cheat sheet (backup)
 - [ ] Cargar todos los servidores localmente (contingencia)
 
-### 2 Horas Antes (Día del Workshop)
+### 2 Horas Antes (Día del Taller)
 
 ```powershell
 # Setup técnico final
@@ -99,11 +99,8 @@ dotnet build -c Release
 # Generar datos de ejemplo frescos
 .\scripts\create-sample-data.ps1
 
-# Levantar todos los servidores de Exercise 4
-.\scripts\start-exercise4-servers.ps1
-
-# Validar puertos disponibles
-Test-NetConnection localhost -Port 5000,5001,5002,5003,5004
+# Validar puertos libres
+Test-NetConnection localhost -Port 5001,5002,5003,5004,5010,5011,5012
 ```
 
 - [ ] Abrir IDE con código de demostración cargado
@@ -123,13 +120,13 @@ Test-NetConnection localhost -Port 5000,5001,5002,5003,5004
 
 > "¡Buenos días! Soy [Nombre], y en las próximas 3 horas vamos a construir juntos 4 servidores MCP desde cero. Al final, tendrás un orquestador que puede responder preguntas como '¿Cuáles son mis top clientes?' coordinando SQL, Cosmos y APIs REST. ¿Quién aquí ya ha usado Claude o ChatGPT? [Show of hands] Perfecto. Pues hoy vamos a ver cómo conectar esos LLMs a TUS datos empresariales de forma segura y estandarizada."
 
-**Engagement Hooks**:
+**Estrategias de Participación**:
 
 - **Poll en vivo**: "¿Cuántos han integrado un LLM en producción?" (Slido/Mentimeter)
 - **Demo rápida** (30 seg): Mostrar Orquestador respondiendo pregunta en español
 - **Expectativas**: "Al final del día, cada uno tendrá código ejecutable y deployable en Azure"
 
-**Red Flags**:
+**Señales de Alerta**:
 
 - ❌ **Si más del 30% no tiene .NET 10**: Ofrecer pair programming durante ejercicios
 - ❌ **Si Wi-Fi es débil**: Activar plan B (repositorio local en USB)
@@ -144,13 +141,13 @@ Test-NetConnection localhost -Port 5000,5001,5002,5003,5004
 
 > "MCP es como USB-C para IA. Antes teníamos plugins específicos para cada app (Lightning para iPhone, microUSB para Android, propietarios para laptops). MCP es el estándar universal: un servidor, múltiples clientes (Claude, ChatGPT, tu agente custom)."
 
-**Chequeo de Comprensión** (min 15):
+**Verificación de Comprensión** (min 15):
 
 - **Pregunta al grupo**: "Si necesito conectar 5 LLMs a 10 fuentes de datos, ¿cuántas integraciones necesito?"
   - ❌ Sin MCP: 50 integraciones (5x10)
   - ✅ Con MCP: 10 servidores MCP + 5 clientes (15 integraciones)
 
-**Slides Críticas**:
+**Diapositivas Críticas**:
 
 1. Arquitectura MCP (diagrama cliente-servidor)
 2. Comparativa MCP vs REST API (tabla)
@@ -158,11 +155,11 @@ Test-NetConnection localhost -Port 5000,5001,5002,5003,5004
 
 **Tiempo de Preguntas** (min 22-25): Máximo 3 preguntas. Resto a parking lot.
 
-### Bloque 3: Anatomía de un Proveedor - Live Coding (20 min)
+### Bloque 3: Anatomía de un Proveedor - Codificación en Vivo (20 min)
 
-**Objetivo**: SC-009 - Live coding sin errores críticos.
+**Objetivo**: SC-009 - Codificación en vivo sin errores críticos.
 
-**Setup Previo**:
+**Configuración Previa**:
 
 ```powershell
 # Abrir proyecto limpio en IDE
@@ -175,7 +172,7 @@ cd DemoMcpServer
 dotnet add package ModelContextProtocol --prerelease
 ```
 
-**Guion de Live Coding** (paso a paso en [03b-anatomia-proveedor.md](./modules/03b-anatomia-proveedor.md)):
+**Guion de Codificación en Vivo** (paso a paso en [03b-anatomia-proveedor.md](./modules/03b-anatomia-proveedor.md)):
 
 1. **Min 0-5**: Crear proyecto + instalar NuGet
 2. **Min 5-10**: Implementar `initialize` endpoint
@@ -190,7 +187,7 @@ dotnet add package ModelContextProtocol --prerelease
 - ❌ **Error crítico desconocido**: Activar Plan B (video pre-grabado de 8 min en backup)
 
 **Contingencia - Plan B**:
-Si live coding falla críticamente (>3 min debugging):
+Si la codificación en vivo falla críticamente (>3 min depurando):
 
 1. Mostrar video pregrabado (8 min)
 2. Usar tiempo restante (12 min) para Q&A anticipado
@@ -209,23 +206,23 @@ Si live coding falla críticamente (>3 min debugging):
 | Exercise 3 | Semi-guiado   | Activa (security es crítico)       | Alta (JWT setup)         |
 | Exercise 4 | Grupos 3-5    | Moderada (rotar entre grupos)      | Media (validación final) |
 
-### Exercise 1: Static Resources (15 min guiado)
+### Ejercicio 1: Recursos Estáticos (15 min guiado)
 
 **Objetivo de Éxito**: SC-002 - 80% completan en 15 min.
 
-**Milestone Checkpoints**:
+**Puntos de Control**:
 
 - **Min 3**: "¿Todos tienen el proyecto compilando? Levantar mano si no."
 - **Min 7**: "¿Quién ya implementó `resources/list`? OK, los que falta: revisar línea 42 del template."
 - **Min 12**: "Último paso: probar con el script. Los que terminaron, ayuden a su vecino."
 
-**Troubleshooting Rápido**:
+**Resolución Rápida de Problemas**:
 
-| Error Común | Solución en 30 seg |
-|-------------|-------------------|
-| "Port 5000 in use" | `$env:ASPNETCORE_URLS="http://localhost:5001"` |
+| Error Común                | Solución en 30 seg                                 |
+| -------------------------- | -------------------------------------------------- |
+| "Port 5001 in use"         | `$env:ASPNETCORE_URLS="http://localhost:5005"`     |
 | "customers.json not found" | Verificar `Build Action: Content`, `Copy if newer` |
-| "Invalid JSON response" | Revisar encoding (debe ser UTF-8) |
+| "Invalid JSON response"    | Revisar encoding (debe ser UTF-8)                  |
 
 **Validación Final** (min 14-15):
 
@@ -236,7 +233,7 @@ Si live coding falla críticamente (>3 min debugging):
 # Salida esperada: ✅ 2/2 recursos, ✅ JSON válido, ✅ <500ms
 ```
 
-### Exercise 2: Parametric Query (20 min independiente)
+### Ejercicio 2: Consulta Paramétrica (20 min independiente)
 
 **Objetivo**: SC-003 - 70% completan en 20 min.
 
@@ -248,7 +245,7 @@ Si live coding falla críticamente (>3 min debugging):
 2. **Min 10-15**: Caminar entre mesas, observar pantallas (silent supervision)
 3. **Min 15-20**: Ofrecer hints si más del 40% está bloqueado
 
-**Hint Progresivo** (si están atascados en schema):
+**Pista Progresiva** (si están atascados en schema):
 
 > "El `inputSchema` es JSON Schema estándar. Busquen 'type', 'properties', 'required'. Tienen un ejemplo completo en la documentación del ejercicio, sección 3.2."
 
@@ -258,16 +255,16 @@ Si live coding falla críticamente (>3 min debugging):
 - Solo validar 1 tool: `search_customers`
 - Resto lo validan ellos en el break
 
-### Exercise 3: Security (20 min semi-guiado)
+### Ejercicio 3: Seguridad (20 min semi-guiado)
 
 **Objetivo**: 60% implementan seguridad completa.
 
-**Challenges Anticipados**:
+**Desafíos Anticipados**:
 
 - JWT signature validation (más complejo)
 - Rate limiting logic (conceptual)
 
-**Andamiaje Pedagógico**:
+**Estructura Pedagógica**:
 
 1. **Min 0-5**: Explicar JWT structure en pizarra (header.payload.signature)
 2. **Min 5-10**: Proveer tokens pre-generados (evitar debugging de generación)
@@ -275,7 +272,7 @@ Si live coding falla críticamente (>3 min debugging):
 4. **Min 15-18**: Probar con Postman (requests con/sin token)
 5. **Min 18-20**: Discutir rate limiting (pueden implementar en casa)
 
-**Tokens Pre-Generated** (distribuir en chat):
+**Tokens Pre-Generados** (distribuir en chat):
 
 ```text
 # Admin token (valid 1 hour)
@@ -300,7 +297,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWV3ZXIiLCJyb2xlIjoidmlld2VyIiw
   - 🧪 **Tester**: Valida con verify script
   - 📝 **Documenter**: Anota decisiones (para presentación)
 
-**Checkpoint de Progreso**:
+**Punto de Control de Progreso**:
 
 - **Min 8**: "¿Todos los grupos tienen los 3 servidores MCP corriendo?"
 - **Min 15**: "¿Quién ya logró una consulta simple (e.g., clientes de España)?"
@@ -311,7 +308,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWV3ZXIiLCJyb2xlIjoidmlld2VyIiw
 - **Min 18**: Ofrecer código de ejemplo simplificado
 - **Min 23**: Permitir demostrar funcionalidad parcial (e.g., solo SQL + Cosmos, sin REST)
 
-**Presentaciones Rápidas** (opcional, si tiempo permite):
+**Presentaciones Rápidas** (opcional, si el tiempo lo permite):
 
 - 1 min por grupo
 - Mostrar 1 query funcionando en vivo
@@ -319,9 +316,9 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWV3ZXIiLCJyb2xlIjoidmlld2VyIiw
 
 ---
 
-## 🔥 Troubleshooting en Vivo
+## 🔥 Resolución de Problemas en Vivo
 
-### Top 10 Problemas & Soluciones Instantáneas
+### Top 10 Problemas y Soluciones Instantáneas
 
 #### 1. "dotnet: command not found"
 
@@ -346,15 +343,15 @@ dotnet add package ModelContextProtocol --prerelease
 dotnet add package ModelContextProtocol --source https://api.nuget.org/v3/index.json --prerelease
 ```
 
-#### 3. "Port 5000-5004 already in use"
+#### 3. "Port 5001-5004, or 5010-5012 already in use"
 
 ```powershell
 # Solución 1: Cambiar puerto
-$env:ASPNETCORE_URLS="http://localhost:5010"
+$env:ASPNETCORE_URLS="http://localhost:5001"
 dotnet run
 
 # Solución 2: Matar proceso existente
-netstat -ano | findstr :5000
+netstat -ano | findstr :5001
 taskkill /PID <PID> /F
 ```
 
@@ -419,7 +416,7 @@ app.UseCors("AllowAll");
 ```powershell
 # Debugging paso a paso
 $body = @{ jsonrpc="2.0"; method="resources/list"; id=1 } | ConvertTo-Json
-Invoke-RestMethod -Uri http://localhost:5000 -Method Post -Body $body -ContentType "application/json" -Verbose
+Invoke-RestMethod -Uri http://localhost:5001 -Method Post -Body $body -ContentType "application/json" -Verbose
 ```
 
 #### 10. "Out of memory (Exercise 4 con 4 servidores)"
@@ -433,59 +430,59 @@ cd src/McpWorkshop.Servers/Exercise4VirtualAnalyst
 
 ---
 
-## 🎭 Engagement & Participación
+## 🎭 Participación y Compromiso
 
 ### Técnicas para Mantener Energía
 
 #### Inicio de Cada Bloque
 
-- **Hook de 30 seg**: Pregunta provocativa o dato impactante
+- **Gancho de 30 seg**: Pregunta provocativa o dato impactante
   - Bloque 2: "¿Sabían que el 73% de integraciones de IA fallan por falta de estandarización?"
   - Bloque 7: "LinkedIn reportó 400 intentos de acceso no autorizados por segundo en Q4 2024. Seguridad no es opcional."
 
-#### Puntos Medios (Evitar "Valley of Death")
+#### Puntos Medios (Evitar el "Valle de la Muerte")
 
 - **Min 90 (post-break)**: Quick poll - "¿Qué ejercicio ha sido más desafiante hasta ahora?"
 - **Min 120**: Stand-up stretch (30 seg) - "Todos de pie, respiren hondo, continuamos con orquestación."
 
 #### Técnicas Específicas
 
-**Think-Pair-Share** (para conceptos complejos):
+**Piensa-Comparte-Discute** (para conceptos complejos):
 
 1. **Think** (1 min): "¿Cuándo usarían parallel vs sequential integration?"
 2. **Pair** (2 min): Discutir con compañero
 3. **Share** (1 min): 2-3 grupos comparten con todos
 
-**Live Debugging Theater** (durante live coding):
+**Teatro de Depuración en Vivo** (durante codificación en vivo):
 
 > "OK, tengo este error [mostrar stack trace]. ¿Qué haríamos en producción? [Pausa dramática] Exacto: leer el mensaje de error completo. Dice 'NullReferenceException line 42'. Vamos allá."
 
-**Gamification Ligera**:
+**Gamificación Ligera**:
 
-- **Badge virtual**: Quien completa Exercise 4 primero: "🏆 MCP Master"
-- **Leaderboard de tests**: Mostrar cobertura de tests por ejercicio
+- **Insignia virtual**: Quien completa Ejercicio 4 primero: "🏆 MCP Master"
+- **Tabla de clasificación de tests**: Mostrar cobertura de tests por ejercicio
 - **Nota**: No debe generar presión negativa. Solo diversión.
 
 ### Manejo de Preguntas Difíciles
 
 **Categorías de Preguntas**:
 
-1. **Clarification** (respuesta corta: 30 seg)
+1. **Aclaración** (respuesta corta: 30 seg)
 
    > "¿El rate limiting es por usuario o por IP?"
    > **R**: "En Exercise 3 es por usuario (requiere JWT). En prod, considerarías ambos: IP para DoS, usuario para fair use. Ver Bloque 7 slide 14."
 
-2. **Deep Dive** (parking lot)
+2. **Profundización** (aparcar para después)
 
    > "¿Cómo implementarían distributed tracing con OpenTelemetry?"
    > **R**: "Excelente pregunta para después del workshop. Tengo recursos en Bloque 9, slide 18. Hablemos en el break."
 
-3. **Off-Topic** (redirigir amablemente)
+3. **Fuera de Tema** (redirigir amablemente)
 
    > "¿MCP funciona con GPT-4o?"
    > **R**: "Sí, MCP es agnóstico del modelo. Hay un link en la documentación. Sigamos con el ejercicio para llegar a tu caso de uso."
 
-4. **Challenge to Instructor** (validar y re-encuadrar)
+4. **Desafío al Instructor** (validar y re-encuadrar)
    > "¿No sería más fácil usar webhooks directos sin MCP?"
    > **R**: "Gran punto. Webhooks son válidos para 1-2 integraciones. MCP escala cuando tienes 5+ fuentes y múltiples consumidores. Veremos ROI en Bloque 10. ¿Cuántas integraciones gestionas actualmente?"
 
@@ -493,20 +490,20 @@ cd src/McpWorkshop.Servers/Exercise4VirtualAnalyst
 
 ## 🆘 Contingencias
 
-### Scenario A: Internet Cae
+### Escenario A: Internet Cae
 
 **Impacto**: No pueden descargar NuGet packages, acceder a GitHub.
 
 **Plan B**:
 
-1. **Pre-Workshop**: Crear `offline-packages.zip` con:
+1. **Pre-Taller**: Crear `offline-packages.zip` con:
 
    ```powershell
    # Empaquetar todos los NuGets localmente
    dotnet pack -o offline-packages
    ```
 
-2. **Durante Workshop**: Distribuir vía USB o carpeta compartida local
+2. **Durante el Taller**: Distribuir vía USB o carpeta compartida local
 
    ```powershell
    dotnet restore --source ./offline-packages
@@ -516,7 +513,7 @@ cd src/McpWorkshop.Servers/Exercise4VirtualAnalyst
 
 **Tiempo de Recuperación**: 5 min
 
-### Scenario B: Proyector Falla
+### Escenario B: Proyector Falla
 
 **Impacto**: No pueden ver live coding ni slides.
 
@@ -528,20 +525,20 @@ cd src/McpWorkshop.Servers/Exercise4VirtualAnalyst
 
 **Tiempo de Recuperación**: Continuar sin proyector (subóptimo pero viable)
 
-### Scenario C: Más del 50% No Completaron Exercise 1 en Tiempo
+### Escenario C: Más del 50% No Completaron Ejercicio 1 en Tiempo
 
 **Impacto**: Riesgo de colapso de agenda.
 
 **Plan C** (triage de contenido):
 
-1. **Skip Exercise 2 completo** (usar solo demostración)
-2. **Exercise 3**: Mostrar pre-implementado (no hacer en vivo)
-3. **Exercise 4**: Demo instructor solamente
+1. **Omitir Ejercicio 2 completo** (usar solo demostración)
+2. **Ejercicio 3**: Mostrar pre-implementado (no hacer en vivo)
+3. **Ejercicio 4**: Demo instructor solamente
 4. **Extender Q&A** (usar tiempo liberado para dudas)
 
-**Trade-off**: Pierden práctica, ganan conceptos teóricos sólidos.
+**Compensación**: Pierden práctica, ganan conceptos teóricos sólidos.
 
-### Scenario D: Asistente con Problema Bloqueante (3+ min)
+### Escenario D: Asistente con Problema Bloqueante (3+ min)
 
 **Impacto**: Retrasa a todo el grupo.
 
@@ -556,9 +553,9 @@ cd src/McpWorkshop.Servers/Exercise4VirtualAnalyst
 
 ---
 
-## 📋 Checklist de Inicio (Imprimir y Laminar)
+## 📋 Lista de Verificación de Inicio (Imprimir y Laminar)
 
-**30 min antes del workshop**:
+**30 min antes del taller**:
 
 - [ ] Laptop conectado y cargando
 - [ ] Proyector configurado (resolución, duplicar pantalla)
@@ -569,47 +566,47 @@ cd src/McpWorkshop.Servers/Exercise4VirtualAnalyst
   - [ ] GitHub repo
   - [ ] MCP spec
   - [ ] Slack/Discord de soporte
-  - [ ] Timer online (visible para asistentes)
+  - [ ] Temporizador online (visible para asistentes)
 - [ ] IDE configurado:
   - [ ] Font size 16+ (legible en proyector)
-  - [ ] Dark theme (menos fatiga visual)
-  - [ ] Snippets de código precargados
+  - [ ] Tema oscuro (menos fatiga visual)
+  - [ ] Fragmentos de código precargados
 - [ ] PowerShell/Terminal abierta con comandos listos
 - [ ] Postman con colección del workshop importada
-- [ ] USB backup con:
-  - [ ] Repo completo
+- [ ] USB de respaldo con:
+  - [ ] Repositorio completo
   - [ ] NuGet packages offline
-  - [ ] Video de live coding (contingencia)
+  - [ ] Video de codificación en vivo (contingencia)
 - [ ] Impresos:
-  - [ ] 5 copias de cheat sheet
-  - [ ] Esta checklist
+  - [ ] 5 copias de guía rápida
+  - [ ] Esta lista de verificación
   - [ ] Lista de asistentes (para networking)
 
-**Último chequeo (5 min antes)**:
+**Última verificación (5 min antes)**:
 
 ```powershell
 # Validación final
 .\scripts\verify-setup.ps1 -Verbose
 .\scripts\start-exercise4-servers.ps1
 Start-Sleep 5
-Invoke-RestMethod http://localhost:5000/health
+Invoke-RestMethod http://localhost:5001/health
 ```
 
 ---
 
 ## 🌟 Principios Clave de Facilitación
 
-1. **Start Strong, End Strong**: Primeros 10 min y últimos 10 min son críticos para impresión.
-2. **Safety First**: Crear ambiente donde errores son oportunidades de aprendizaje.
-3. **Progresive Disclosure**: No abrumar con detalles de implementación al inicio.
-4. **Active Learning > Passive Watching**: Ejercicios prácticos maximizan retención.
+1. **Inicio y Cierre Fuertes**: Primeros 10 min y últimos 10 min son críticos para la impresión.
+2. **Seguridad Primero**: Crear ambiente donde errores son oportunidades de aprendizaje.
+3. **Revelación Progresiva**: No abrumar con detalles de implementación al inicio.
+4. **Aprendizaje Activo > Observación Pasiva**: Ejercicios prácticos maximizan retención.
 5. **Adaptabilidad**: Leer la sala. Si están perdidos, ralentizar. Si dominan, acelerar.
-6. **Energy Management**: Instructor con energía alta contagia al grupo (hasta post-break).
-7. **Celebrate Small Wins**: Reconocer públicamente a quien completa cada ejercicio.
+6. **Gestión de Energía**: Instructor con energía alta contagia al grupo (hasta después del descanso).
+7. **Celebrar Pequeños Logros**: Reconocer públicamente a quien completa cada ejercicio.
 
 ---
 
-## 📞 Soporte Post-Workshop
+## 📞 Soporte Post-Taller
 
 Proveer a asistentes:
 
@@ -622,15 +619,15 @@ Proveer a asistentes:
 2. **Canal de comunicación**:
 
    - Discord/Slack para dudas (1 semana de soporte)
-   - Office hours virtuales (1h, 3 días después)
+   - Horas de oficina virtuales (1h, 3 días después)
 
 3. **Materiales extra**:
    - Certificado de asistencia (PDF)
-   - Badge para LinkedIn
+   - Insignia para LinkedIn
    - Casos de uso expandidos
 
 ---
 
-**¡Éxito en tu workshop!** 🚀
+**¡Éxito en tu taller!** 🚀
 
 Para más detalles, consultar [CHECKLIST.md](./CHECKLIST.md) y notas específicas de cada módulo en [modules/](./modules/).

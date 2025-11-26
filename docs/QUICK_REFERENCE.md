@@ -10,10 +10,10 @@ Referencia rápida para asistentes durante ejercicios prácticos. Mantener esta 
 
 ```json
 {
-    "jsonrpc": "2.0",
-    "method": "method_name",
-    "params": {},
-    "id": 1
+  "jsonrpc": "2.0",
+  "method": "method_name",
+  "params": {},
+  "id": 1
 }
 ```
 
@@ -268,7 +268,7 @@ Invoke-RestMethod -Uri http://localhost:5000 -Method Post -Body $body -ContentTy
 
 # Probar con autenticación
 $headers = @{ Authorization = "Bearer $token" }
-Invoke-RestMethod -Uri http://localhost:5001 -Method Post -Body $body -ContentType "application/json" -Headers $headers
+Invoke-RestMethod -Uri http://localhost:5000 -Method Post -Body $body -ContentType "application/json" -Headers $headers
 ```
 
 ---
@@ -279,7 +279,7 @@ Invoke-RestMethod -Uri http://localhost:5001 -Method Post -Body $body -ContentTy
 
 ```powershell
 # Cambiar puerto
-$env:ASPNETCORE_URLS="http://localhost:5010"
+$env:ASPNETCORE_URLS="http://localhost:5000"
 dotnet run
 
 # Buscar y cerrar proceso

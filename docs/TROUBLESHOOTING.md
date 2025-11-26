@@ -47,18 +47,18 @@ $env:PATH += ";C:\Program Files\dotnet\"
 
 ---
 
-### 2. Puertos 5000-5004 ya en uso
+### 2. Puertos 5001-5004 ya en uso
 
 **Síntomas**:
 
 ```powershell
-System.IO.IOException: Failed to bind to address http://localhost:5000: address already in use.
+System.IO.IOException: Failed to bind to address http://localhost:5001: address already in use.
 ```
 
 **Diagnóstico**:
 
 ```powershell
-netstat -ano | findstr :5000
+netstat -ano | findstr :5001
 # Muestra PID del proceso usando el puerto
 ```
 
@@ -67,7 +67,7 @@ netstat -ano | findstr :5000
 **Opción A - Cambiar Puerto**:
 
 ```powershell
-$env:ASPNETCORE_URLS="http://localhost:5010"
+$env:ASPNETCORE_URLS="http://localhost:5005"
 dotnet run
 ```
 
@@ -335,7 +335,7 @@ RateLimitPartition.GetFixedWindowLimiter(
 **Síntomas**:
 
 ```text
-Access to fetch at 'http://localhost:5000' from origin 'http://localhost:3000' has been blocked by CORS policy
+Access to fetch at 'http://localhost:5001' from origin 'http://localhost:3000' has been blocked by CORS policy
 ```
 
 **Soluciones**:
@@ -469,7 +469,7 @@ dotnet tool update --global dotnet-ef
 
 ```powershell
 # Verificar que los 3 servidores MCP estén corriendo
-Get-NetTCPConnection -LocalPort 5002,5003,5004 -State Listen
+Get-NetTCPConnection -LocalPort 5010,5011,5012 -State Listen
 ```
 
 **Soluciones**:
@@ -497,9 +497,9 @@ Start-Process powershell -ArgumentList "dotnet run"
 // appsettings.json del VirtualAnalyst
 {
   "McpServers": {
-    "SqlServer": "http://localhost:5002",
-    "CosmosServer": "http://localhost:5003",
-    "RestApiServer": "http://localhost:5004"
+    "SqlServer": "http://localhost:5010",
+    "CosmosServer": "http://localhost:5011",
+    "RestApiServer": "http://localhost:5012"
   }
 }
 ```
@@ -518,7 +518,7 @@ builder.Services.AddHttpClient("mcp-client", client =>
 
 ```powershell
 # Agregar regla de firewall (PowerShell Admin):
-New-NetFirewallRule -DisplayName "MCP Workshop" -Direction Inbound -LocalPort 5000-5004 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "MCP Workshop" -Direction Inbound -LocalPort 5001-5004,5010-5012 -Protocol TCP -Action Allow
 ```
 
 ---
@@ -603,7 +603,7 @@ var customers = await _context.Customers
 
 ```powershell
 # Verificar que el servidor esté activo:
-Test-NetConnection localhost -Port 5000
+Test-NetConnection localhost -Port 5001
 
 # Si no responde, iniciar:
 cd src\McpWorkshop.Servers\Exercise1StaticResources
@@ -614,7 +614,7 @@ dotnet run
 
 ```powershell
 # Editar verify script para usar puerto custom:
-$baseUrl = "http://localhost:5010" # Cambiar de 5000 a tu puerto
+$baseUrl = "http://localhost:5000" # Cambiar de 5000 a tu puerto
 ```
 
 **Opción C - Response Format Incorrecto**:

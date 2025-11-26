@@ -35,16 +35,16 @@ Al terminar este bloque, los asistentes deben:
 
 **Antes de comenzar el ejercicio**:
 
--   [ ] Detén el `Exercise1Server` si está corriendo (puerto 5001 libre)
--   [ ] Ejecuta `.\scripts\create-sample-data.ps1` para generar datos de ejemplo
--   [ ] Confirma que `data/orders.json` fue generado correctamente
--   [ ] Prepara 3 terminales en VS Code:
-    -   Terminal 1: Comandos de creación de proyecto
-    -   Terminal 2: Ejecución del servidor (puerto 5002)
-    -   Terminal 3: Tests con PowerShell
--   [ ] Ten las 3 herramientas (`SearchCustomersTool.cs`, `GetOrderDetailsTool.cs`, `CalculateMetricsTool.cs`) en archivos de respaldo
--   [ ] Abre el contrato de referencia: `specs/001-mcp-workshop-course/contracts/exercise-2-parametric-query.json`
--   [ ] Valida que el puerto **5002** está libre:
+- [ ] Detén el `Exercise1Server` si está corriendo (puerto 5002)
+- [ ] Ejecuta `.\scripts\create-sample-data.ps1` para generar datos de ejemplo
+- [ ] Confirma que `data/orders.json` fue generado correctamente
+- [ ] Prepara 3 terminales en VS Code:
+  - Terminal 1: Comandos de creación de proyecto
+  - Terminal 2: Ejecución del servidor (puerto 5002)
+  - Terminal 3: Tests con PowerShell
+- [ ] Ten las 3 herramientas (`SearchCustomersTool.cs`, `GetOrderDetailsTool.cs`, `CalculateMetricsTool.cs`) en archivos de respaldo
+- [ ] Abre el contrato de referencia: `specs/001-mcp-workshop-course/contracts/exercise-2-parametric-query.json`
+- [ ] Valida que el puerto **5002** está libre:
 
 ```powershell
 netstat -ano | Select-String "5002"
@@ -249,20 +249,20 @@ public static object Execute(Dictionary<string, JsonElement> arguments, List<Cus
 
 1. **GetOrderDetailsTool**:
 
-    - Parámetro requerido: `orderId` (integer)
-    - Devuelve: Combinación de Order + Customer + Product
+   - Parámetro requerido: `orderId` (integer)
+   - Devuelve: Combinación de Order + Customer + Product
 
 2. **CalculateMetricsTool**:
-    - Parámetro requerido: `metricType` (enum: "sales", "average", "top_products")
-    - Devuelve: Texto con la métrica calculada
+   - Parámetro requerido: `metricType` (enum: "sales", "average", "top_products")
+   - Devuelve: Texto con la métrica calculada
 
 > "Usen el documento del ejercicio, copien el código, y si compilan sin errores, continúan al siguiente paso."
 
 **Estrategia de apoyo**:
 
--   Camina por el aula/sala virtual
--   Ayuda a quien tiene errores de compilación
--   Valida que al menos 2 de las 3 herramientas estén implementadas antes de continuar
+- Camina por el aula/sala virtual
+- Ayuda a quien tiene errores de compilación
+- Valida que al menos 2 de las 3 herramientas estén implementadas antes de continuar
 
 **Checkpoint de tiempo** (Minuto 11):
 
@@ -478,18 +478,18 @@ Invoke-RestMethod -Uri "http://localhost:5002/mcp" -Method POST -Body $body -Con
 
 1. **Detener trabajo**:
 
-    > "Pausa general. Veo que hay confusión. Voy a compartir las 3 herramientas completas por chat."
+   > "Pausa general. Veo que hay confusión. Voy a compartir las 3 herramientas completas por chat."
 
 2. **Compartir código**:
 
-    - Sube los 3 archivos (`SearchCustomersTool.cs`, `GetOrderDetailsTool.cs`, `CalculateMetricsTool.cs`) a Teams/Zoom
-    - Indica: "Descarguen los archivos, colóquenlos en la carpeta `Tools/`, reemplacen lo que tengan"
+   - Sube los 3 archivos (`SearchCustomersTool.cs`, `GetOrderDetailsTool.cs`, `CalculateMetricsTool.cs`) a Teams/Zoom
+   - Indica: "Descarguen los archivos, colóquenlos en la carpeta `Tools/`, reemplacen lo que tengan"
 
 3. **Continuar**:
 
-    - Minuto 13: Todos tienen las herramientas
-    - Minuto 13-16: Implementan `Program.cs`
-    - Minuto 16-20: Prueban
+   - Minuto 13: Todos tienen las herramientas
+   - Minuto 13-16: Implementan `Program.cs`
+   - Minuto 16-20: Prueban
 
 **Ganancia de tiempo**: Terminas en el minuto 20.
 
@@ -503,37 +503,37 @@ Invoke-RestMethod -Uri "http://localhost:5002/mcp" -Method POST -Body $body -Con
 
 1. **Reducir alcance**:
 
-    > "Para ganar tiempo, vamos a implementar solo 2 herramientas: `search_customers` y `calculate_metrics`. Omitan `get_order_details`."
+   > "Para ganar tiempo, vamos a implementar solo 2 herramientas: `search_customers` y `calculate_metrics`. Omitan `get_order_details`."
 
 2. **Ajustar Program.cs**:
 
-    - En `HandleToolsList`, comenta la línea de `GetOrderDetailsTool`:
+   - En `HandleToolsList`, comenta la línea de `GetOrderDetailsTool`:
 
-    ```csharp
-    tools = new[]
-    {
-        SearchCustomersTool.GetDefinition(),
-        // GetOrderDetailsTool.GetDefinition(),  // OMITIDA
-        CalculateMetricsTool.GetDefinition()
-    }
-    ```
+   ```csharp
+   tools = new[]
+   {
+       SearchCustomersTool.GetDefinition(),
+       // GetOrderDetailsTool.GetDefinition(),  // OMITIDA
+       CalculateMetricsTool.GetDefinition()
+   }
+   ```
 
-    - En `HandleToolsCall`, comenta el case:
+   - En `HandleToolsCall`, comenta el case:
 
-    ```csharp
-    var result = toolName switch
-    {
-        "search_customers" => SearchCustomersTool.Execute(arguments, customers),
-        // "get_order_details" => GetOrderDetailsTool.Execute(...),  // OMITIDA
-        "calculate_metrics" => CalculateMetricsTool.Execute(arguments, orders, products),
-        _ => throw new ArgumentException($"Unknown tool: {toolName}")
-    };
-    ```
+   ```csharp
+   var result = toolName switch
+   {
+       "search_customers" => SearchCustomersTool.Execute(arguments, customers),
+       // "get_order_details" => GetOrderDetailsTool.Execute(...),  // OMITIDA
+       "calculate_metrics" => CalculateMetricsTool.Execute(arguments, orders, products),
+       _ => throw new ArgumentException($"Unknown tool: {toolName}")
+   };
+   ```
 
 3. **Continuar con 2 herramientas**:
 
-    - Minuto 14-17: Implementan Program.cs
-    - Minuto 17-20: Prueban 2 herramientas
+   - Minuto 14-17: Implementan Program.cs
+   - Minuto 17-20: Prueban 2 herramientas
 
 **Ganancia de tiempo**: Terminas en el minuto 20, pero con menos funcionalidad.
 
@@ -549,14 +549,14 @@ Invoke-RestMethod -Uri "http://localhost:5002/mcp" -Method POST -Body $body -Con
 
 ```json
 {
-    "name": "search_customers",
-    "inputSchema": {
-        "properties": {
-            "name": { "type": "string" },
-            "country": { "type": "string" }
-        },
-        "required": [] // Ninguno obligatorio
-    }
+  "name": "search_customers",
+  "inputSchema": {
+    "properties": {
+      "name": { "type": "string" },
+      "country": { "type": "string" }
+    },
+    "required": [] // Ninguno obligatorio
+  }
 }
 ```
 
@@ -566,17 +566,17 @@ Invoke-RestMethod -Uri "http://localhost:5002/mcp" -Method POST -Body $body -Con
 
 ### Contingencia D: Puerto 5002 ocupado
 
-**Problema**: Error "Address already in use".
+**Síntoma**: Error "address already in use" al iniciar
 
-**Acción rápida**:
+**Solución rápida**:
 
-> "Cambien el puerto a 5003 en `Program.cs`:"
+> "Cambien el puerto a 5005 en `Program.cs`:"
 
 ```csharp
-app.Run("http://localhost:5003");
+await app.RunAsync("http://localhost:5005");
 ```
 
-> "Y actualicen las URLs de prueba a `http://localhost:5003/mcp`."
+> "Y actualicen las URLs de prueba a `http://localhost:5005/mcp`."
 
 ---
 
@@ -586,9 +586,9 @@ Al terminar el ejercicio, pregunta:
 
 > "¿Cuántos pudieron ejecutar al menos 2 de las 3 herramientas exitosamente?"
 
--   **>75% levanta la mano**: ✅ **Ejercicio exitoso**, continúa al Bloque 6.
--   **50-75% levanta la mano**: ⚠️ **Revisar problemas comunes**, da 2 minutos extra.
--   **<50% levanta la mano**: 🚨 **Contingencia crítica**, ofrece código completo funcionando.
+- **>75% levanta la mano**: ✅ **Ejercicio exitoso**, continúa al Bloque 6.
+- **50-75% levanta la mano**: ⚠️ **Revisar problemas comunes**, da 2 minutos extra.
+- **<50% levanta la mano**: 🚨 **Contingencia crítica**, ofrece código completo funcionando.
 
 ---
 
@@ -609,17 +609,17 @@ Al terminar el ejercicio, pregunta:
 
 1. **Recursos vs Herramientas**:
 
-    - Recursos: Datos pasivos (`resources/read`)
-    - Herramientas: Operaciones activas (`tools/call`)
+   - Recursos: Datos pasivos (`resources/read`)
+   - Herramientas: Operaciones activas (`tools/call`)
 
 2. **JSON Schema**:
 
-    - Define contrato de entrada
-    - Ayuda a clientes a validar parámetros antes de enviar
+   - Define contrato de entrada
+   - Ayuda a clientes a validar parámetros antes de enviar
 
 3. **Pattern Matching con Switch**:
-    - Routing simple y legible
-    - Fácil agregar nuevas herramientas
+   - Routing simple y legible
+   - Fácil agregar nuevas herramientas
 
 **Pregunta de reflexión** (30 segundos):
 
@@ -639,10 +639,10 @@ Al terminar el ejercicio, pregunta:
 
 **Checklist de transición**:
 
--   [ ] Los asistentes detienen el servidor (Ctrl+C)
--   [ ] Confirma que todos tienen el código funcionando (carpeta `Exercise2Server`)
--   [ ] Abre el documento del Ejercicio 3 en VS Code
--   [ ] Prepara la terminal para el siguiente proyecto
+- [ ] Los asistentes detienen el servidor (Ctrl+C)
+- [ ] Confirma que todos tienen el código funcionando (carpeta `Exercise2Server`)
+- [ ] Abre el documento del Ejercicio 3 en VS Code
+- [ ] Prepara la terminal para el siguiente proyecto
 
 ---
 
