@@ -73,7 +73,7 @@ dotnet build McpWorkshop.sln
 - [04 - Ejercicio 2: Consultas Paramétricas](docs/modules/04b-ejercicio-2-consultas-parametricas.md)
 - [05 - Ejercicio 3: Seguridad](docs/modules/05b-ejercicio-3-seguridad.md)
 - [06 - Seguridad & Gobernanza](docs/modules/06b-seguridad-gobernanza.md)
-- [07 - Ejercicio 4: Analista Virtual](docs/modules/07-ejercicio-4-analista-virtual.md)
+- [07 - Ejercicio 4: Analista Virtual](docs/modules/07b-ejercicio-4-analista-virtual.md)
 - [08 - Orquestación Multi-Fuente](docs/modules/08-orquestacion-multifuente.md)
 - [09 - Ejercicio 5: Agente con Microsoft Agent Framework](docs/modules/9b-ejercicio-5-agente-maf.md)
 - [10 - Roadmap & Casos B2B](docs/modules/10-roadmap-casos-b2b.md)
@@ -91,7 +91,7 @@ mcp-workshop/
 │   │   ├── 04b-ejercicio-2-consultas-parametricas.md
 │   │   ├── 05b-ejercicio-3-seguridad.md
 │   │   ├── 06b-seguridad-gobernanza.md
-│   │   ├── 07-ejercicio-4-analista-virtual.md
+│   │   ├── 07b-ejercicio-4-analista-virtual.md
 │   │   ├── 08-orquestacion-multifuente.md
 │   │   ├── 09-roadmap-casos-b2b.md
 │   │   └── 11-cierre.md
@@ -295,7 +295,7 @@ Usuario (español) → Orquestador → [SQL Server | Cosmos DB | REST API]
 .\scripts\verify-exercise4.ps1
 ```
 
-**[📄 Guía completa →](docs/modules/07-ejercicio-4-analista-virtual.md)**
+**[📄 Guía completa →](docs/modules/07b-ejercicio-4-analista-virtual.md)**
 
 ### Ejercicio 5: Agente con Microsoft Agent Framework (30 min)
 
@@ -343,16 +343,16 @@ Usuario (español) → Orquestador → [SQL Server | Cosmos DB | REST API]
 
 ### Puertos Utilizados
 
-| Ejercicio                  | Puerto | Servidor                 |
-| -------------------------- | ------ | ------------------------ |
-| Ejercicio 1                | 5000   | Exercise1Server |
-| Ejercicio 2                | 5001   | Exercise2Server |
-| Ejercicio 3                | 5002   | Exercise3Server    |
-| Ejercicio 4 - SQL          | 5009   | SqlMcpServer             |
-| Ejercicio 4 - Cosmos       | 5010   | CosmosMcpServer          |
-| Ejercicio 4 - REST         | 5011   | RestApiMcpServer         |
-| Ejercicio 4 - Orchestrator | 5012   | Exercise4Server  |
-| Ejercicio 5 - Agente       | 5014   | Exercise5Agent          |
+| Ejercicio                  | Puerto | Servidor         |
+| -------------------------- | ------ | ---------------- |
+| Ejercicio 1                | 5000   | Exercise1Server  |
+| Ejercicio 2                | 5001   | Exercise2Server  |
+| Ejercicio 3                | 5002   | Exercise3Server  |
+| Ejercicio 4 - SQL          | 5010   | SqlMcpServer     |
+| Ejercicio 4 - Cosmos       | 5011   | CosmosMcpServer  |
+| Ejercicio 4 - REST         | 5012   | RestApiMcpServer |
+| Ejercicio 4 - Orquestador  | 5004   | Exercise4Server  |
+| Ejercicio 5 - Agente       | 5014   | Exercise5Agent   |
 
 ## 📄 Licencia
 

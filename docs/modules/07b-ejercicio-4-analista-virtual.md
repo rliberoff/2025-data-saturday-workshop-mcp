@@ -62,24 +62,24 @@ flowchart TB
 
 1. **"¿Cuántos clientes nuevos registrados en España este mes?"**
 
-    - Servidor: SQL MCP
-    - Método: `tools/call` → `query_customers_by_country`
-    - Parámetros: `{ country: "España" }`
+   - Servidor: SQL MCP
+   - Método: `tools/call` → `query_customers_by_country`
+   - Parámetros: `{ country: "España" }`
 
 2. **"¿Qué usuarios abandonaron carritos en las últimas 24 horas?"**
 
-    - Servidor: Cosmos MCP
-    - Método: `tools/call` → `get_abandoned_carts`
-    - Parámetros: `{ hours: 24 }`
+   - Servidor: Cosmos MCP
+   - Método: `tools/call` → `get_abandoned_carts`
+   - Parámetros: `{ hours: 24 }`
 
 3. **"¿Cuál es el estado del pedido #1234 y su inventario asociado?"**
 
-    - Servidores: SQL MCP (pedido) + REST API MCP (inventario, envío)
-    - Patrón: Secuencial → primero pedido, luego inventario/envío con IDs
+   - Servidores: SQL MCP (pedido) + REST API MCP (inventario, envío)
+   - Patrón: Secuencial → primero pedido, luego inventario/envío con IDs
 
 4. **"Dame un resumen de ventas de la semana más productos más vendidos"**
-    - Servidores: SQL MCP (ventas) + REST API MCP (top productos)
-    - Patrón: Paralelo → ambas consultas simultáneas, luego fusionar
+   - Servidores: SQL MCP (ventas) + REST API MCP (top productos)
+   - Patrón: Paralelo → ambas consultas simultáneas, luego fusionar
 
 ---
 
@@ -118,6 +118,7 @@ Crea `Models/McpServerClient.cs`:
 
 ```csharp
 using System.Text.Json;
+using System.Linq;
 
 namespace Exercise4Server.Models;
 
@@ -151,16 +152,10 @@ public class McpServerClient
             response.EnsureSuccessStatusCode();
 
             var responseJson = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<JsonElement>(responseJson);
-
-            // Verificar si la respuesta tiene la propiedad "result"
-            if (result.TryGetProperty("result", out var resultProperty))
-            {
-                return JsonSerializer.Deserialize<T>(resultProperty.GetRawText());
-            }
+            var jsonResponse = JsonSerializer.Deserialize<JsonElement>(responseJson);
 
             // Si tiene "error", lanzar excepción con el mensaje de error
-            if (result.TryGetProperty("error", out var errorProperty))
+            if (jsonResponse.TryGetProperty("error", out var errorProperty))
             {
                 var errorMessage = errorProperty.TryGetProperty("message", out var msgProp)
                     ? msgProp.GetString()
@@ -168,8 +163,29 @@ public class McpServerClient
                 throw new InvalidOperationException($"MCP Server error: {errorMessage}");
             }
 
-            // Si no tiene ni result ni error, devolver la respuesta completa
-            return JsonSerializer.Deserialize<T>(responseJson);
+            // Verificar si la respuesta tiene la propiedad "result"
+            if (!jsonResponse.TryGetProperty("result", out var resultProperty))
+            {
+                throw new InvalidOperationException("MCP Server returned invalid response: missing 'result' property");
+            }
+
+            // El formato MCP estándar es: { result: { content: [ { type: "text", text: "..." } ] } }
+            if (resultProperty.TryGetProperty("content", out var contentProperty) && contentProperty.ValueKind == JsonValueKind.Array)
+            {
+                // Extraer el "text" del primer elemento de content
+                var firstContent = contentProperty.EnumerateArray().FirstOrDefault();
+                if (firstContent.TryGetProperty("text", out var textProperty))
+                {
+                    var textValue = textProperty.GetString();
+                    if (textValue != null)
+                    {
+                        return JsonSerializer.Deserialize<T>(textValue);
+                    }
+                }
+            }
+
+            // Fallback: intentar deserializar el result directamente
+            return JsonSerializer.Deserialize<T>(resultProperty.GetRawText());
         }
         catch (HttpRequestException ex)
         {
@@ -200,6 +216,8 @@ public record QueryRequest(string Query);
 Crea `Parsers/SpanishQueryParser.cs`:
 
 ```csharp
+using System.Text.RegularExpressions;
+
 namespace Exercise4Server.Parsers;
 
 public record ParsedQuery(
@@ -260,7 +278,7 @@ public class SpanishQueryParser
                 {
                     { "orderId", orderId ?? "0" }
                 },
-                RequiredServers: new List<string> { "sql", "rest" }
+                RequiredServers: ["sql", "rest"]
             );
         }
 
@@ -269,20 +287,20 @@ public class SpanishQueryParser
         {
             return new ParsedQuery(
                 Intent: "sales_summary",
-                Parameters: new Dictionary<string, string>(),
-                RequiredServers: new List<string> { "sql", "rest" }
+                Parameters: [],
+                RequiredServers: ["sql", "rest"]
             );
         }
 
         // Default: Unknown intent
         return new ParsedQuery(
             Intent: "unknown",
-            Parameters: new Dictionary<string, string>(),
-            RequiredServers: new List<string>()
+            Parameters: [],
+            RequiredServers: []
         );
     }
 
-    private string? ExtractCountry(string query)
+    private static string? ExtractCountry(string query)
     {
         var countries = new Dictionary<string, string>
         {
@@ -304,12 +322,14 @@ public class SpanishQueryParser
                 return value;
             }
         }
+
         return null;
     }
 
-    private string? ExtractCity(string query)
+    private static string? ExtractCity(string query)
     {
         var cities = new[] { "madrid", "barcelona", "valencia", "sevilla", "bilbao" };
+
         foreach (var city in cities)
         {
             if (query.Contains(city))
@@ -317,20 +337,21 @@ public class SpanishQueryParser
                 return char.ToUpper(city[0]) + city.Substring(1);
             }
         }
+
         return null;
     }
 
     private int ExtractHours(string query)
     {
         // Buscar patrones como "últimas 24 horas", "últimas 72 horas", etc.
-        var match = System.Text.RegularExpressions.Regex.Match(query, @"últimas?\s+(\d+)\s+horas?");
+        var match = Regex.Match(query, @"últimas?\s+(\d+)\s+horas?");
         if (match.Success && int.TryParse(match.Groups[1].Value, out var hours))
         {
             return hours;
         }
 
         // Buscar patrones como "24h", "72h"
-        match = System.Text.RegularExpressions.Regex.Match(query, @"(\d+)h");
+        match = Regex.Match(query, @"(\d+)h");
         if (match.Success && int.TryParse(match.Groups[1].Value, out hours))
         {
             return hours;
@@ -339,23 +360,25 @@ public class SpanishQueryParser
         return 0; // No se encontró
     }
 
-    private string? ExtractOrderId(string query)
+    private static string? ExtractOrderId(string query)
     {
-        var match = System.Text.RegularExpressions.Regex.Match(query, @"#?(\d+)");
+        var match = Regex.Match(query, @"#?(\d+)");
         return match.Success ? match.Groups[1].Value : null;
     }
 
-    private string? ExtractDateRange(string query)
+    private static string? ExtractDateRange(string query)
     {
         if (query.Contains("este mes"))
         {
             return new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1).ToString("yyyy-MM-dd");
         }
+
         if (query.Contains("esta semana"))
         {
             var startOfWeek = DateTime.UtcNow.AddDays(-(int)DateTime.UtcNow.DayOfWeek);
             return startOfWeek.ToString("yyyy-MM-dd");
         }
+
         return null;
     }
 }
@@ -419,7 +442,7 @@ public class OrchestratorService
         // 3. Execute based on intent
         try
         {
-            object result = parsedQuery.Intent switch
+            var result = parsedQuery.Intent switch
             {
                 "new_customers" => await ExecuteNewCustomersAsync(parsedQuery.Parameters),
                 "abandoned_carts" => await ExecuteAbandonedCartsAsync(parsedQuery.Parameters),
@@ -602,9 +625,9 @@ await app.RunAsync("http://localhost:5004");
 
 **📝 Nota sobre Tools MCP**: Los servidores `SqlMcpServer`, `CosmosMcpServer` y `RestApiMcpServer` ya están implementados con todos los tools necesarios:
 
--   **SQL Server**: `query_customers_by_country`, `get_sales_summary` y `get_order_details`
--   **Cosmos Server**: `get_abandoned_carts` y `analyze_user_behavior`
--   **REST API Server**: `check_inventory`, `get_shipping_status` y `get_top_products`
+- **SQL Server**: `query_customers_by_country`, `get_sales_summary` y `get_order_details`
+- **Cosmos Server**: `get_abandoned_carts` y `analyze_user_behavior`
+- **REST API Server**: `check_inventory`, `get_shipping_status` y `get_top_products`
 
 ```powershell
 # Terminal 1: SQL Server
@@ -626,10 +649,10 @@ dotnet run
 
 **Verifica que los 4 servidores estén escuchando**:
 
--   SqlMcpServer: `http://localhost:5010`
--   CosmosMcpServer: `http://localhost:5011`
--   RestApiMcpServer: `http://localhost:5012`
--   Orchestrator (este ejercicio): `http://localhost:5004`
+- SqlMcpServer: `http://localhost:5010`
+- CosmosMcpServer: `http://localhost:5011`
+- RestApiMcpServer: `http://localhost:5012`
+- Orchestrator (este ejercicio): `http://localhost:5004`
 
 ---
 
@@ -669,7 +692,7 @@ Invoke-RestMethod -Uri "http://localhost:5004/query" -Method POST -Body $body -C
 
 **Resultado esperado**: Query parseado como `order_status`, patrón secuencial:
 
-1. Primero consulta SQL MCP para obtener detalles del pedido
+1. Primero consulta SQL MCP para obtener detalles del pedido (JSON estructurado)
 2. Luego usa esos datos para consultar REST API MCP (inventario y envío)
 
 ### Prueba 5: Caching
@@ -689,12 +712,12 @@ Invoke-RestMethod -Uri "http://localhost:5004/query" -Method POST -Body $body -C
 
 ## ✅ Criterios de Éxito
 
--   [ ] Parser reconoce las 4 intents (new_customers, abandoned_carts, order_status, sales_summary)
--   [ ] Orquestador llama a servidores correctos según intent
--   [ ] Patrón paralelo funciona (sales_summary)
--   [ ] Patrón secuencial funciona (order_status)
--   [ ] Caching reduce latencia en queries repetidas
--   [ ] Respuestas en español legibles
+- [ ] Parser reconoce las 4 intents (new_customers, abandoned_carts, order_status, sales_summary)
+- [ ] Orquestador llama a servidores correctos según intent
+- [ ] Patrón paralelo funciona (sales_summary)
+- [ ] Patrón secuencial funciona (order_status)
+- [ ] Caching reduce latencia en queries repetidas
+- [ ] Respuestas en español legibles
 
 ---
 
@@ -803,8 +826,8 @@ return new { order, inventory, shipping };
 
 **Regla de oro**:
 
--   Si los datos **NO dependen entre sí** → **Paralelo** (Task.WhenAll)
--   Si una consulta **necesita resultados de otra** → **Secuencial** (await en cadena)
+- Si los datos **NO dependen entre sí** → **Paralelo** (Task.WhenAll)
+- Si una consulta **necesita resultados de otra** → **Secuencial** (await en cadena)
 
 ---
 
@@ -818,7 +841,7 @@ return new { order, inventory, shipping };
 
 ```json
 {
-    "answer": "❌ Error al ejecutar la consulta: MCP Server error: Internal error: Unknown tool: get_order_details"
+  "answer": "❌ Error al ejecutar la consulta: MCP Server error: Internal error: Unknown tool: get_order_details"
 }
 ```
 
@@ -837,6 +860,51 @@ return new { order, inventory, shipping };
 ```
 
 Si solo ves 2 tools en lugar de 3, significa que el código no se recompiló o no se reinició el servidor.
+
+---
+
+#### Error: No se reciben datos del servidor MCP
+
+**Síntoma**: El orquestador no recibe los datos del servidor SQL MCP aunque las trazas muestran que el servidor respondió correctamente.
+
+**Causa**: El `McpServerClient` no está extrayendo correctamente el contenido de la respuesta JSON-RPC. El formato estándar de MCP envuelve el resultado en `result.content[0].text`, pero el cliente intentaba deserializar directamente desde `result`.
+
+**Formato de respuesta MCP**:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"found\":true,\"order\":{...}}"
+      }
+    ]
+  },
+  "id": "..."
+}
+```
+
+**Solución**: Actualizar el `McpServerClient.cs` para extraer correctamente `result.content[0].text`:
+
+```csharp
+// ✅ CORRECTO - Extrae el texto del formato MCP estándar
+if (resultProperty.TryGetProperty("content", out var contentProperty) && contentProperty.ValueKind == JsonValueKind.Array)
+{
+    var firstContent = contentProperty.EnumerateArray().FirstOrDefault();
+    if (firstContent.TryGetProperty("text", out var textProperty))
+    {
+        var textValue = textProperty.GetString();
+        if (textValue != null)
+        {
+            return JsonSerializer.Deserialize<T>(textValue);
+        }
+    }
+}
+```
+
+Ver el código completo corregido en el **Paso 2** de este ejercicio.
 
 ---
 
@@ -874,7 +942,7 @@ var inventory = await restClient.CallToolAsync<dynamic>("check_inventory", new
 
 ```json
 {
-    "answer": "❌ Error al ejecutar la consulta: MCP Server error: Internal error: The requested operation requires an element of type 'Number', but the target element has type 'String'."
+  "answer": "❌ Error al ejecutar la consulta: MCP Server error: Internal error: The requested operation requires an element of type 'Number', but the target element has type 'String'."
 }
 ```
 
@@ -898,9 +966,9 @@ var shipping = await restClient.CallToolAsync<dynamic>("get_shipping_status", ne
 
 **Regla general**: Siempre revisa el schema del tool en el servidor para conocer el tipo esperado:
 
--   `"type": "number"` → usa `int.Parse()` o `.GetInt32()`
--   `"type": "string"` → usa el valor directo
--   `"type": "boolean"` → usa `bool.Parse()` o `.GetBoolean()`
+- `"type": "number"` → usa `int.Parse()` o `.GetInt32()`
+- `"type": "string"` → usa el valor directo
+- `"type": "boolean"` → usa `bool.Parse()` o `.GetBoolean()`
 
 ---
 

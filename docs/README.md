@@ -180,7 +180,7 @@ Ver [Guía de Inicio Rápido](./quickstart.md) para instrucciones detalladas.
 - **Duración**: 25 minutos en grupos de 3-5 personas
 - **Skills**: Multi-source orchestration, caching, natural language queries
 
-📚 [Instrucciones](./modules/07-ejercicio-4-analista-virtual.md) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise4VirtualAnalyst/)
+📚 [Instrucciones](./modules/07b-ejercicio-4-analista-virtual.md) | ✅ [Solución](../src/McpWorkshop.Servers/Exercise4VirtualAnalyst/)
 
 ### Parte 3: Arquitectura y Casos de Negocio (40 min)
 

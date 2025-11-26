@@ -56,6 +56,8 @@ src/McpWorkshop.Servers/
 
 > **💬 Instructor**: "Usamos `dotnet new web` porque es la plantilla más ligera de ASP.NET Core. No necesitamos MVC, solo un endpoint HTTP simple."
 
+1.1 Crear estructura
+
 ```powershell
 # Crear proyecto web API
 cd src/McpWorkshop.Servers
@@ -69,6 +71,14 @@ dotnet add reference ../../McpWorkshop.Shared/McpWorkshop.Shared.csproj
 cd ../../..
 dotnet sln add src/McpWorkshop.Servers/Exercise1Server/Exercise1Server.csproj
 dotnet build
+```
+
+1.2 Crear carpetas
+
+```powershell
+# Crear proyecto web API
+cd src/McpWorkshop.Servers/Exercise1Server
+mkdir Models
 ```
 
 **✅ Checkpoint**: Debe compilar sin errores.

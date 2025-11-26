@@ -404,14 +404,15 @@ Authorization: Bearer <token>
 
 ### Clientes MCP Populares
 
-| Cliente            | Tipo                 | Uso Principal                         |
-| ------------------ | -------------------- | ------------------------------------- |
-| **Visual Studio Code** | Editor de código           | Conexión usando GitHub Copilot  |
-| **Claude Desktop** | App nativa           | Asistente personal con datos locales  |
-| **Cursor IDE**     | Editor de código     | Copilot con contexto del proyecto     |
-| **Continue.dev**   | VS Code Extension    | Autocomplete con contexto empresarial |
-| **Zed Editor**     | Editor de texto      | Desarrollo con IA integrada           |
-| **Custom Agents**  | Aplicaciones propias | Chatbots, automatizaciones            |
+| Cliente                     | Tipo                 | Uso Principal                         |
+| --------------------------- | -------------------- | ------------------------------------- |
+| **Visual Studio Code**      | Editor de código     | Conexión usando GitHub Copilot        |
+| **Visual Studio 2022/2026** | Editor de código     | Conexión usando GitHub Copilot        |
+| **Claude Desktop**          | App nativa           | Asistente personal con datos locales  |
+| **Cursor IDE**              | Editor de código     | Copilot con contexto del proyecto     |
+| **Continue.dev**            | VS Code Extension    | Autocomplete con contexto empresarial |
+| **Zed Editor**              | Editor de texto      | Desarrollo con IA integrada           |
+| **Custom Agents**           | Aplicaciones propias | Chatbots, automatizaciones            |
 
 ### Servidores MCP Oficiales (Ejemplos)
 
