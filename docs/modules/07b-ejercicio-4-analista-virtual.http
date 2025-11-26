@@ -18,7 +18,7 @@ Content-Type: application/json
 POST http://localhost:5004/query
 Content-Type: application/json
 
-{ "query": "Dame un resumen de ventas de esta semana más productos más vendidos" }
+{ "query": "Dame un resumen de las ventas de esta semana" }
 
 ###
 
@@ -34,4 +34,4 @@ Content-Type: application/json
 POST http://localhost:5004/query
 Content-Type: application/json
 
-{ "query": "¿Cuántos clientes nuevos en España?" }
+{ "query": "¿Cuáles son los 10 productos más vendidos?" }

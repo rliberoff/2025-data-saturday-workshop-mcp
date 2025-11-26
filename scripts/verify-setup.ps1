@@ -210,7 +210,6 @@ else {
         Write-Host "  .NET 10.0 SDK: https://dotnet.microsoft.com/download/dotnet/10.0" -ForegroundColor Gray
         Write-Host "  PowerShell 7+: https://aka.ms/powershell" -ForegroundColor Gray
         Write-Host "  Azure CLI: https://learn.microsoft.com/cli/azure/install-azure-cli" -ForegroundColor Gray
-        Write-Host "  Terraform: https://www.terraform.io/downloads" -ForegroundColor Gray
         Write-Host "  Git: https://git-scm.com/downloads" -ForegroundColor Gray
     }
     else {

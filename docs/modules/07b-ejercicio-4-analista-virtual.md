@@ -207,6 +207,18 @@ namespace Exercise4Server.Models;
 public record QueryRequest(string Query);
 ```
 
+Crea `Models/ParsedQuery.cs`:
+
+```csharp
+namespace Exercise4Server.Models;
+
+public record ParsedQuery(
+    string Intent,
+    Dictionary<string, string> Parameters,
+    List<string> RequiredServers
+);
+```
+
 ---
 
 ### Paso 3: Query Parser (7 minutos)
@@ -218,17 +230,13 @@ Crea `Parsers/SpanishQueryParser.cs`:
 ```csharp
 using System.Text.RegularExpressions;
 
+using Exercise4Server.Models;
+
 namespace Exercise4Server.Parsers;
 
-public record ParsedQuery(
-    string Intent,
-    Dictionary<string, string> Parameters,
-    List<string> RequiredServers
-);
-
-public class SpanishQueryParser
+public static class SpanishQueryParser
 {
-    public ParsedQuery Parse(string query)
+    public static ParsedQuery Parse(string query)
     {
         query = query.ToLowerInvariant();
 
@@ -279,6 +287,22 @@ public class SpanishQueryParser
                     { "orderId", orderId ?? "0" }
                 },
                 RequiredServers: ["sql", "rest"]
+            );
+        }
+
+        // Intent: Productos más vendidos
+        if ((query.Contains("productos") || query.Contains("producto")) &&
+            (query.Contains("más vendidos") || query.Contains("mas vendidos") || query.Contains("top") || query.Contains("mejores")))
+        {
+            var limit = ExtractLimit(query);
+
+            return new ParsedQuery(
+                Intent: "top_products",
+                Parameters: new Dictionary<string, string>
+                {
+                    { "limit", limit.ToString() }
+                },
+                RequiredServers: new List<string> { "rest" }
             );
         }
 
@@ -341,7 +365,7 @@ public class SpanishQueryParser
         return null;
     }
 
-    private int ExtractHours(string query)
+    private static int ExtractHours(string query)
     {
         // Buscar patrones como "últimas 24 horas", "últimas 72 horas", etc.
         var match = Regex.Match(query, @"últimas?\s+(\d+)\s+horas?");
@@ -381,6 +405,24 @@ public class SpanishQueryParser
 
         return null;
     }
+
+    private static int ExtractLimit(string query)
+    {
+        // Buscar patrones como "10 productos", "los 5 productos", "top 10"
+        var match = Regex.Match(query, @"\b(\d+)\s+productos?|top\s+(\d+)|(\d+)\s+mejores");
+        if (match.Success)
+        {
+            for (var i = 1; i <= match.Groups.Count; i++)
+            {
+                if (match.Groups[i].Success && int.TryParse(match.Groups[i].Value, out var limit))
+                {
+                    return limit;
+                }
+            }
+        }
+
+        return 10; // Default
+    }
 }
 ```
 
@@ -401,27 +443,28 @@ namespace Exercise4Server.Orchestration;
 
 public class OrchestratorService
 {
-    private readonly Dictionary<string, McpServerClient> _servers;
-    private readonly SpanishQueryParser _parser;
-    private readonly ConcurrentDictionary<string, (object Result, DateTime CachedAt)> _cache;
-    private readonly TimeSpan _cacheTtl = TimeSpan.FromMinutes(5);
+    private readonly Dictionary<string, McpServerClient> servers;
+
+    private readonly ConcurrentDictionary<string, (object Result, DateTime CachedAt)> cache;
+
+    private readonly TimeSpan cacheTtl = TimeSpan.FromMinutes(5);
 
     public OrchestratorService()
     {
-        _servers = new Dictionary<string, McpServerClient>
+        servers = new Dictionary<string, McpServerClient>
         {
             { "sql", new McpServerClient("http://localhost:5010") },
             { "cosmos", new McpServerClient("http://localhost:5011") },
             { "rest", new McpServerClient("http://localhost:5012") }
         };
-        _parser = new SpanishQueryParser();
-        _cache = new ConcurrentDictionary<string, (object, DateTime)>();
+
+        cache = new ConcurrentDictionary<string, (object, DateTime)>();
     }
 
     public async Task<string> ProcessQueryAsync(string userQuery)
     {
         // 1. Parse query
-        var parsedQuery = _parser.Parse(userQuery);
+        var parsedQuery = SpanishQueryParser.Parse(userQuery);
 
         if (parsedQuery.Intent == "unknown")
         {
@@ -430,13 +473,14 @@ public class OrchestratorService
 
         // 2. Check cache
         var cacheKey = $"{parsedQuery.Intent}:{string.Join(",", parsedQuery.Parameters.Select(p => $"{p.Key}={p.Value}"))}";
-        if (_cache.TryGetValue(cacheKey, out var cached))
+        if (cache.TryGetValue(cacheKey, out var cached))
         {
-            if (DateTime.UtcNow - cached.CachedAt < _cacheTtl)
+            if (DateTime.UtcNow - cached.CachedAt < cacheTtl)
             {
                 return $"[CACHE] {FormatResult(parsedQuery.Intent, cached.Result)}";
             }
-            _cache.TryRemove(cacheKey, out _);
+
+            cache.TryRemove(cacheKey, out _);
         }
 
         // 3. Execute based on intent
@@ -447,12 +491,13 @@ public class OrchestratorService
                 "new_customers" => await ExecuteNewCustomersAsync(parsedQuery.Parameters),
                 "abandoned_carts" => await ExecuteAbandonedCartsAsync(parsedQuery.Parameters),
                 "order_status" => await ExecuteOrderStatusAsync(parsedQuery.Parameters),
+                "top_products" => await ExecuteTopProductsAsync(parsedQuery.Parameters),
                 "sales_summary" => await ExecuteSalesSummaryAsync(),
                 _ => "Intent no implementado"
             };
 
             // 4. Cache result
-            _cache[cacheKey] = (result, DateTime.UtcNow);
+            cache[cacheKey] = (result, DateTime.UtcNow);
 
             // 5. Format and return
             return FormatResult(parsedQuery.Intent, result);
@@ -470,7 +515,7 @@ public class OrchestratorService
     private async Task<object> ExecuteNewCustomersAsync(Dictionary<string, string> parameters)
     {
         // Single server: SQL - usa query_customers_by_country
-        var sqlClient = _servers["sql"];
+        var sqlClient = servers["sql"];
         var country = parameters.GetValueOrDefault("country", "España");
         var city = parameters.GetValueOrDefault("city", "all");
 
@@ -485,13 +530,13 @@ public class OrchestratorService
     private async Task<object> ExecuteAbandonedCartsAsync(Dictionary<string, string> parameters)
     {
         // Single server: Cosmos - usa get_abandoned_carts
-        var cosmosClient = _servers["cosmos"];
+        var cosmosClient = servers["cosmos"];
 
         // Extraer horas del parámetro timeRange (formato: "24h", "72h", etc.)
         var timeRange = parameters.GetValueOrDefault("timeRange", "24h");
         var hours = 24; // Default
 
-        if (timeRange.EndsWith("h") && int.TryParse(timeRange.TrimEnd('h'), out var parsedHours))
+        if (timeRange.EndsWith('h') && int.TryParse(timeRange.TrimEnd('h'), out var parsedHours))
         {
             hours = parsedHours;
         }
@@ -500,14 +545,15 @@ public class OrchestratorService
         {
             hours = hours
         });
+
         return result ?? "No data";
     }
 
     private async Task<object> ExecuteOrderStatusAsync(Dictionary<string, string> parameters)
     {
         // Sequential: SQL first, then REST with results
-        var sqlClient = _servers["sql"];
-        var restClient = _servers["rest"];
+        var sqlClient = servers["sql"];
+        var restClient = servers["rest"];
 
         var orderResponse = await sqlClient.CallToolAsync<JsonElement>("get_order_details", new
         {
@@ -541,11 +587,24 @@ public class OrchestratorService
         };
     }
 
+    private async Task<object> ExecuteTopProductsAsync(Dictionary<string, string> parameters)
+    {
+        // Single server: REST - usa get_top_products
+        var restClient = servers["rest"];
+        var limit = int.Parse(parameters.GetValueOrDefault("limit", "10"));
+
+        var result = await restClient.CallToolAsync<dynamic>("get_top_products", new
+        {
+            limit = limit
+        });
+        return result ?? "No data";
+    }
+
     private async Task<object> ExecuteSalesSummaryAsync()
     {
         // Parallel: SQL + REST simultaneously
-        var sqlClient = _servers["sql"];
-        var restClient = _servers["rest"];
+        var sqlClient = servers["sql"];
+        var restClient = servers["rest"];
 
         var salesTask = sqlClient.CallToolAsync<dynamic>("get_sales_summary", new
         {
@@ -566,13 +625,14 @@ public class OrchestratorService
         };
     }
 
-    private string FormatResult(string intent, object result)
+    private static string FormatResult(string intent, object result)
     {
         return intent switch
         {
             "new_customers" => $"Clientes nuevos: {result}",
             "abandoned_carts" => $"Carritos abandonados: {result}",
             "order_status" => $"Estado del pedido: {result}",
+            "top_products" => $"Productos más vendidos: {result}",
             "sales_summary" => $"Resumen de ventas: {result}",
             _ => result.ToString() ?? "Sin resultado"
         };
