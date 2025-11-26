@@ -40,10 +40,10 @@
 
 En 2024-2025, vemos una explosión de aplicaciones de IA generativa:
 
--   **Asistentes conversacionales** (ChatGPT, Claude, Gemini)
--   **Copilots de código** (GitHub Copilot, Cursor, Cline)
--   **Agentes autónomos** (AutoGPT, BabyAGI)
--   **Aplicaciones empresariales** con LLMs integrados
+- **Asistentes conversacionales** (ChatGPT, Claude, Gemini)
+- **Copilots de código** (GitHub Copilot, Cursor, Cline)
+- **Agentes autónomos** (AutoGPT, BabyAGI)
+- **Aplicaciones empresariales** con LLMs integrados
 
 **Problema**: Cada herramienta necesita conectarse a datos empresariales (bases de datos, APIs, archivos) pero no existe un estándar común.
 
@@ -62,23 +62,23 @@ Al finalizar este taller, serás capaz de:
 
 ### ✅ Fundamentos
 
--   Entender la diferencia entre MCP y sistemas tradicionales de plugins
--   Conocer la arquitectura cliente-servidor de MCP
--   Comprender el flujo JSON-RPC 2.0 subyacente
+- Entender la diferencia entre MCP y sistemas tradicionales de plugins
+- Conocer la arquitectura cliente-servidor de MCP
+- Comprender el flujo JSON-RPC 2.0 subyacente
 
 ### ✅ Implementación Práctica
 
--   Crear un servidor MCP desde cero en C# / .NET 10.0
--   Exponer recursos estáticos (datos JSON)
--   Implementar herramientas (tools) con parámetros dinámicos
--   Agregar autenticación JWT y rate limiting
--   Integrar múltiples fuentes de datos (SQL, Cosmos DB, Blob Storage)
+- Crear un servidor MCP desde cero en C# / .NET 10.0
+- Exponer recursos estáticos (datos JSON)
+- Implementar herramientas (tools) con parámetros dinámicos
+- Agregar autenticación JWT y rate limiting
+- Integrar múltiples fuentes de datos (SQL, Cosmos DB, Blob Storage)
 
 ### ✅ Despliegue Empresarial
 
--   Desplegar servidores MCP en Azure Container Apps
--   Configurar logging y observabilidad estructurada
--   Aplicar prácticas de seguridad y gobernanza
+- Desplegar servidores MCP en Azure Container Apps
+- Configurar logging y observabilidad estructurada
+- Aplicar prácticas de seguridad y gobernanza
 
 ---
 
@@ -86,17 +86,17 @@ Al finalizar este taller, serás capaz de:
 
 ### Lenguajes y Frameworks
 
--   **C# / .NET 10.0**: Lenguaje principal
--   **ModelContextProtocol NuGet**: Librería oficial de MCP
--   **xUnit**: Testing framework
+- **C# / .NET 10.0**: Lenguaje principal
+- **ModelContextProtocol NuGet**: Librería oficial de MCP
+- **xUnit**: Testing framework
 
 ### Infraestructura Azure
 
--   **Azure Container Apps**: Hosting de servidores MCP
--   **Azure SQL Database**: Datos relacionales
--   **Azure Cosmos DB**: Datos NoSQL
--   **Azure Blob Storage**: Archivos y objetos
--   **Azure Log Analytics**: Observabilidad
+- **Azure Container Apps**: Hosting de servidores MCP
+- **Azure SQL Database**: Datos relacionales
+- **Azure Cosmos DB**: Datos NoSQL
+- **Azure Blob Storage**: Archivos y objetos
+- **Azure Log Analytics**: Observabilidad
 
 **Visual Studio Code**: Editor recomendado  
 **Azure CLI**: Gestión de recursos
@@ -107,18 +107,18 @@ Al finalizar este taller, serás capaz de:
 
 ### Software Instalado
 
--   ✅ .NET 10.0 SDK
--   ✅ PowerShell 7+
--   ✅ Azure CLI 2.80+
--   ✅ Visual Studio Code (recomendado)
--   ✅ Git (opcional)
+- ✅ .NET 10.0 SDK
+- ✅ PowerShell 7+
+- ✅ Azure CLI 2.80+
+- ✅ Visual Studio Code (recomendado)
+- ✅ Git (opcional)
 
 ### Conocimientos Previos
 
--   🟢 **Esencial**: C# básico (clases, métodos, async/await)
--   🟡 **Recomendado**: APIs REST y JSON
--   🟡 **Recomendado**: Conceptos de autenticación (JWT)
--   🔵 **Opcional**: Azure básico
+- 🟢 **Esencial**: C# básico (clases, métodos, async/await)
+- 🟡 **Recomendado**: APIs REST y JSON
+- 🟡 **Recomendado**: Conceptos de autenticación (JWT)
+- 🔵 **Opcional**: Azure básico
 
 ### Verificación del Entorno
 
@@ -165,61 +165,76 @@ Al finalizar, consideraremos el taller exitoso si:
 
 **✅ Esperamos que...**
 
--   Hagas preguntas en cualquier momento
--   Experimentes y cometas errores (así se aprende)
--   Compartas descubrimientos con tu grupo
--   Pidas ayuda cuando estés bloqueado más de 5 minutos
+- Hagas preguntas en cualquier momento
+- Experimentes y cometas errores (así se aprende)
+- Compartas descubrimientos con tu grupo
+- Pidas ayuda cuando estés bloqueado más de 5 minutos
 
 **❌ No te preocupes si...**
 
--   No completes todos los ejercicios a tiempo
--   Necesitas revisar conceptos de C# durante la práctica
--   Algunos ejercicios te resultan desafiantes
--   No tienes experiencia previa con Azure
+- No completes todos los ejercicios a tiempo
+- Necesitas revisar conceptos de C# durante la práctica
+- Algunos ejercicios te resultan desafiantes
+- No tienes experiencia previa con Azure
 
 ### Recursos Disponibles
 
--   **Guía rápida impresa**: Referencia de comandos y conceptos
--   **Repositorio GitHub**: Todo el código y documentación
--   **Instructor**: Disponible para preguntas durante ejercicios
--   **Compañeros**: Forma grupos de 2-3 personas
+- **Guía rápida impresa**: Referencia de comandos y conceptos
+- **Repositorio GitHub**: Todo el código y documentación
+- **Instructor**: Disponible para preguntas durante ejercicios
+- **Compañeros**: Forma grupos de 2-3 personas
 
 ---
 
 ## 🔗 Estructura del Repositorio
 
-```
+```text
 mcp-workshop/
-├── docs/
-│   ├── modules/                  # Documentación de cada bloque del taller
-│   ├── QUICK_REFERENCE.md        # Referencia rápida de comandos y patrones
-│   ├── TROUBLESHOOTING.md        # Solución de problemas comunes
-│   └── README.md                 # Documentación principal del workshop
-|
-├── src/
-│   ├── McpWorkshop.Shared/       # Librería compartida (helpers, logging, config)
-│   └── McpWorkshop.Servers/      # Servidores MCP de cada ejercicio
-│       ├── Exercise1StaticResources/
-│       ├── Exercise2ParametricQuery/
-│       ├── Exercise3SecureServer/
-│       └── Exercise4VirtualAnalyst/
-|
-├── tests/
-│   └── McpWorkshop.Tests/        # Tests automatizados de los ejercicios
-|
-├── scripts/
-│   ├── create-sample-data.ps1    # Genera o actualiza datos de ejemplo
-│   ├── verify-setup.ps1          # Verifica entorno y dependencias
+│
+├── docs/                         # Documentación del taller (30 archivos)
+│   ├── modules/                  # 24 módulos (teoría + ejercicios + instructor)
+│   ├── AGENDA.md                 # Cronograma del workshop
+│   ├── CHECKLIST.md              # Lista de verificación
+│   ├── INSTRUCTOR_HANDBOOK.md    # Guía para instructores
+│   ├── QUICK_REFERENCE.md        # Referencia rápida de comandos
+│   ├── TROUBLESHOOTING.md        # Solución de problemas
+│   └── README.md                 # Documentación principal
+│
+├── src/                          # Código fuente (50 archivos .cs)
+│   ├── McpWorkshop.Shared/       # Librería compartida
+│   │   ├── Configuration/        # Configuración
+│   │   ├── Logging/              # Logging estructurado
+│   │   ├── Mcp/                  # Utilidades MCP
+│   │   ├── Monitoring/           # Monitoreo y trazas
+│   │   └── Security/             # Seguridad
+│   └── McpWorkshop.Servers/      # Servidores MCP
+│       ├── CosmosMcpServer/      # Servidor para Azure Cosmos DB
+│       ├── RestApiMcpServer/     # Servidor para REST APIs
+│       └── SqlMcpServer/         # Servidor para SQL Server
+│
+├── tests/                        # Suite de pruebas (13 archivos .cs)
+│   └── McpWorkshop.Tests/        # Tests unitarios e integración
+│
+├── data/                         # Datos de ejemplo JSON (6 archivos)
+│   ├── abandoned-carts.json
+│   ├── cart-events.json
+│   ├── customers.json
+│   ├── orders.json
+│   ├── products.json
+│   └── sessions.json
+│
+├── scripts/                      # Scripts de automatización PowerShell
+│   ├── create-sample-data.ps1    # Genera datos de ejemplo
+│   ├── verify-setup.ps1          # Verifica entorno
 │   ├── verify-exercise1.ps1      # Valida Ejercicio 1
 │   ├── verify-exercise2.ps1      # Valida Ejercicio 2
 │   ├── verify-exercise3.ps1      # Valida Ejercicio 3
 │   ├── verify-exercise4.ps1      # Valida Ejercicio 4
 │   ├── verify-exercise5.ps1      # Valida Ejercicio 5
 │   └── run-all-tests.ps1         # Ejecuta todos los tests
-|
-├── data/                         # Datos de ejemplo (incluidos en el repo)
-├── McpWorkshop.sln               # Solución de Visual Studio
-└── README.md                     # Guía de inicio rápido del repositorio
+│
+├── McpWorkshop.sln               # Solución Visual Studio
+└── README.md                     # Guía principal del repositorio
 ```
 
 ---
@@ -243,10 +258,10 @@ mcp-workshop/
 
 En el próximo bloque exploraremos:
 
--   ¿Qué problema resuelve MCP?
--   Arquitectura cliente-servidor
--   Comparación con plugins tradicionales
--   Casos de uso reales
+- ¿Qué problema resuelve MCP?
+- Arquitectura cliente-servidor
+- Comparación con plugins tradicionales
+- Casos de uso reales
 
 **Acción**: Abre el repositorio en Visual Studio Code y prepara tu terminal.
 
@@ -254,10 +269,10 @@ En el próximo bloque exploraremos:
 
 ## 📚 Recursos Adicionales
 
--   **Especificación MCP oficial**: https://modelcontextprotocol.io/specification/2025-06-18
--   **GitHub ModelContextProtocol**: https://github.com/modelcontextprotocol
--   **Documentación .NET 10.0**: https://learn.microsoft.com/dotnet
--   **Azure Documentation**: https://learn.microsoft.com/azure
+- **Especificación MCP oficial**: https://modelcontextprotocol.io/specification/2025-06-18
+- **GitHub ModelContextProtocol**: https://github.com/modelcontextprotocol
+- **Documentación .NET 10.0**: https://learn.microsoft.com/dotnet
+- **Azure Documentation**: https://learn.microsoft.com/azure
 
 ---
 

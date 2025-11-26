@@ -68,74 +68,55 @@ docs/                                    # Workshop documentation (Markdown)
 │   ├── 02b-fundamentos.md            # Block 2: MCP concepts, architecture (25 min)
 │   ├── 03b-anatomia-proveedor.md     # Block 3: Server structure, live coding (20 min)
 │   ├── 04b-ejercicio-1-recursos-estaticos.md # Block 4: Exercise 1 (15 min)
-│   ├── 05b-ejercicio-2-consultas-parametricas.md # Block 5: Exercise 2 (20 min)
-│   ├── 06b-ejercicio-3-seguridad.md  # Block 6: Exercise 3 instructions (20 min)
-│   ├── 07b-seguridad-gobernanza.md   # Block 7: Security sesión (15 min)
-│   ├── 08-ejercicio-4-analista-virtual.md # Block 8: Exercise 4 group challenge (30 min)
-│   ├── 09-orquestacion-multifuente.md # Block 9: Multi-source orchestration (15 min)
+├── 05b-ejercicio-2-consultas-parametricas.md # Block 5: Exercise 2 (20 min)
+├── 06b-ejercicio-3-seguridad.md  # Block 6: Exercise 3 instructions (20 min)
+├── 07b-seguridad-gobernanza.md   # Block 7: Security sesión (15 min)
+├── 07b-ejercicio-4-orquestador.md # Block 8: Exercise 4 group challenge (30 min)
+├── 09-orquestacion-multifuente.md # Block 9: Multi-source orchestration (15 min)
 │   ├── 10-roadmap-casos-b2b.md       # Block 10: Business scenarios (10 min)
 │   ├── 11-cierre.md                  # Block 11: Retrospective, closure (10 min)
 │   └── diagrams/                      # Mermaid diagrams (shared)
 ├── AGENDA.md                          # Master workshop agenda
 └── instructor-notes/                  # Facilitation guides per block
 
-src/                                    # Sample MCP servers and utilities
-├── McpWorkshop.Servers/               # Solution folder
-│   ├── Exercise1StaticResources/      # Exercise 1 sample
-│   │   ├── Program.cs
+src/                                    # Source code (50 .cs files)
+├── McpWorkshop.Servers/               # MCP server implementations
+│   ├── CosmosMcpServer/               # Azure Cosmos DB MCP server
 │   │   ├── Models/
-│   │   ├── Resources/
-│   │   └── Exercise1StaticResources.csproj
-│   ├── Exercise2ParametricQuery/      # Exercise 2 sample
-│   │   ├── Program.cs
 │   │   ├── Tools/
-│   │   ├── Services/
-│   │   └── ParametricQueryServer.csproj
-│   ├── SecureServer/                  # Exercise 3 sample
 │   │   ├── Program.cs
-│   │   ├── Middleware/
-│   │   ├── Authorization/
-│   │   └── SecureServer.csproj
-│   ├── DataSourceConnectors/          # Exercise 4 components
-│   │   ├── SqlConnector/
-│   │   ├── CosmosConnector/
-│   │   ├── RestApiConnector/
-│   │   └── DataSourceConnectors.csproj
-│   ├── VirtualAnalyst/                # Exercise 4 integrator
+│   │   └── CosmosMcpServer.csproj
+│   ├── RestApiMcpServer/              # REST API MCP server
+│   │   ├── Tools/
 │   │   ├── Program.cs
-│   │   ├── Orchestration/
-│   │   ├── AgentLogic/
-│   │   └── VirtualAnalyst.csproj
-│   └── McpWorkshop.Shared/            # Common utilities
-│       ├── Logging/
-│       ├── Configuration/
-│       ├── Testing/
-│       └── McpWorkshop.Shared.csproj
+│   │   └── RestApiMcpServer.csproj
+│   └── SqlMcpServer/                  # SQL Server MCP server
+│       ├── Models/
+│       ├── Tools/
+│       ├── Program.cs
+│       └── SqlMcpServer.csproj
+└── McpWorkshop.Shared/                # Shared library
+    ├── Configuration/                 # Configuration helpers
+    ├── Logging/                       # Structured logging
+    ├── Mcp/                           # MCP utilities
+    ├── Monitoring/                    # Monitoring and tracing
+    ├── Security/                      # Security utilities
+    └── McpWorkshop.Shared.csproj
 
-tests/                                  # Verification and testing
-├── McpWorkshop.Tests/
-│   ├── Unit/
-│   ├── Integration/
-│   └── Protocol/                      # MCP protocol validation
-└── McpWorkshop.Tests.csproj
-
-infrastructure/                         # Azure provisioning
-│   ├── modules/
-│   │   ├── app-service/               # App Service module
-│   │   ├── container-apps/            # Container Apps module
-│   │   ├── storage/                   # Storage Account module
-│   │   ├── sql-database/              # Azure SQL module
-│   │   ├── cosmos-db/                 # Cosmos DB module
-│   │   └── monitoring/                # Log Analytics module
-│   ├── environments/
-│   │   ├── dev/
-│   │   └── prod/
-│   ├── main.tf
-│   ├── variables.tf
-│   ├── outputs.tf
-└── scripts/                           # Deployment automation
-    ├── deploy.ps1
-    └── teardown.ps1
+tests/                                  # Test suite (13 .cs files)
+└── McpWorkshop.Tests/
+    ├── CosmosMcpServerToolsTests.cs
+    ├── DataModelsTests.cs
+    ├── InputSanitizerTests.cs
+    ├── JsonRpcComplianceTests.cs
+    ├── McpTestClient.cs
+    ├── PerformanceTrackerTests.cs
+    ├── SecurityHeadersMiddlewareTests.cs
+    ├── SqlMcpServerToolsTests.cs
+    ├── StructuredLoggerTests.cs
+    ├── WorkshopSettingsTests.cs
+    ├── README.md
+    └── McpWorkshop.Tests.csproj
 
 scripts/                                # Workshop utilities
 ├── verify-setup.ps1                   # Pre-workshop environment check
@@ -155,19 +136,19 @@ data/                                   # Sample datasets (included in repositor
 
 **Structure Decision**: Multi-project workshop structure separating concerns:
 
--   **docs/**: Instructor and attendee-facing Markdown documentation organized by workshop block sequence
--   **src/**: Complete C# solutions for all exercises (reference implementations)
--   **tests/**: Comprehensive test suite for verification and protocol validation
--   **scripts/**: Automation for setup verification, data generation, and testing
+- **docs/**: Instructor and attendee-facing Markdown documentation organized by workshop block sequence
+- **src/**: Complete C# solutions for all exercises (reference implementations)
+- **tests/**: Comprehensive test suite for verification and protocol validation
+- **scripts/**: Automation for setup verification, data generation, and testing
 
 This structure supports self-paced learning, instructor-led delivery, local development, and cloud deployment scenarios.
 
 **Structure Decision**: Multi-project workshop structure separating concerns:
 
--   **docs/**: Instructor and attendee-facing Markdown documentation organized by workshop block sequence
--   **src/**: Complete C# solutions for all exercises (reference implementations)
--   **tests/**: Comprehensive test suite for verification and protocol validation
--   **scripts/**: Automation for setup verification, data generation, and testing
+- **docs/**: Instructor and attendee-facing Markdown documentation organized by workshop block sequence
+- **src/**: Complete C# solutions for all exercises (reference implementations)
+- **tests/**: Comprehensive test suite for verification and protocol validation
+- **scripts/**: Automation for setup verification, data generation, and testing
 
 This structure supports self-paced learning, instructor-led delivery, local development, and cloud deployment scenarios.
 
@@ -188,10 +169,10 @@ No violations identified. Constitution check passed completely - no complexity t
 
 **Artifacts Created**:
 
--   ✅ research.md: Technology decisions and best practices
--   ✅ data-model.md: Domain entities and relationships
--   ✅ contracts/: MCP protocol specifications (5 files)
--   ✅ quickstart.md: Environment setup guide
+- ✅ research.md: Technology decisions and best practices
+- ✅ data-model.md: Domain entities and relationships
+- ✅ contracts/: MCP protocol specifications (5 files)
+- ✅ quickstart.md: Environment setup guide
 
 ### Compliance Verification
 
@@ -228,12 +209,12 @@ No violations identified. Constitution check passed completely - no complexity t
 
 This completes the `/speckit.plan` command execution. The following artifacts have been generated:
 
--   ✅ **plan.md**: Technical context, constitution checks, project structure
--   ✅ **research.md**: Technology decisions and alternatives analysis
--   ✅ **data-model.md**: Domain entities, relationships, and state diagrams
--   ✅ **contracts/**: MCP protocol specifications for all exercises
--   ✅ **quickstart.md**: Environment setup and first server deployment
--   ✅ **Agent context updated**: GitHub Copilot instructions refreshed
+- ✅ **plan.md**: Technical context, constitution checks, project structure
+- ✅ **research.md**: Technology decisions and alternatives analysis
+- ✅ **data-model.md**: Domain entities, relationships, and state diagrams
+- ✅ **contracts/**: MCP protocol specifications for all exercises
+- ✅ **quickstart.md**: Environment setup and first server deployment
+- ✅ **Agent context updated**: GitHub Copilot instructions refreshed
 
 **Ready for**: `/speckit.tasks` command to break down implementation into actionable work items.
 

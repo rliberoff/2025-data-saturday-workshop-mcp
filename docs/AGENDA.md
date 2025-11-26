@@ -260,7 +260,7 @@ Crear `Exercise4VirtualAnalyst` que:
 
 **Tiempo**: 25 minutos (desafío más complejo del taller).
 
-**[📄 Documentación completa →](./modules/07b-ejercicio-4-analista-virtual.md)**
+**[📄 Documentación completa →](./modules/07b-ejercicio-4-orquestador.md)**
 
 ---
 

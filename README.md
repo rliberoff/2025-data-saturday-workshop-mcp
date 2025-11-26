@@ -72,8 +72,8 @@ dotnet build McpWorkshop.sln
 - [03 - Ejercicio 1: Anatomía de un Proveedor MCP](docs/modules/03b-ejercicio-1-anatomia-proveedor.md)
 - [04 - Ejercicio 2: Consultas Paramétricas](docs/modules/04b-ejercicio-2-consultas-parametricas.md)
 - [05 - Ejercicio 3: Seguridad](docs/modules/05b-ejercicio-3-seguridad.md)
-- [06 - Seguridad & Gobernanza](docs/modules/06b-seguridad-gobernanza.md)
-- [07 - Ejercicio 4: Analista Virtual](docs/modules/07b-ejercicio-4-analista-virtual.md)
+- [06 - Seguridad y Gobernanza](docs/modules/06b-seguridad-gobernanza.md)
+- [07 - Ejercicio 4: Orquestador](docs/modules/07b-ejercicio-4-orquestador.md)
 - [08 - Orquestación Multi-Fuente](docs/modules/08-orquestacion-multifuente.md)
 - [09 - Ejercicio 5: Agente con Microsoft Agent Framework](docs/modules/09b-ejercicio-5-agente-maf.md)
 - [10 - Roadmap & Casos B2B](docs/modules/10-roadmap-casos-b2b.md)
@@ -83,48 +83,88 @@ dotnet build McpWorkshop.sln
 
 ```
 mcp-workshop/
-├── docs/                          # Documentación del taller
-│   ├── modules/                   # 11 módulos educativos (teoría + ejercicios)
+│
+├── docs/                          # Documentación del taller (30 archivos)
+│   ├── modules/                  # 24 módulos educativos (teoría + ejercicios + instructor)
+│   │   ├── 01a-apertura-instructor.md
 │   │   ├── 01b-apertura.md
+│   │   ├── 02a-fundamentos-instructor.md
 │   │   ├── 02b-fundamentos.md
+│   │   ├── 03a-ejercicio-1-instructor.md
 │   │   ├── 03b-ejercicio-1-anatomia-proveedor.md
+│   │   ├── 03b-ejercicio-1-anatomia-proveedor.http
+│   │   ├── 04a-ejercicio-2-instructor.md
 │   │   ├── 04b-ejercicio-2-consultas-parametricas.md
+│   │   ├── 04b-ejercicio-2-consultas-parametricas.http
+│   │   ├── 05a-ejercicio-3-instructor.md
 │   │   ├── 05b-ejercicio-3-seguridad.md
+│   │   ├── 05b-ejercicio-3-seguridad.http
+│   │   ├── 06-seguridad-gobernanza-antipatterns.md
+│   │   ├── 06a-seguridad-gobernanza-instructor.md
 │   │   ├── 06b-seguridad-gobernanza.md
-│   │   ├── 07b-ejercicio-4-analista-virtual.md
+│   │   ├── 07a-ejercicio-4-instructor.md
+│   │   ├── 07b-ejercicio-4-orquestador.md
+│   │   ├── 07b-ejercicio-4-orquestador.http
 │   │   ├── 08-orquestacion-multifuente.md
-│   │   ├── 09-roadmap-casos-b2b.md
+│   │   ├── 09a-ejercicio-5-instructor.md
+│   │   ├── 09b-ejercicio-5-agente-maf.md
+│   │   ├── 10-roadmap-casos-b2b.md
 │   │   └── 11-cierre.md
-│   ├── AGENDA.md                  # Cronograma detallado 180 minutos
-│   ├── INSTRUCTOR_HANDBOOK.md     # Guía para instructores
-│   ├── QUICK_REFERENCE.md         # Cheat sheet de MCP y C#
-│   └── TROUBLESHOOTING.md         # Solución de problemas
+│   ├── AGENDA.md                 # Cronograma detallado 180 minutos
+│   ├── CHECKLIST.md              # Lista de verificación del workshop
+│   ├── INSTRUCTOR_HANDBOOK.md    # Guía para instructores
+│   ├── QUICK_REFERENCE.md        # Cheat sheet de MCP y C#
+│   ├── TROUBLESHOOTING.md        # Solución de problemas
+│   └── README.md                 # Documentación principal
 │
+├── src/                           # Código fuente (50 archivos .cs)
+│   ├── McpWorkshop.Servers/
+│   │   ├── CosmosMcpServer/      # Servidor MCP para Azure Cosmos DB
+│   │   │   ├── Models/
+│   │   │   ├── Tools/
+│   │   │   ├── Program.cs
+│   │   │   └── CosmosMcpServer.csproj
+│   │   ├── RestApiMcpServer/     # Servidor MCP para REST APIs
+│   │   │   ├── Tools/
+│   │   │   ├── Program.cs
+│   │   │   └── RestApiMcpServer.csproj
+│   │   └── SqlMcpServer/         # Servidor MCP para SQL Server
+│   │       ├── Models/
+│   │       ├── Tools/
+│   │       ├── Program.cs
+│   │       └── SqlMcpServer.csproj
+│   └── McpWorkshop.Shared/       # Librería compartida
+│       ├── Configuration/
+│       ├── Logging/
+│       ├── Mcp/
+│       ├── Monitoring/
+│       ├── Security/
+│       └── McpWorkshop.Shared.csproj
 │
-├── src/                           # Código fuente
-│   └── McpWorkshop.Servers/
-│       ├── Exercise1StaticResources/      # Puerto 5000: Recursos JSON estáticos
-│       ├── Exercise2ParametricQuery/      # Puerto 5001: Herramientas con parámetros
-│       ├── Exercise3SecureServer/         # Puerto 5002: JWT + Rate Limiting
-│       ├── SqlMcpServer/         # Puerto 5009: Servidor MCP para SQL
-│       ├── CosmosMcpServer/      # Puerto 5010: Servidor MCP para Cosmos
-│       ├── RestApiMcpServer/     # Puerto 5011: Servidor MCP para REST APIs
-│       ├── Exercise4VirtualAnalyst/       # Puerto 5012: Orquestador principal
-│       ├── Exercise5AgentServer/          # Agente con Microsoft Agent Framework
-│       └── McpWorkshop.Shared/            # Utilidades compartidas
-│
-├── tests/                         # Suite de pruebas
+├── tests/                         # Suite de pruebas (13 archivos .cs)
 │   └── McpWorkshop.Tests/
-│       ├── Integration/           # 50 integration tests (43 passing, 7 skipped)
-│       │   ├── Exercise1IntegrationTests.cs
-│       │   ├── Exercise2IntegrationTests.cs
-│       │   ├── Exercise3IntegrationTests.cs
-│       │   └── Exercise4IntegrationTests.cs
-│       ├── Protocol/              # Validación de conformidad JSON-RPC
-│       └── Performance/           # Benchmarks de rendimiento
+│       ├── CosmosMcpServerToolsTests.cs
+│       ├── DataModelsTests.cs
+│       ├── InputSanitizerTests.cs
+│       ├── JsonRpcComplianceTests.cs
+│       ├── McpTestClient.cs
+│       ├── PerformanceTrackerTests.cs
+│       ├── SecurityHeadersMiddlewareTests.cs
+│       ├── SqlMcpServerToolsTests.cs
+│       ├── StructuredLoggerTests.cs
+│       ├── WorkshopSettingsTests.cs
+│       ├── README.md
+│       └── McpWorkshop.Tests.csproj
 │
+├── data/                          # Datos de ejemplo JSON
+│   ├── abandoned-carts.json
+│   ├── cart-events.json
+│   ├── customers.json
+│   ├── orders.json
+│   ├── products.json
+│   └── sessions.json
 │
-├── scripts/                       # Scripts de automatización
+├── scripts/                       # Scripts de automatización PowerShell
 │   ├── create-sample-data.ps1    # Generar o actualizar datos de ejemplo
 │   ├── verify-setup.ps1          # Verificación de prerrequisitos
 │   ├── verify-exercise1.ps1      # Validación Ejercicio 1
@@ -134,14 +174,9 @@ mcp-workshop/
 │   ├── verify-exercise5.ps1      # Validación Ejercicio 5
 │   └── run-all-tests.ps1         # Ejecutar suite completa de tests
 │
-├── specs/                         # Especificaciones del proyecto
-│   └── 001-mcp-workshop-course/
-│       ├── spec.md               # Especificación completa
-│       ├── plan.md               # Plan de implementación
-│       ├── tasks.md              # 145 tareas (100% completas)
-│       ├── contracts/            # Contratos JSON de cada ejercicio
-│       └── research.md           # Investigación técnica
 │
+├── .editorconfig                  # Configuración de editor
+├── .gitignore                     # Exclusiones de Git
 ├── LICENSE                        # Licencia MIT
 ├── QUICKSTART.md                  # Guía de inicio rápido
 ├── README.md                      # Este archivo
@@ -150,21 +185,22 @@ mcp-workshop/
 
 ### Componentes Clave
 
-**Servidores MCP (7 implementaciones)**:
+**Servidores MCP (4 implementaciones)**:
 
-- 3 servidores de ejercicios individuales (1-3)
-- 4 servidores para ejercicio grupal (4)
+- 3 servidores de datos (SQL, Cosmos, REST API)
+- 1 agente en desarrollo (Exercise5Agent)
 
-**Documentación (28 archivos)**:
+**Documentación (30 archivos)**:
 
-- 19 módulos educativos (con versiones para instructor)
-- 9 guías de soporte (agenda, handbook, troubleshooting, etc.)
+- 24 módulos educativos (teoría + ejercicios + instructor + archivos .http)
+- 6 guías del workshop (AGENDA, CHECKLIST, INSTRUCTOR_HANDBOOK, QUICK_REFERENCE, TROUBLESHOOTING, README)
 
-**Tests (83 tests totales)**:
+**Tests (13 archivos de prueba)**:
 
-- 50 integration tests (86% passing, 14% skipped con documentación)
-- 25 protocol validation tests
-- 8 performance tests
+- Tests unitarios y de integración
+- Validación de protocolo JSON-RPC
+- Tests de seguridad y rendimiento
+- Cliente de prueba MCP (McpTestClient)
 
 ## 🎓 Ejercicios Prácticos
 
@@ -295,7 +331,7 @@ Usuario (español) → Orquestador → [SQL Server | Cosmos DB | REST API]
 .\scripts\verify-exercise4.ps1
 ```
 
-**[📄 Guía completa →](docs/modules/07b-ejercicio-4-analista-virtual.md)**
+**[📄 Guía completa →](docs/modules/07b-ejercicio-4-orquestador.md)**
 
 ### Ejercicio 5: Agente con Microsoft Agent Framework (30 min)
 
@@ -343,16 +379,16 @@ Usuario (español) → Orquestador → [SQL Server | Cosmos DB | REST API]
 
 ### Puertos Utilizados
 
-| Ejercicio                  | Puerto | Servidor         |
-| -------------------------- | ------ | ---------------- |
-| Ejercicio 1                | 5000   | Exercise1Server  |
-| Ejercicio 2                | 5001   | Exercise2Server  |
-| Ejercicio 3                | 5002   | Exercise3Server  |
-| Ejercicio 4 - SQL          | 5010   | SqlMcpServer     |
-| Ejercicio 4 - Cosmos       | 5011   | CosmosMcpServer  |
-| Ejercicio 4 - REST         | 5012   | RestApiMcpServer |
-| Ejercicio 4 - Orquestador  | 5003   | Exercise4Server  |
-| Ejercicio 5 - Agente       | N/A    | Exercise5Agent   |
+| Ejercicio                 | Puerto | Servidor         |
+| ------------------------- | ------ | ---------------- |
+| Ejercicio 1               | 5000   | Exercise1Server  |
+| Ejercicio 2               | 5001   | Exercise2Server  |
+| Ejercicio 3               | 5002   | Exercise3Server  |
+| Ejercicio 4 - SQL         | 5010   | SqlMcpServer     |
+| Ejercicio 4 - Cosmos      | 5011   | CosmosMcpServer  |
+| Ejercicio 4 - REST        | 5012   | RestApiMcpServer |
+| Ejercicio 4 - Orquestador | 5003   | Exercise4Server  |
+| Ejercicio 5 - Agente      | N/A    | Exercise5Agent   |
 
 ## 📄 Licencia
 
