@@ -416,7 +416,7 @@ $tests = @(
 )
 
 foreach ($test in $tests) {
-    $response = Invoke-RestMethod -Uri "http://localhost:5014/chat" `
+    $response = Invoke-RestMethod -Uri "http://localhost:5005/chat" `
         -Method POST `
         -Body (@{ message = $test.Query } | ConvertTo-Json) `
         -ContentType "application/json"

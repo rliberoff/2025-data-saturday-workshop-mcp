@@ -97,7 +97,7 @@ flowchart TB
 
 ### Conversación 1: Consulta de Clientes
 
-```
+```text
 Usuario: "¿Cuántos clientes tenemos registrados en España?"
 Agente:  [Usa tool: list_customers_by_country]
          "Actualmente tenemos 1,247 clientes registrados en España."
@@ -109,7 +109,7 @@ Agente:  [Usa tool: list_customers_by_city]
 
 ### Conversación 2: Análisis de Carritos
 
-```
+```text
 Usuario: "¿Hay carritos abandonados recientes?"
 Agente:  [Usa tool: get_abandoned_carts]
          "Sí, encontré 23 carritos abandonados en las últimas 24 horas,
@@ -123,7 +123,7 @@ Agente:  [Recupera detalles del carrito]
 
 ### Conversación 3: Consulta de Inventario
 
-```
+```text
 Usuario: "¿Qué productos tenemos con poco stock?"
 Agente:  [Usa tool: get_low_stock_products]
          "Hay 7 productos con stock bajo:
@@ -272,7 +272,6 @@ public static class McpClientHelper
         return client;
     }
 }
-
 
 ```
 
@@ -426,6 +425,7 @@ public static class McpToolAdapter
             : "Respuesta vacía del servidor MCP";
     }
 }
+
 ```
 
 **💡 Conceptos Clave del Adaptador**:
@@ -637,7 +637,7 @@ dotnet run
 
 **Ejemplo de sesión**:
 
-```
+```powershell
 🤖 Inicializando Microsoft Agent Framework con MCP Tools...
 
 📡 Conectando a servidores MCP...

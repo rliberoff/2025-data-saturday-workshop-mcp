@@ -75,7 +75,7 @@ dotnet build McpWorkshop.sln
 - [06 - Seguridad & Gobernanza](docs/modules/06b-seguridad-gobernanza.md)
 - [07 - Ejercicio 4: Analista Virtual](docs/modules/07b-ejercicio-4-analista-virtual.md)
 - [08 - Orquestación Multi-Fuente](docs/modules/08-orquestacion-multifuente.md)
-- [09 - Ejercicio 5: Agente con Microsoft Agent Framework](docs/modules/9b-ejercicio-5-agente-maf.md)
+- [09 - Ejercicio 5: Agente con Microsoft Agent Framework](docs/modules/09b-ejercicio-5-agente-maf.md)
 - [10 - Roadmap & Casos B2B](docs/modules/10-roadmap-casos-b2b.md)
 - [11 - Cierre](docs/modules/11-cierre.md)
 
@@ -317,7 +317,7 @@ Usuario (español) → Orquestador → [SQL Server | Cosmos DB | REST API]
 ./scripts/verify-exercise5.ps1
 ```
 
-**[📄 Guía completa →](docs/modules/9b-ejercicio-5-agente-maf.md)**
+**[📄 Guía completa →](docs/modules/09b-ejercicio-5-agente-maf.md)**
 
 ## 🛠️ Tecnologías
 
@@ -352,7 +352,7 @@ Usuario (español) → Orquestador → [SQL Server | Cosmos DB | REST API]
 | Ejercicio 4 - Cosmos       | 5011   | CosmosMcpServer  |
 | Ejercicio 4 - REST         | 5012   | RestApiMcpServer |
 | Ejercicio 4 - Orquestador  | 5004   | Exercise4Server  |
-| Ejercicio 5 - Agente       | 5014   | Exercise5Agent   |
+| Ejercicio 5 - Agente       | 5005   | Exercise5Agent   |
 
 ## 📄 Licencia
 
